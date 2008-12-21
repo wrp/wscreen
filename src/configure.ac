@@ -1,17 +1,50 @@
-dnl Process this file with autoconf to produce a configure script.
-dnl
-dnl $Id$ FAU
-dnl
-dnl Many thanks to David MacKenzie for writing autoconf and
-dnl providing a sample configure.in file for screen.
-dnl
-AC_REVISION($Revision$)dnl
-AC_INIT(screen.c)
-AC_CONFIG_HEADER(config.h)
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
 
-dnl
-dnl Define some useful macros
-dnl
+AC_PREREQ([2.61])
+AC_INIT([screen], [4.1.0], [screen-devel@gnu.org])
+AC_CONFIG_SRCDIR([screen.c])
+AC_CONFIG_HEADERS([config.h])
+AC_MSG_NOTICE([this is screen version $VERSION])
+
+# AM_INIT_AUTOMAKE(foreign)
+
+AC_DEFINE([ORIGIN],["FAU"],[origin])
+AC_DEFINE([REV], [4], [Revision])
+AC_DEFINE([VERS], [1], [Version])
+AC_DEFINE([PATCHLEVEL], [0], [Patchlevel])
+AC_DEFINE([DATE], ["2-May-06"], [date])
+AC_DEFINE([STATE], ["devel"], [state])
+
+AC_PROG_CC
+AC_PROG_CPP
+AC_SEARCH_LIBS([strerror], [cposix])
+AC_PROG_AWK
+
+AC_PROG_INSTALL
+
+AC_MSG_CHECKING([if a system-wide socket dir should be used]) 
+AC_ARG_ENABLE([socket-dir],
+    AS_HELP_STRING([--disable-socket-dir],[disable system wide socket-dir and use ~/.screen instead]),
+    [AC_MSG_RESULT([no.  ~/.screen will be used instead.])],
+    [
+	AC_MSG_RESULT([yes])
+	AC_MSG_CHECKING([for the socket dir])
+	SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
+	AC_ARG_WITH([socket-dir],
+	    AS_HELP_STRING([--with-socket-dir=path], [where to put the per-user sockets]),
+	     [ dnl (( 
+	  case "${withval}" in
+	    *\"*) SOCKDIR="${withval}" ;;
+	    *) SOCKDIR="\"${withval}\"" ;;
+	  esac
+        ])
+	AC_MSG_RESULT(${SOCKDIR})
+	AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
+    ]
+)
+
+
 AC_DEFUN([AC_PROGRAM_SOURCE],
 [AC_REQUIRE([AC_PROG_CPP])AC_PROVIDE([$0])cat > conftest.c <<EOF
 #include "confdefs.h"
@@ -22,105 +55,22 @@ EOF
 eval "$ac_cpp conftest.c 2>&5 | sed -e '1,/_CUT_HERE_/d' -e 's/ //g' > conftest.out"
 . ./conftest.out
 rm -f conftest*
-])dnl
-dnl
-define(AC_NOTE,
-[echo "$1" 1>&AC_FD_MSG
-])dnl
-
-dnl
-dnl Extract version from patchlevel.h
-dnl
-rev=`sed < ${srcdir}/patchlevel.h -n -e '/#define REV/s/#define REV  *//p'`
-vers=`sed < ${srcdir}/patchlevel.h -n -e '/#define VERS/s/#define VERS  *//p'`
-pat=`sed < ${srcdir}/patchlevel.h -n -e '/#define PATCHLEVEL/s/#define PATCHLEVEL  *//p'`
-VERSION="$rev.$vers.$pat"
-AC_NOTE(this is screen version $VERSION)
-AC_SUBST(VERSION)
-AC_PREFIX_PROGRAM(screen)
-AC_PREFIX_PROGRAM(gzip)
-
-old_CFLAGS="$CFLAGS"
-AC_PROG_CC
-AC_PROG_CPP
-AC_PROG_GCC_TRADITIONAL
-AC_ISC_POSIX
-
-AC_TRY_RUN(main(){exit(0);},,[
-if test $CC != cc ; then
-AC_NOTE(Your $CC failed - restarting with CC=cc)
-AC_NOTE()
-CC=cc
-export CC
-exec $0 $configure_args
-fi
 ])
 
-AC_TRY_RUN(main(){exit(0);},,
-exec 5>&2
-eval $ac_link
-AC_NOTE(CC=$CC; CFLAGS=$CFLAGS; LIBS=$LIBS;)
-AC_NOTE($ac_compile)
-AC_MSG_ERROR(Can't run the compiler - sorry))
-
-AC_TRY_RUN([
-main()
-{
-  int __something_strange_();
-  __something_strange_(0);
-}
-],AC_MSG_ERROR(Your compiler does not set the exit status - sorry))
-
-AC_PROG_AWK
-
-AC_PROG_INSTALL
-
-if test -f etc/toolcheck; then
-AC_CHECKING(for buggy tools)
-sh etc/toolcheck 1>&AC_FD_MSG
-fi
-
-
-
-dnl SOCKDIR
-AC_MSG_CHECKING(if a system-wide socket dir should be used) 
-AC_ARG_ENABLE(socket-dir,
-    [  --disable-socket-dir    disable system wide socket-dir and use ~/.screen instead],
-    [
-	AC_MSG_RESULT(no.  ~/.screen will be used instead.)
-    ],
-    [
-	AC_MSG_RESULT(yes)
-	AC_MSG_CHECKING(for the socket dir)
-	SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
-	AC_ARG_WITH(socket-dir, [  --with-socket-dir=path  where to put the per-user sockets], [ 
-	  case "${withval}" in
-	    *\"*) SOCKDIR="${withval}" ;;
-	    *) SOCKDIR="\"${withval}\"" ;;
-	  esac
-        ])
-	AC_MSG_RESULT(${SOCKDIR})
-	AC_DEFINE_UNQUOTED(SOCKDIR, $SOCKDIR)
-    ]
-)
-
+define([AC_NOTE],
+[AC_MSG_NOTICE([$1])
+])
 
 dnl
 dnl    ****  special unix variants  ****
 dnl
 if test -n "$ISC"; then
-  AC_DEFINE(ISC) LIBS="$LIBS -linet"
+  AC_DEFINE([ISC],[1],[ISC]) LIBS="$LIBS -linet"
 fi
 
-dnl AC_CHECKING(for OSF1)
-dnl if test -f /bin/uname ; then
-dnl if test `/bin/uname` = OSF1 || test -f /osf_boot; then
-dnl AC_DEFINE(OSF1)	# this disables MIPS again....
-dnl fi
-dnl fi
 
 if test -f /sysV68 ; then
-AC_DEFINE(sysV68)
+AC_DEFINE([sysV68],[1],[sysV68])
 fi
 
 AC_CHECKING(for MIPS)
@@ -133,7 +83,7 @@ AC_TRY_LINK(,,,LIBS="$oldlibs")
 dnl
 dnl
 if test -r /dev/ptc; then
-AC_DEFINE(MIPS)
+AC_DEFINE([MIPS],[1],[MIPS])
 AC_CHECKING(wait3)
 AC_TRY_LINK(,[wait3();], ,
 AC_CHECKING(wait2)
@@ -142,7 +92,7 @@ dnl John Rouillard (rouilj@sni-usa.com):
 dnl need -I/usr/include/bsd in RISCOS otherwise sockets are broken, no
 dnl job control etc.
 dnl Detect RISCOS if wait2 is present, but not wait3.
-AC_DEFINE(USE_WAIT2) LIBS="$LIBS -lbsd" ; CC="$CC -I/usr/include/bsd"
+AC_DEFINE([USE_WAIT2],[1],[USE_WAIT2]) LIBS="$LIBS -lbsd" ; CC="$CC -I/usr/include/bsd"
 ))
 fi
 fi
@@ -159,7 +109,7 @@ if test -f /usr/lib/libpyr.a ; then
 oldlibs="$LIBS"
 LIBS="$LIBS -lpyr"
 AC_CHECKING(Pyramid OSX)
-AC_TRY_LINK(,[open_controlling_pty("")], AC_DEFINE(OSX), LIBS="$oldlibs")
+AC_TRY_LINK(,[open_controlling_pty("")], AC_DEFINE([OSX],[1],[OSX]), LIBS="$oldlibs")
 fi
 
 dnl ghazi@caip.rutgers.edu (Kaveh R. Ghazi):
@@ -184,14 +134,14 @@ main () {
 #ifdef _POSIX_VERSION
   yes;
 #endif
-], AC_NOTE(- you have a POSIX system) AC_DEFINE(POSIX) posix=1)
+], AC_NOTE(- you have a POSIX system) AC_DEFINE([POSIX],[1],[POSIX]) posix=1)
 fi
 
 AC_CHECKING(for System V)
 AC_TRY_COMPILE(
 [#include <sys/types.h>
 #include <signal.h>
-#include <fcntl.h>], [int x = SIGCHLD | FNDELAY;], , AC_DEFINE(SYSV))
+#include <fcntl.h>], [int x = SIGCHLD | FNDELAY;], , AC_DEFINE([SYSV],[1],[SYSV]))
 
 AC_CHECKING(for sequent/ptx)
 AC_EGREP_CPP(yes,
@@ -205,8 +155,8 @@ LIBS="$LIBS -lelf"
 AC_CHECKING(SVR4)
 AC_TRY_LINK([#include <utmpx.h>
 ],,
-[AC_CHECK_HEADER(dwarf.h, AC_DEFINE(SVR4) AC_DEFINE(BUGGYGETLOGIN),
-[AC_CHECK_HEADER(elf.h, AC_DEFINE(SVR4) AC_DEFINE(BUGGYGETLOGIN))])]
+[AC_CHECK_HEADER(dwarf.h, AC_DEFINE([SVR4],[1],[SVR4]) AC_DEFINE([BUGGYGETLOGIN],[1],[buggygetlogin]),
+[AC_CHECK_HEADER(elf.h, AC_DEFINE([SVR4],[1],[SVR4]) AC_DEFINE([BUGGYGETLOGIN],[1],[buggygetlogin]))])]
 ,LIBS="$oldlibs")
 AC_CHECK_HEADERS([stropts.h string.h strings.h])
 
@@ -224,16 +174,16 @@ dnl (currently not used)
 dnl
 dnl AC_CHECKING(for pid_t)
 dnl AC_EGREP_CPP(pid_t,[#include <sys/types.h>
-dnl ],AC_DEFINE(PID_T_DEFINED))
+dnl ],AC_DEFINE([PID_T_DEFINED],[1],[PID_T_DEFINED]))
 dnl
 dnl AC_CHECKING(for sig_t)
 dnl AC_EGREP_CPP(sig_t,[#include <sys/types.h>
 dnl #include <signal.h>
-dnl ],AC_DEFINE(SIG_T_DEFINED))
+dnl ],AC_DEFINE([SIG_T_DEFINED],[1],[SIG_T_DEFINED]))
 dnl
 dnl AC_CHECKING(for uid_t)
 dnl AC_EGREP_CPP(uid_t,[#include <sys/types.h>
-dnl ],AC_DEFINE(UID_T_DEFINED))
+dnl ],AC_DEFINE([UID_T_DEFINED],[1],[UID_T_DEFINED]))
 dnl
 
 dnl
@@ -255,7 +205,7 @@ setpgrp();
 int y = TIOCNOTTY;
 #endif
 #endif
-], AC_NOTE(- you have jobcontrol) AC_DEFINE(BSDJOBS), AC_NOTE(- you don't have jobcontrol))
+], AC_NOTE(- you have jobcontrol) AC_DEFINE([BSDJOBS],[1],[BSDJOBS]), AC_NOTE(- you don't have jobcontrol))
 
 dnl
 dnl    ****  setresuid(), setreuid(), seteuid()  ****
@@ -263,11 +213,11 @@ dnl
 AC_CHECKING(setresuid)
 AC_TRY_LINK(,[
 setresuid(0, 0, 0);
-], AC_DEFINE(HAVE_SETRESUID))
+], AC_DEFINE([HAVE_SETRESUID],[1],[HAVE_SETRESUID]))
 AC_CHECKING(setreuid)
 AC_TRY_LINK(,[
 setreuid(0, 0);
-], AC_DEFINE(HAVE_SETREUID))
+], AC_DEFINE([HAVE_SETREUID],[1],[HAVE_SETREUID]))
 dnl
 dnl seteuid() check:
 dnl   linux seteuid was broken before V1.1.11
@@ -281,7 +231,7 @@ seteuid_is_broken(0);
 #else
 seteuid(0);
 #endif
-], AC_DEFINE(HAVE_SETEUID))
+], AC_DEFINE([HAVE_SETEUID],[1],[HAVE_SETEUID]))
 
 dnl
 dnl    ****  select()  ****
@@ -412,7 +362,7 @@ main()
   exit(0);
 }
 ], AC_NOTE(- your implementation is ok), 
-AC_NOTE(- you have a broken implementation) AC_DEFINE(BROKEN_PIPE) fifobr=1)
+AC_NOTE(- you have a broken implementation) AC_DEFINE([BROKEN_PIPE],[1],[BROKEN_PIPE]) fifobr=1)
 rm -f /tmp/conftest*
 fi
 
@@ -513,7 +463,7 @@ main()
 }
 ],AC_NOTE(- you are normal),
 AC_NOTE(- unix domain sockets are not kept in the filesystem)
-AC_DEFINE(SOCK_NOT_IN_FS) socknofs=1)
+AC_DEFINE([SOCK_NOT_IN_FS],[1],[SOCK_NOT_IN_FS]) socknofs=1)
 rm -f /tmp/conftest*
 fi
 
@@ -525,7 +475,7 @@ if test -n "$fifo"; then
   if test -n "$sock"; then
     if test -n "$nore"; then
       AC_NOTE(- hmmm... better take the fifos)
-      AC_DEFINE(NAMEDPIPE)
+      AC_DEFINE([NAMEDPIPE],[1],[NAMEDPIPE])
     elif test -n "$fifobr"; then
       AC_NOTE(- as your fifos are broken lets use the sockets.)
     else
@@ -533,7 +483,7 @@ if test -n "$fifo"; then
     fi
   else
     AC_NOTE(- using named pipes, of course)
-    AC_DEFINE(NAMEDPIPE)
+    AC_DEFINE([NAMEDPIPE],[1],[NAMEDPIPE])
   fi
 elif test -n "$sock"; then
   AC_NOTE(- using unix-domain sockets, of course)
@@ -640,7 +590,7 @@ main()
   exit(0);
 }
 ],AC_NOTE(- select is ok),
-AC_NOTE(- select can't count) AC_DEFINE(SELECT_BROKEN))
+AC_NOTE(- select can't count) AC_DEFINE([SELECT_BROKEN],[1],[SELECT_BROKEN]))
 
 dnl
 dnl    ****  termcap or terminfo  ****
@@ -676,22 +626,22 @@ main()
 {
  exit(strcmp(tgoto("%p1%d", 0, 1), "1") ? 0 : 1);
 }], AC_NOTE(- you use the termcap database),
-AC_NOTE(- you use the terminfo database) AC_DEFINE(TERMINFO))
+AC_NOTE(- you use the terminfo database) AC_DEFINE([TERMINFO],[1],[TERMINFO]))
 AC_CHECKING(ospeed)
-AC_TRY_LINK(extern short ospeed;,ospeed=5;,,AC_DEFINE(NEED_OSPEED))
+AC_TRY_LINK(extern short ospeed;,ospeed=5;,,AC_DEFINE([NEED_OSPEED],[1],[NEED_OSPEED]))
 
 dnl
 dnl    ****  PTY specific things  ****
 dnl
 AC_CHECKING(for /dev/ptc)
 if test -r /dev/ptc; then
-AC_DEFINE(HAVE_DEV_PTC)
+AC_DEFINE([HAVE_DEV_PTC],[1],[HAVE_DEV_PTC])
 fi
 
 AC_CHECKING(for SVR4 ptys)
 sysvr4ptys=
 if test -c /dev/ptmx ; then
-AC_TRY_LINK([],[ptsname(0);grantpt(0);unlockpt(0);],[AC_DEFINE(HAVE_SVR4_PTYS)
+AC_TRY_LINK([],[ptsname(0);grantpt(0);unlockpt(0);],[AC_DEFINE([HAVE_SVR4_PTYS],[1],[HAVE_SVR4_PTYS])
 sysvr4ptys=1])
 fi
 
@@ -700,7 +650,7 @@ AC_CHECK_FUNCS(getpt)
 dnl check for openpty()
 if test -z "$sysvr4ptys"; then
 AC_CHECK_FUNCS(openpty,,
-[AC_CHECK_LIB(util,openpty, [AC_DEFINE(HAVE_OPENPTY)] [LIBS="$LIBS -lutil"])])
+[AC_CHECK_LIB(util,openpty, [AC_DEFINE([HAVE_OPENPTY],[1],[HAVE_OPENPTY])] [LIBS="$LIBS -lutil"])])
 fi
 
 AC_CHECKING(for ptyranges)
@@ -723,8 +673,8 @@ dnl fi
 if test "$ptys" != "$pdir/pty??" ; then
 p0=`echo $ptys | tr ' ' '\012' | sed -e 's/^.*\(.\).$/\1/g' | sort -u | tr -d '\012'`
 p1=`echo $ptys | tr ' ' '\012' | sed -e 's/^.*\(.\)$/\1/g'  | sort -u | tr -d '\012'`
-AC_DEFINE_UNQUOTED(PTYRANGE0,"$p0")
-AC_DEFINE_UNQUOTED(PTYRANGE1,"$p1")
+AC_DEFINE_UNQUOTED(PTYRANGE0,"$p0",[undocumented])
+AC_DEFINE_UNQUOTED(PTYRANGE1,"$p1",[undocumented])
 fi
 
 dnl    ****  pty mode/group handling ****
@@ -734,8 +684,8 @@ AC_ARG_WITH(pty-mode, [  --with-pty-mode=mode    default mode for ptys], [ ptymo
 AC_ARG_WITH(pty-group, [  --with-pty-group=group  default group for ptys], [ ptygrp="${withval}" ])
 test -n "$ptymode" || ptymode=0620
 if test -n "$ptygrp" ; then
-AC_DEFINE_UNQUOTED(PTYMODE, $ptymode)
-AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp)
+AC_DEFINE_UNQUOTED(PTYMODE, $ptymode,[undocumented])
+AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp,[undocumented])
 else
 
 AC_CHECKING(default tty permissions/group)
@@ -772,8 +722,8 @@ main()
     if test -f conftest_grp; then
 	ptygrp=`cat conftest_grp`
 	AC_NOTE([- pty mode: $ptymode, group: $ptygrp])
-	AC_DEFINE_UNQUOTED(PTYMODE, $ptymode)
-	AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp)
+	AC_DEFINE_UNQUOTED(PTYMODE, $ptymode,[undocumented])
+	AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp,[undocumented])
     else
 	AC_NOTE(- ptys are world accessable)
     fi
@@ -803,8 +753,8 @@ main()
       if test -n "$found"; then
 	ptygrp=`ls -ln$lsfollow $found | sed -n -e 1p | $AWK '{print $4}'`
 	AC_NOTE([- pty mode: $ptymode, group: $ptygrp])
-	AC_DEFINE_UNQUOTED(PTYMODE, $ptymode)
-	AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp)
+	AC_DEFINE_UNQUOTED(PTYMODE, $ptymode,[undocumented])
+	AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp,[undocumented])
       else
 	AC_NOTE(- ptys are world accessable)
       fi
@@ -833,7 +783,7 @@ AC_TRY_LINK([
 #define pututline _pututline
 #endif
 ],
-[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE(GETUTENT),
+[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE([GETUTENT],[1],[GETUTENT]),
 olibs="$LIBS"
 LIBS="$LIBS -lgen"
 AC_CHECKING(getutent with -lgen)
@@ -850,7 +800,7 @@ AC_TRY_LINK([
 #define pututline _pututline
 #endif
 ],
-[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE(GETUTENT), LIBS="$olibs")
+[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE([GETUTENT],[1],[GETUTENT]), LIBS="$olibs")
 )
 AC_CHECKING(ut_host)
 AC_TRY_COMPILE([
@@ -862,10 +812,10 @@ AC_TRY_COMPILE([
 #else
 #include <utmp.h>
 #endif
-],[struct utmp u; u.ut_host[0] = 0;], AC_DEFINE(UTHOST))
+],[struct utmp u; u.ut_host[0] = 0;], AC_DEFINE([UTHOST],[1],[UTHOST]))
 AC_CHECK_HEADER(utempter.h, have_utempter=yes, have_utempter=no)
 if test "$have_utempter" = yes; then
-  AC_DEFINE(HAVE_UTEMPTER)
+  AC_DEFINE([HAVE_UTEMPTER],[1],[HAVE_UTEMPTER])
   LIBS="$LIBS -lutempter"
 fi
 
@@ -878,13 +828,13 @@ test -f /usr/lib/libutil.a && LIBS="$LIBS -lutil"
 
 AC_CHECKING(getloadavg)
 AC_TRY_LINK(,[getloadavg((double *)0, 0);],
-AC_DEFINE(LOADAV_GETLOADAVG) load=1,
+AC_DEFINE([LOADAV_GETLOADAVG],[1],[LOADAV_GETLOADAVG]) load=1,
 if test -f /usr/lib/libkvm.a ; then
 olibs="$LIBS"
 LIBS="$LIBS -lkvm"
 AC_CHECKING(getloadavg with -lkvm)
 AC_TRY_LINK(,[getloadavg((double *)0, 0);],
-AC_DEFINE(LOADAV_GETLOADAVG) load=1, LIBS="$olibs")
+AC_DEFINE([LOADAV_GETLOADAVG],[1],[LOADAV_GETLOADAVG]) load=1, LIBS="$olibs")
 fi
 )
 
@@ -907,13 +857,13 @@ if test ! -f $core && test ! -c $core ; then
 else
   AC_NOTE(- using kernelfile '$core')
   if test -r $core ; then
-  AC_DEFINE_UNQUOTED(LOADAV_UNIX,"$core")
+  AC_DEFINE_UNQUOTED(LOADAV_UNIX,"$core",[undocumented])
   AC_CHECK_HEADER(nlist.h,
-    [AC_DEFINE(NLIST_STRUCT)
+    [AC_DEFINE([NLIST_STRUCT],[1],[NLIST_STRUCT])
      AC_CHECKING(n_un in struct nlist)
      AC_TRY_COMPILE([#include <nlist.h>],
        [struct nlist n; n.n_un.n_name = 0;],
-        AC_DEFINE(NLIST_NAME_UNION))])
+        AC_DEFINE([NLIST_NAME_UNION],[1],[NLIST_NAME_UNION]))])
 
   AC_CHECKING(for nlist declaration)
   AC_EGREP_CPP([nlist(( |	)( |	)*.*\(|\()],[
@@ -922,7 +872,7 @@ else
 #else
 # include <a.out.h>
 #endif
-],AC_DEFINE(NLIST_DECLARED))
+],AC_DEFINE([NLIST_DECLARED],[1],[NLIST_DECLARED]))
 
   AC_CHECKING(for avenrun symbol)
   nlist64=
@@ -964,10 +914,10 @@ main()
     AC_NOTE(- no avenrun symbol found)
   else
     AC_NOTE(- using avenrun symbol '$avensym')
-    AC_DEFINE_UNQUOTED(LOADAV_AVENRUN,"$avensym")
+    AC_DEFINE_UNQUOTED(LOADAV_AVENRUN,"$avensym",[undocumented])
     if test -n "$nlist64"; then
       AC_NOTE(- used nlist64 to find it)
-      AC_DEFINE(LOADAV_USE_NLIST64)
+      AC_DEFINE([LOADAV_USE_NLIST64],[1],[LOADAV_USE_NLIST64])
     fi
     load=1
   fi
@@ -1019,10 +969,10 @@ loadnum=3
 #endif
 ])
 
-if test -n "$load" ; then AC_DEFINE(LOADAV) fi
-if test -n "$loadtype" ; then AC_DEFINE_UNQUOTED(LOADAV_TYPE,$loadtype) fi
-if test -n "$loadnum" ; then AC_DEFINE_UNQUOTED(LOADAV_NUM,$loadnum) fi
-if test -n "$loadscale" ; then AC_DEFINE_UNQUOTED(LOADAV_SCALE,$loadscale) fi
+if test -n "$load" ; then AC_DEFINE([LOADAV],[1],[LOADAV]) fi
+if test -n "$loadtype" ; then AC_DEFINE_UNQUOTED(LOADAV_TYPE,$loadtype,[undocumented]) fi
+if test -n "$loadnum" ; then AC_DEFINE_UNQUOTED(LOADAV_NUM,$loadnum,[undocumented]) fi
+if test -n "$loadscale" ; then AC_DEFINE_UNQUOTED(LOADAV_SCALE,$loadscale,[undocumented]) fi
 
 dnl
 dnl    ****  signal handling  ****
@@ -1031,7 +981,7 @@ if test -n "$posix" ; then
 
 dnl POSIX has reliable signals with void return type.
 AC_NOTE(assuming posix signal definition)
-AC_DEFINE(SIGVOID)
+AC_DEFINE([SIGVOID],[1],[SIGVOID])
 
 else
 
@@ -1042,7 +992,7 @@ AC_TRY_COMPILE(
 #ifdef signal
 #undef signal
 #endif
-extern void (*signal ()) ();], [int i;], AC_DEFINE(SIGVOID))
+extern void (*signal ()) ();], [int i;], AC_DEFINE([SIGVOID],[1],[SIGVOID]))
 AC_CHECKING(sigset)
 AC_TRY_LINK([
 #include <sys/types.h>
@@ -1053,7 +1003,7 @@ sigset(0, (void (*)())0);
 #else
 sigset(0, (int (*)())0);
 #endif
-], AC_DEFINE(USESIGSET))
+], AC_DEFINE([USESIGSET],[1],[USESIGSET]))
 AC_CHECKING(signal implementation)
 AC_TRY_RUN([
 #include <sys/types.h>
@@ -1088,7 +1038,7 @@ main()
 #endif
   exit(0);
 }
-],,AC_DEFINE(SYSVSIGS))
+],,AC_DEFINE([SYSVSIGS],[1],[SYSVSIGS]))
 
 fi
 
@@ -1114,7 +1064,7 @@ AC_TRY_LINK(,[closelog();], , [oldlibs="$LIBS"
 LIBS="$LIBS -lbsd"
 AC_CHECKING(syslog in libbsd.a)
 AC_TRY_LINK(, [closelog();], AC_NOTE(- found.), [LIBS="$oldlibs"
-AC_NOTE(- bad news: syslog missing.) AC_DEFINE(NOSYSLOG)])])
+AC_NOTE(- bad news: syslog missing.) AC_DEFINE([NOSYSLOG],[1],[NOSYSLOG])])])
 
 AC_EGREP_CPP(yes,
 [#ifdef M_UNIX
@@ -1134,26 +1084,26 @@ AC_TRY_COMPILE([#include <sys/types.h>
 #ifdef WEXITSTATUS
   y = WEXITSTATUS(x);
 #endif
-],AC_DEFINE(BSDWAIT))
+],AC_DEFINE([BSDWAIT],[1],[BSDWAIT]))
 
 if test -z "$butterfly"; then
 AC_CHECKING(for termio or termios)
-AC_TRY_CPP([#include <termio.h>], AC_DEFINE(TERMIO),
+AC_TRY_CPP([#include <termio.h>], AC_DEFINE([TERMIO],[1],[TERMIO]),
 if test -n "$posix"; then
-AC_TRY_CPP([#include <termios.h>], AC_DEFINE(TERMIO))
+AC_TRY_CPP([#include <termios.h>], AC_DEFINE([TERMIO],[1],[TERMIO]))
 fi
 )
 fi
 
-dnl AC_CHECK_HEADER(shadow.h, AC_DEFINE(SHADOWPW))
+dnl AC_CHECK_HEADER(shadow.h, AC_DEFINE([SHADOWPW],[1],[SHADOWPW]))
 AC_CHECKING(getspnam)
-AC_TRY_LINK([#include <shadow.h>], [getspnam("x");],AC_DEFINE(SHADOWPW))
+AC_TRY_LINK([#include <shadow.h>], [getspnam("x");],AC_DEFINE([SHADOWPW],[1],[SHADOWPW]))
 
 AC_CHECKING(getttyent)
-AC_TRY_LINK(,[getttyent();], AC_DEFINE(GETTTYENT))
+AC_TRY_LINK(,[getttyent();], AC_DEFINE([GETTTYENT],[1],[GETTTYENT]))
 
 AC_CHECKING(fdwalk)
-AC_TRY_LINK([#include <stdlib.h>], [fdwalk(NULL, NULL);],AC_DEFINE(HAVE_FDWALK))
+AC_TRY_LINK([#include <stdlib.h>], [fdwalk(NULL, NULL);],AC_DEFINE([HAVE_FDWALK],[1],[HAVE_FDWALK]))
 
 AC_CHECKING(whether memcpy/memmove/bcopy handles overlapping arguments)
 AC_TRY_RUN([
@@ -1168,7 +1118,7 @@ main() {
   if (strncmp(buf, "cdedef", 6))
     exit(1);
   exit(0); /* libc version works properly.  */
-}], AC_DEFINE(USEBCOPY))
+}], AC_DEFINE([USEBCOPY],[1],[USEBCOPY]))
 
 AC_TRY_RUN([
 #define bcopy(s,d,l) memmove(d,s,l)
@@ -1183,7 +1133,7 @@ main() {
   if (strncmp(buf, "cdedef", 6))
     exit(1);
   exit(0); /* libc version works properly.  */
-}], AC_DEFINE(USEMEMMOVE))
+}], AC_DEFINE([USEMEMMOVE],[1],[USEMEMMOVE]))
 
 
 AC_TRY_RUN([
@@ -1199,7 +1149,7 @@ main() {
   if (strncmp(buf, "cdedef", 6))
     exit(1);
   exit(0); /* libc version works properly.  */
-}], AC_DEFINE(USEMEMCPY))
+}], AC_DEFINE([USEMEMCPY],[1],[USEMEMCPY]))
 
 AC_MSG_CHECKING(long file names)
 (echo 1 > /tmp/conftest9012345) 2>/dev/null
@@ -1209,12 +1159,12 @@ if test -f /tmp/conftest9012345 && test "$val" = 1; then
 AC_MSG_RESULT(yes)
 else
 AC_MSG_RESULT(no)
-AC_DEFINE(NAME_MAX, 14)
+AC_DEFINE([NAME_MAX], [14], [name max])
 fi
 rm -f /tmp/conftest*
 
 AC_MSG_CHECKING(for vsprintf)
-AC_TRY_LINK(,[vsprintf(0,0,0);], AC_MSG_RESULT(yes);AC_DEFINE(USEVARARGS), AC_MSG_RESULT(no))
+AC_TRY_LINK(,[vsprintf(0,0,0);], AC_MSG_RESULT(yes);AC_DEFINE([USEVARARGS],[1],[USEVARARGS]), AC_MSG_RESULT(no))
 
 AC_HEADER_DIRENT
 
@@ -1234,21 +1184,21 @@ if test -z "$ac_setenv_args"; then
     ], ac_setenv_args=2)
 fi
 if test -n "$ac_setenv_args"; then
-    AC_DEFINE(USESETENV)
+    AC_DEFINE([USESETENV],[1],[USESETENV])
     if test "$ac_setenv_args" = 3; then
-        AC_DEFINE(HAVE_SETENV_3)
+        AC_DEFINE([HAVE_SETENV_3],[1],[HAVE_SETENV_3])
     elif test "$ac_setenv_args" = 2; then
-        AC_DEFINE(HAVE_SETENV_2)
+        AC_DEFINE([HAVE_SETENV_2],[1],[HAVE_SETENV_2])
     fi
 else
     AC_MSG_RESULT(no)
     AC_MSG_CHECKING(for putenv)
-    AC_TRY_LINK(,[putenv((char *)0);unsetenv((char *)0);], AC_MSG_RESULT(yes) ,  AC_MSG_RESULT(no);AC_DEFINE(NEEDPUTENV))
+    AC_TRY_LINK(,[putenv((char *)0);unsetenv((char *)0);], AC_MSG_RESULT(yes) ,  AC_MSG_RESULT(no);AC_DEFINE([NEEDPUTENV],[1],[NEEDPUTENV]))
 fi
 AC_MSG_CHECKING([for nl_langinfo(CODESET)])
 AC_TRY_LINK([
 #include <langinfo.h>
-],[nl_langinfo(CODESET);], AC_MSG_RESULT(yes);AC_DEFINE(HAVE_NL_LANGINFO), AC_MSG_RESULT(no))
+],[nl_langinfo(CODESET);], AC_MSG_RESULT(yes);AC_DEFINE([HAVE_NL_LANGINFO],[1],[HAVE_NL_LANGINFO]), AC_MSG_RESULT(no))
 
 AC_SEARCH_LIBS(gethostname, nsl)
 
@@ -1263,25 +1213,25 @@ if test "$enable_pam" = "yes"; then
 	pam_start(0, 0, 0, 0);
 	pam_authenticate(0, 0);
 	pam_end(0,0);
-    ], AC_MSG_RESULT(yes);AC_DEFINE(USE_PAM),
+    ], AC_MSG_RESULT(yes);AC_DEFINE([USE_PAM],[1],[USE_PAM]),
        AC_MSG_RESULT(no);LIBS="$oldlibs")
 fi
 
 AC_ARG_ENABLE(use_locale, [  --enable-locale         use localized month/day names])
 if test "$enable_use_locale" = "yes"; then
-  AC_DEFINE(USE_LOCALE)
+  AC_DEFINE([USE_LOCALE],[1],[USE_LOCALE])
 fi
 AC_ARG_ENABLE(telnet, [  --enable-telnet         enable builtin telnet])
 if test "$enable_telnet" = "yes"; then
-  AC_DEFINE(BUILTIN_TELNET)
+  AC_DEFINE([BUILTIN_TELNET],[1],[BUILTIN_TELNET])
 fi
 AC_ARG_ENABLE(colors256, [  --enable-colors256      enable support for 256 colors])
 if test "$enable_colors256" = "yes"; then
-  AC_DEFINE(COLORS256)
+  AC_DEFINE([COLORS256],[1],[COLORS256])
 fi
 AC_ARG_ENABLE(rxvt_osc, [  --enable-rxvt_osc       enable support for rxvt OSC codes])
 if test "$enable_rxvt_osc" = "yes"; then
-  AC_DEFINE(RXVT_OSC)
+  AC_DEFINE([RXVT_OSC],[1],[RXVT_OSC])
 fi
 
 dnl
