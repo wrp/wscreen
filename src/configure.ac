@@ -7,7 +7,22 @@ AC_CONFIG_SRCDIR([screen.c])
 AC_CONFIG_HEADERS([config.h])
 AC_MSG_NOTICE([this is screen version $VERSION])
 
-# AM_INIT_AUTOMAKE(foreign)
+# After autoconf is cleaned up, we'll add automake support.
+# AM_INIT_AUTOMAKE([foreign])
+
+# We'll want to ensure that we make checks in the following order:
+
+# Checks for programs.
+AC_PROG_CC
+AC_PROG_CPP
+AC_PROG_AWK
+
+# Checks for libraries.
+AC_SEARCH_LIBS([strerror], [cposix])
+
+# Checks for header files.
+# Checks for typedefs, structures, and compiler characteristics.
+# Checks for library functions.
 
 AC_DEFINE([ORIGIN],["FAU"],[origin])
 AC_DEFINE([REV], [4], [Revision])
@@ -16,10 +31,6 @@ AC_DEFINE([PATCHLEVEL], [0], [Patchlevel])
 AC_DEFINE([DATE], ["2-May-06"], [date])
 AC_DEFINE([STATE], ["devel"], [state])
 
-AC_PROG_CC
-AC_PROG_CPP
-AC_SEARCH_LIBS([strerror], [cposix])
-AC_PROG_AWK
 
 AC_PROG_INSTALL
 
