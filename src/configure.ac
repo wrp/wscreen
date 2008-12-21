@@ -5,7 +5,7 @@ AC_PREREQ([2.61])
 AC_INIT([screen], [4.1.0], [screen-devel@gnu.org])
 AC_CONFIG_SRCDIR([screen.c])
 AC_CONFIG_HEADERS([config.h])
-AC_MSG_NOTICE([this is screen version $VERSION])
+AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
 
 # After autoconf is cleaned up, we'll add automake support.
 # AM_INIT_AUTOMAKE([foreign])
