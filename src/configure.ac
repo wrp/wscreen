@@ -60,18 +60,6 @@ AC_ARG_ENABLE([socket-dir],
 )
 
 
-AC_DEFUN([AC_PROGRAM_SOURCE],
-[AC_REQUIRE([AC_PROG_CPP])AC_PROVIDE([$0])cat > conftest.c <<EOF
-#include "confdefs.h"
-[$1]
-_CUT_HERE_
-[$2]
-EOF
-eval "$ac_cpp conftest.c 2>&5 | sed -e '1,/_CUT_HERE_/d' -e 's/ //g' > conftest.out"
-. ./conftest.out
-rm -f conftest*
-])
-
 define([AC_NOTE],
 [AC_MSG_NOTICE([$1])
 ])
