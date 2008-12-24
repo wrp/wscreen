@@ -40,26 +40,18 @@ dnl --- cut ---  Below here is old.
 
 AC_PROG_INSTALL
 
-AC_MSG_CHECKING([if a system-wide socket dir should be used]) 
-AC_ARG_ENABLE([socket-dir],
-    AS_HELP_STRING([--disable-socket-dir],[disable system wide socket-dir and use ~/.screen instead]),
-    [AC_MSG_RESULT([no.  ~/.screen will be used instead.])],
-    [
-	AC_MSG_RESULT([yes])
-	AC_MSG_CHECKING([for the socket dir])
-	SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
-	AC_ARG_WITH([socket-dir],
-	    AS_HELP_STRING([--with-socket-dir=path], [where to put the per-user sockets]),
-	     [ dnl (( 
-	  case "${withval}" in
-	    *\"*) SOCKDIR="${withval}" ;;
-	    *) SOCKDIR="\"${withval}\"" ;;
-	  esac
-        ])
-	AC_MSG_RESULT(${SOCKDIR})
-	AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
-    ]
-)
+AC_MSG_CHECKING([for the socket dir])
+SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
+AC_ARG_WITH([socket-dir],
+    AS_HELP_STRING([--with-socket-dir=path], [where to put the per-user sockets]),
+     [ dnl (( 
+  case "${withval}" in
+    *\"*) SOCKDIR="${withval}" ;;
+    *) SOCKDIR="\"${withval}\"" ;;
+  esac
+])
+AC_MSG_RESULT(${SOCKDIR})
+AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
 
 
 define([AC_NOTE],
