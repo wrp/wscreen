@@ -19,6 +19,7 @@ AC_PROG_AWK
 
 # Checks for libraries.
 AC_SEARCH_LIBS([strerror], [cposix])
+AC_SEARCH_LIBS([sprintf], [util utils])
 
 # Checks for header files.
 # Checks for typedefs, structures, and compiler characteristics.
@@ -833,12 +834,6 @@ if test "$have_utempter" = yes; then
   LIBS="$LIBS -lutempter"
 fi
 
-dnl
-dnl    ****  loadav  ****
-dnl
-AC_CHECKING(for libutil(s))
-test -f /usr/lib/libutils.a && LIBS="$LIBS -lutils"
-test -f /usr/lib/libutil.a && LIBS="$LIBS -lutil"
 
 AC_CHECKING(getloadavg)
 AC_TRY_LINK(,[getloadavg((double *)0, 0);],
