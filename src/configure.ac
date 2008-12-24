@@ -32,7 +32,9 @@ AC_DEFINE([PATCHLEVEL], [0], [Patchlevel])
 AC_DEFINE([DATE], ["2-May-06"], [date])
 AC_DEFINE([STATE], ["devel"], [state])
 
-AC_DEFINE([MAXWIN],[40],[Maximum of simultaneously allowed windows per screen session.])
+AC_ARG_VAR([MAXWIN],[Maximum of simultaneously allowed windows per screen session.])
+AC_DEFINE_UNQUOTED([MAXWIN],[${MAXWIN-40}],[Maximum of simultaneously allowed windows per screen session.])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWIN must be an int]))
 
 dnl --- cut ---  Below here is old.
 
