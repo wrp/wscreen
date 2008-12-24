@@ -1,0 +1,13 @@
+
+In updating the build, I anticipate some difficulties.  To
+make my life easier, some compromises will be made and some
+functionality will be sacrificed.  Hopefully not too much.
+I hope to use this file to maintain a list of all the
+changes I make that affect functionality.
+
+*) The configure test for determining the load average is
+very fragile.  It tests for systems rather than features,
+and that means I cannot tell what it is looking for.  Rather
+than sweating the details, I'm going to disable the loadavg
+feature.  I'll do this via the configure script, so that
+when I reasonable test is known it will be easy to replace.
