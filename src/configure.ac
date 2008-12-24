@@ -942,46 +942,7 @@ main()
 fi
 fi
 
-AC_PROGRAM_SOURCE([
-#include <sys/types.h>
-#include <sys/param.h>
-],[
-#if !defined(LOADAV_GETLOADAVG) && ((defined(hp300) && !defined(__hpux)) || defined(sun) || (defined(ultrix) && defined(mips)) || defined(_SEQUENT_) || defined(sgi) || (defined(SVR4) && !defined(__hpux)) || defined(sony_news) || (!defined(__osf__) && defined(__alpha)) || defined(_IBMR2) || defined(_AUX_SOURCE) || defined(AUX) || defined(m88k))
-loadtype=long
-# if defined(apollo) || defined(_IBMR2) || defined(_AUX_SOURCE) || defined(AUX)
-loadscale=65536
-# else
-#  if defined(FSCALE) && !defined(__osf__)
-#   undef FSCALE
-loadscale=FSCALE
-#  else
-#   ifdef sgi
-loadtype=int
-loadscale=1024
-#   else
-#    if defined(MIPS) || defined(SVR4) || defined(m88k)
-loadscale=256
-#    else /* not MIPS */
-loadscale=1000 	/* our default value */
-#    endif /* MIPS */
-#   endif /* sgi */
-#  endif /* not FSCALE */
-# endif /* not apollo */
-#else
-loadtype=double
-loadscale=1
-#endif
-#ifdef alliant
-loadnum=4
-#else
-loadnum=3
-#endif
-])
 
-if test -n "$load" ; then AC_DEFINE([LOADAV],[1],[LOADAV]) fi
-if test -n "$loadtype" ; then AC_DEFINE_UNQUOTED(LOADAV_TYPE,$loadtype,[undocumented]) fi
-if test -n "$loadnum" ; then AC_DEFINE_UNQUOTED(LOADAV_NUM,$loadnum,[undocumented]) fi
-if test -n "$loadscale" ; then AC_DEFINE_UNQUOTED(LOADAV_SCALE,$loadscale,[undocumented]) fi
 
 dnl
 dnl    ****  signal handling  ****
