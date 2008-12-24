@@ -10,9 +10,8 @@ AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
 # After autoconf is cleaned up, we'll add automake support.
 # AM_INIT_AUTOMAKE([foreign])
 
-# We'll want to ensure that we make checks in the following order:
-
 # Checks for programs.
+AC_PROG_INSTALL
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_AWK
@@ -36,10 +35,6 @@ AC_ARG_VAR([MAXWIN],[Maximum of simultaneously allowed windows per screen sessio
 AC_DEFINE_UNQUOTED([MAXWIN],[${MAXWIN-40}],[Maximum of simultaneously allowed windows per screen session.])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWIN must be an int]))
 
-dnl --- cut ---  Below here is old.
-
-AC_PROG_INSTALL
-
 AC_MSG_CHECKING([for the socket dir])
 SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
 AC_ARG_WITH([socket-dir],
@@ -53,11 +48,11 @@ AC_ARG_WITH([socket-dir],
 AC_MSG_RESULT(${SOCKDIR})
 AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
 
-
 define([AC_NOTE],
 [AC_MSG_NOTICE([$1])
 ])
 
+dnl --- cut ---  Below here is old.
 dnl
 dnl    ****  special unix variants  ****
 dnl
