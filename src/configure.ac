@@ -52,14 +52,13 @@ define([AC_NOTE],
 [AC_MSG_NOTICE([$1])
 ])
 
-dnl --- cut ---  Below here is old.
-dnl
-dnl    ****  special unix variants  ****
-dnl
-if test -n "$ISC"; then
-  AC_DEFINE([ISC],[1],[ISC]) LIBS="$LIBS -linet"
-fi
+AS_IF([test -n "$ISC"],
+  [AC_DEFINE([ISC],[1],[ISC])]
+  [AC_HAVE_LIBRARY([inet],,AC_MSG_ERROR([libinet is required on $ISC]))]
+)
 
+
+dnl --- cut ---  Below here is old.
 
 if test -f /sysV68 ; then
 AC_DEFINE([sysV68],[1],[sysV68])
