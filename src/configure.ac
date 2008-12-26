@@ -36,7 +36,6 @@ AC_DEFINE_UNQUOTED([MAXWIN],[${MAXWIN-40}],[Maximum of simultaneously allowed wi
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWIN must be an int]))
 
 AC_MSG_CHECKING([for the socket dir])
-SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
 AC_ARG_WITH([socket-dir],
     [AS_HELP_STRING([--with-socket-dir=path], [Where to put the per-user sockets.
 
@@ -55,7 +54,8 @@ AC_ARG_WITH([socket-dir],
     [AS_CASE([${withval}],
         [*\"*], [SOCKDIR="${withval}"],
         [SOCKDIR="\"${withval}\""]
-    )]
+    )],
+    [SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"]
 )
 AC_MSG_RESULT(${SOCKDIR})
 AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
