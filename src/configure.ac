@@ -38,7 +38,20 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWI
 AC_MSG_CHECKING([for the socket dir])
 SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
 AC_ARG_WITH([socket-dir],
-    AS_HELP_STRING([--with-socket-dir=path], [where to put the per-user sockets]),
+    AS_HELP_STRING([--with-socket-dir=path], [Where to put the per-user sockets.
+
+        Define SOCKDIR to be the directory to contain the named sockets
+        screen creates. This should be in a common subdirectory, such as
+        /usr/local or /tmp. It makes things a little more secure if you
+        choose a directory which is not writable by everyone or where the
+        "sticky" bit is on, but this isn't required.
+        If SOCKDIR is not defined screen will put the named sockets in
+        the user's home directory. Notice that this can cause you problems
+        if some user's HOME directories are AFS- or NFS-mounted. Especially
+        AFS is unlikely to support named sockets.
+
+        Screen will name the subdirectories "S-$USER" (e.g /tmp/S-davison).
+    ]),
      [ dnl (( 
   case "${withval}" in
     *\"*) SOCKDIR="${withval}" ;;
