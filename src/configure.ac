@@ -38,7 +38,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWI
 AC_MSG_CHECKING([for the socket dir])
 SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
 AC_ARG_WITH([socket-dir],
-    AS_HELP_STRING([--with-socket-dir=path], [Where to put the per-user sockets.
+    [AS_HELP_STRING([--with-socket-dir=path], [Where to put the per-user sockets.
 
         Define SOCKDIR to be the directory to contain the named sockets
         screen creates. This should be in a common subdirectory, such as
@@ -51,7 +51,7 @@ AC_ARG_WITH([socket-dir],
         AFS is unlikely to support named sockets.
 
         Screen will name the subdirectories "S-$USER" (e.g /tmp/S-davison).
-    ]),
+    ])],
      [ dnl (( 
   case "${withval}" in
     *\"*) SOCKDIR="${withval}" ;;
