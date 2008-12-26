@@ -52,12 +52,11 @@ AC_ARG_WITH([socket-dir],
 
         Screen will name the subdirectories "S-$USER" (e.g /tmp/S-davison).
     ])],
-     [ dnl (( 
-  case "${withval}" in
-    *\"*) SOCKDIR="${withval}" ;;
-    *) SOCKDIR="\"${withval}\"" ;;
-  esac
-])
+    [AS_CASE([${withval}],
+        [*\"*], [SOCKDIR="${withval}"],
+        [SOCKDIR="\"${withval}\""]
+    )]
+)
 AC_MSG_RESULT(${SOCKDIR})
 AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
 
