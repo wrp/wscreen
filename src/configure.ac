@@ -57,6 +57,21 @@ AC_ARG_WITH([socket-dir],
     )],
     [SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"]
 )
+
+AC_ARG_WITH([socket-dir-remote],
+    [AS_HELP_STRING([--with-socket-dir-remote=path],
+        [This option is identical to --with-socket-dir, but indicates
+	that the specified path is a network mount.  If given, this
+        will override a value given by --with-socket-dir.]
+    )],
+    [AS_CASE([${withval}],
+        [*\"*], [SOCKDIR="${withval}"],
+        [SOCKDIR="\"${withval}\""]
+    )],
+    [AC_DEFINE([SOCKDIR_IS_LOCAL_TO_HOST],[1],
+        [Define this if the SOCKDIR is not shared between hosts.]
+    )]
+)
 AC_MSG_RESULT(${SOCKDIR})
 AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
 

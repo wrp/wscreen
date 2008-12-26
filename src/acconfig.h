@@ -54,11 +54,6 @@
 #undef SOCKDIR
 
 /*
- * Define this if the SOCKDIR is not shared between hosts.
- */
-#define SOCKDIR_IS_LOCAL_TO_HOST
-
-/*
  * Screen can look for the environment variable $SYSSCREENRC and -if it
  * exists- load the file specified in that variable as global screenrc.
  * If you want to enable this feature, define ALLOW_SYSSCREENRC to one (1).
