@@ -151,7 +151,10 @@ AC_EGREP_CPP(yes,
 #endif
 ],
         [AC_MSG_NOTICE([- you have a POSIX system])]
-        [AC_DEFINE([POSIX],[1],[define if _POSIX_VERSION defined])]
+        [AC_DEFINE([POSIX],[1], dnl
+            [Define POSIX if your system supports IEEE Std 1003.1-1988 (POSIX).]
+        )]
+
         [posix=1]
     )]
 )

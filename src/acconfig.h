@@ -303,11 +303,6 @@
 #endif
 
 /*
- * Define POSIX if your system supports IEEE Std 1003.1-1988 (POSIX).
- */
-#undef POSIX
-
-/*
  * Define BSDJOBS if you have BSD-style job control (both process
  * groups and a tty that deals correctly with them).
  */
