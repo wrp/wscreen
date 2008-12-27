@@ -138,22 +138,23 @@ AC_EGREP_CPP(yes,
 [#if defined(butterfly)
   yes;
 #endif
-], butterfly=1)
+],
+    [butterfly=1],
 
-if test -z "$butterfly"; then
-if test -n "$ULTRIX"; then
-  test -z "$GCC" && CC="$CC -YBSD"
-fi
-AC_CHECKING(for POSIX.1)
-AC_EGREP_CPP(yes,
-[#include <sys/types.h>
+    dnl This is not "butterfly".
+    [AC_CHECKING([for POSIX.1])]
+    [AC_EGREP_CPP([yes],[
+#include <sys/types.h>
 #include <unistd.h>
-main () {
 #ifdef _POSIX_VERSION
   yes;
 #endif
-], AC_NOTE(- you have a POSIX system) AC_DEFINE([POSIX],[1],[POSIX]) posix=1)
-fi
+],
+        [AC_MSG_NOTICE([- you have a POSIX system])]
+        [AC_DEFINE([POSIX],[1],[define if _POSIX_VERSION defined])]
+        [posix=1]
+    )]
+)
 
 AC_CHECKING(for System V)
 AC_TRY_COMPILE(

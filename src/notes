@@ -11,3 +11,9 @@ and that means I cannot tell what it is looking for.  Rather
 than sweating the details, I'm going to disable the loadavg
 feature.  I'll do this via the configure script, so that
 when I reasonable test is known it will be easy to replace.
+
+*) -YBSD was automatically appended to CC for ULTRIX systems.
+CC Should not be touched by the build system, as it is a
+user defined variable.  Arguably, we could set -YBSD in
+AM_CFLAGS, but frankly it is better left to the user to
+define that value if needed.
