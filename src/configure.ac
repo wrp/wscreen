@@ -25,9 +25,12 @@ AC_SEARCH_LIBS([sprintf], [util utils])
 # Checks for library functions.
 
 AC_DEFINE([ORIGIN],["FAU"],[origin])
-AC_DEFINE([REV], [4], [Revision])
-AC_DEFINE([VERS], [1], [Version])
-AC_DEFINE([PATCHLEVEL], [0], [Patchlevel])
+REV=`echo $PACKAGE_VERSION |  sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/'`
+AC_DEFINE_UNQUOTED([REV], [$REV], [Revision])
+VERS=`echo $PACKAGE_VERSION |  sed 's/\(.*\)\.\(.*\)\.\(.*\)/\2/'`
+AC_DEFINE_UNQUOTED([VERS], [$VERS], [Version])
+PATCHLEVEL=`echo $PACKAGE_VERSION |  sed 's/\(.*\)\.\(.*\)\.\(.*\)/\3/'`
+AC_DEFINE_UNQUOTED([PATCHLEVEL], [$PATCHLEVEL], [Patchlevel])
 AC_DEFINE([DATE], ["2-May-06"], [date])
 AC_DEFINE([STATE], ["devel"], [state])
 
