@@ -1060,14 +1060,25 @@ AC_TRY_COMPILE([#include <sys/types.h>
 #endif
 ],AC_DEFINE([BSDWAIT],[1],[BSDWAIT]))
 
-if test -z "$butterfly"; then
-AC_CHECKING(for termio or termios)
-AC_TRY_CPP([#include <termio.h>], AC_DEFINE([TERMIO],[1],[TERMIO]),
-if test -n "$posix"; then
-AC_TRY_CPP([#include <termios.h>], AC_DEFINE([TERMIO],[1],[TERMIO]))
-fi
+m4_pushdef([TERMIO_DESCRIPTION],[
+Define TERMIO if you have struct termio instead of struct sgttyb.
+This is usually the case for SVID systems, where BSD uses sgttyb.
+POSIX systems should define this anyway, even though they use
+struct termios.])
+
+AS_IF([test -z "$butterfly"],
+    [AC_CHECKING([for termio or termios])]
+    [AC_PREPROC_IFELSE([#include <termio.h>],
+        [AC_DEFINE([TERMIO],[1],TERMIO_DESCRIPTION)]
+	,
+        [AS_IF([test -n "$posix"],
+	    [AC_TRY_CPP([#include <termios.h>],
+	        [AC_DEFINE([TERMIO],[1],TERMIO_DESCRIPTION)]
+            ])
+	])
+    )]
 )
-fi
+m4_popdef([TERMIO_DESCRIPTION])
 
 dnl AC_CHECK_HEADER(shadow.h, AC_DEFINE([SHADOWPW],[1],[SHADOWPW]))
 AC_CHECKING(getspnam)

@@ -314,14 +314,6 @@
 #undef BSDJOBS
 
 /*
- * Define TERMIO if you have struct termio instead of struct sgttyb.
- * This is usually the case for SVID systems, where BSD uses sgttyb.
- * POSIX systems should define this anyway, even though they use
- * struct termios.
- */
-#undef TERMIO
-
-/*
  * Define CYTERMIO if you have cyrillic termio modes.
  */
 #undef CYTERMIO
