@@ -64,10 +64,10 @@ AS_IF([test -z "${SOCKDIR}"],
 )
 
 dnl Validate SOCKDIR.  If SOCKDIR is invalid, try putting "" around it.
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[char* s = ${SOCKDIR};])],[],
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int eff_uid; char* s = ${SOCKDIR};])],[],
     [SOCKDIR=\"$SOCKDIR\"]
     [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[char* s = ${SOCKDIR};])],[],
-        AC_MSG_ERROR([SOCKDIR must evaluate to a valid char *])
+        AC_MSG_ERROR([SOCKDIR:$SOCKDIR must evaluate to a valid char *])
     ])
 )
 AC_MSG_RESULT(${SOCKDIR})
