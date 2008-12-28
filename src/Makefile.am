@@ -4,6 +4,7 @@
 # See machine dependant config.h for more configuration options.
 #
 
+ACLOCAL_AMFLAGS = -I m4
 srcdir = @srcdir@
 VPATH = @srcdir@
 
