@@ -123,6 +123,12 @@ AS_CASE([$host_os],
     [ultrix], ULTRIX=1
 )
 
+AS_CASE([$host_vendor],
+    [sequent],
+        [AC_CHECK_LIB([socket], [main])]
+        [AC_CHECK_LIB([inet], [main])]
+        [seqptx=1]
+)
 
 
 dnl ghazi@caip.rutgers.edu (Kaveh R. Ghazi):
@@ -160,12 +166,6 @@ AC_TRY_COMPILE(
 #include <signal.h>
 #include <fcntl.h>], [int x = SIGCHLD | FNDELAY;], , AC_DEFINE([SYSV],[1],[SYSV]))
 
-AC_CHECKING(for sequent/ptx)
-AC_EGREP_CPP(yes,
-[#ifdef _SEQUENT_
-  yes;
-#endif
-], LIBS="$LIBS -lsocket -linet";seqptx=1)
 
 oldlibs="$LIBS"
 LIBS="$LIBS -lelf"
