@@ -111,7 +111,7 @@ fi
 AC_CANONICAL_HOST
 
 AS_CASE([$host_cpu],
-    [mips],      [AC_DEFINE([MIPS],[1],[MIPS])]
+    [mips],      [AC_DEFINE([MIPS],[1],[MIPS])],
     [pyramid],
         [AC_CHECK_LIB([pyr], [main], [],
 	    [AC_TRY_LINK( [],[open_controlling_pty("")], AC_DEFINE([OSX],[1],[OSX]), LIBS="$oldlibs")]
