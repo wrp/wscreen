@@ -24,6 +24,9 @@ AC_SEARCH_LIBS([sprintf], [util utils])
 # Checks for typedefs, structures, and compiler characteristics.
 # Checks for library functions.
 
+# Parse revision number for backwards compatibility.
+# The code should be updated to use PACKAGE_VERSION
+# directly.
 AC_DEFINE([ORIGIN],["FAU"],[origin])
 REV=`echo $PACKAGE_VERSION |  sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/'`
 AC_DEFINE_UNQUOTED([REV], [$REV], [Revision])
@@ -34,6 +37,7 @@ AC_DEFINE_UNQUOTED([PATCHLEVEL], [$PATCHLEVEL], [Patchlevel])
 AC_DEFINE([DATE], ["2-May-06"], [date])
 AC_DEFINE([STATE], ["devel"], [state])
 
+# User configuration section.
 AC_ARG_VAR([MAXWIN],[Maximum of simultaneously allowed windows per screen session.])
 AC_DEFINE_UNQUOTED([MAXWIN],[${MAXWIN-40}],[Maximum of simultaneously allowed windows per screen session.])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWIN must be an int]))
