@@ -104,14 +104,12 @@ AS_IF([test -n "$ISC"],
   [AC_HAVE_LIBRARY([inet],,AC_MSG_ERROR([libinet is required on $ISC]))]
 )
 
-if test -f /sysV68 ; then
-AC_DEFINE([sysV68],[1],[sysV68])
-fi
 
 AC_CANONICAL_HOST
 
 AS_CASE([$host_cpu],
     [mips],      [AC_DEFINE([MIPS],[1],[MIPS])],
+    [m68k],      [AC_DEFINE([sysV68],[1],[define if running on motorola 68000 family])],
     [pyramid],
         [AC_CHECK_LIB([pyr], [main], [],
 	    [AC_TRY_LINK( [],[open_controlling_pty("")], AC_DEFINE([OSX],[1],[OSX]), LIBS="$oldlibs")]
