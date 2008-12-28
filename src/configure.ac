@@ -1066,11 +1066,11 @@ AC_TRY_COMPILE([#include <sys/types.h>
 #endif
 ],AC_DEFINE([BSDWAIT],[1],[BSDWAIT]))
 
-m4_pushdef([TERMIO_DESCRIPTION],[
+m4_pushdef([TERMIO_DESCRIPTION],[[
 Define TERMIO if you have struct termio instead of struct sgttyb.
 This is usually the case for SVID systems, where BSD uses sgttyb.
 POSIX systems should define this anyway, even though they use
-struct termios.])
+struct termios.]])
 
 AS_IF([test -z "$butterfly"],
     [AC_CHECKING([for termio or termios])]
