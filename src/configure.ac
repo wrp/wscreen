@@ -5,6 +5,7 @@ AC_PREREQ([2.61])
 AC_INIT([screen], [4.1.0], [screen-devel@gnu.org])
 AC_CONFIG_SRCDIR([screen.c])
 AC_CONFIG_HEADERS([config.h])
+# AC_CONFIG_LIBOBJ_DIR([lib])
 AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
 AM_INIT_AUTOMAKE([foreign])
 
@@ -23,6 +24,7 @@ AC_SEARCH_LIBS([sprintf], [util utils])
 # Checks for header files.
 # Checks for typedefs, structures, and compiler characteristics.
 # Checks for library functions.
+# AC_FUNC_GETLOADAVG
 
 # Parse revision number for backwards compatibility.
 # The code should be updated to use PACKAGE_VERSION
