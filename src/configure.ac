@@ -184,25 +184,6 @@ AC_CHECK_HEADERS([stropts.h string.h strings.h])
 
 
 dnl
-dnl    ****  typedefs ****
-dnl
-dnl (currently not used)
-dnl
-dnl AC_CHECKING(for pid_t)
-dnl AC_EGREP_CPP(pid_t,[#include <sys/types.h>
-dnl ],AC_DEFINE([PID_T_DEFINED],[1],[PID_T_DEFINED]))
-dnl
-dnl AC_CHECKING(for sig_t)
-dnl AC_EGREP_CPP(sig_t,[#include <sys/types.h>
-dnl #include <signal.h>
-dnl ],AC_DEFINE([SIG_T_DEFINED],[1],[SIG_T_DEFINED]))
-dnl
-dnl AC_CHECKING(for uid_t)
-dnl AC_EGREP_CPP(uid_t,[#include <sys/types.h>
-dnl ],AC_DEFINE([UID_T_DEFINED],[1],[UID_T_DEFINED]))
-dnl
-
-dnl
 dnl   ****     Job control     ****
 dnl
 
