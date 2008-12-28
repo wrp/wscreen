@@ -19,11 +19,14 @@ SCREENENCODINGS = $(datadir)/screen/utf8encodings
 AM_CPPFLAGS = -DETCSCREENRC='"$(ETCSCREENRC)"' \
            -DSCREENENCODINGS='"$(SCREENENCODINGS)"'
 
+BUILT_SOURCES = term.h kmapdef.c tty.c comm.h osdef.h
+
 bin_PROGRAMS = screen
+nodist_screen_SOURCES = term.h kmapdef.c tty.c comm.h osdef.h
 screen_SOURCES = screen.c ansi.c fileio.c mark.c misc.c resize.c socket.c \
-	search.c tty.c term.c window.c utmp.c loadav.c putenv.c help.c \
+	search.c term.c window.c utmp.c loadav.c putenv.c help.c \
 	termcap.c input.c attacher.c pty.c process.c display.c comm.c \
-	kmapdef.c acls.c braille.c braille_tsi.c logfile.c layer.c \
+	acls.c braille.c braille_tsi.c logfile.c layer.c \
 	sched.c teln.c nethack.c encoding.c
 
 
