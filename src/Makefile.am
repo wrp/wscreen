@@ -1,9 +1,6 @@
 ## Process this file with automake to create Makefile.in
 #
 # Makefile template for screen 
-#
-# See machine dependant config.h for more configuration options.
-#
 
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = lib
@@ -11,13 +8,13 @@ SUBDIRS = lib
 SCREEN = screen-$(VERSION)
 
 GIT_REV = "`git describe --always 2>/dev/null`"
-DEFS = @DEFS@ -DGIT_REV=\"$(GIT_REV)\"
 
 ETCSCREENRC = $(prefix)/etc/screenrc
 SCREENENCODINGS = $(datadir)/screen/utf8encodings
 
 AM_CPPFLAGS = -DETCSCREENRC='"$(ETCSCREENRC)"' \
-           -DSCREENENCODINGS='"$(SCREENENCODINGS)"'
+	-DSCREENENCODINGS='"$(SCREENENCODINGS)"' \
+	-DGIT_REV=\"$(GIT_REV)\"
 
 BUILT_SOURCES = term.h kmapdef.c tty.c comm.h osdef.h
 
