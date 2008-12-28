@@ -92,6 +92,9 @@ AS_IF([test "X$REMOTE_SOCKDIR" = Xno ],
 )
 AC_MSG_RESULT(${REMOTE_SOCKDIR})
 
+
+dnl --- cut ---  Below here is old.
+
 define([AC_NOTE],
 [AC_MSG_NOTICE([$1])
 ])
@@ -101,51 +104,28 @@ AS_IF([test -n "$ISC"],
   [AC_HAVE_LIBRARY([inet],,AC_MSG_ERROR([libinet is required on $ISC]))]
 )
 
-
-dnl --- cut ---  Below here is old.
-
 if test -f /sysV68 ; then
 AC_DEFINE([sysV68],[1],[sysV68])
 fi
 
-AC_CHECKING(for MIPS)
-if test -f /lib/libmld.a || test -f /usr/lib/libmld.a || test -f /usr/lib/cmplrs/cc/libmld.a; then
-oldlibs="$LIBS"
-test -f /bin/mx || LIBS="$LIBS -lmld" # for nlist. But not on alpha.
-dnl djm@eng.umd.edu: "... for one thing, it doubles the size of the executable"
-AC_CHECKING(mld library)
-AC_TRY_LINK(,,,LIBS="$oldlibs")
-dnl
-dnl
-if test -r /dev/ptc; then
-AC_DEFINE([MIPS],[1],[MIPS])
-AC_CHECKING(wait3)
-AC_TRY_LINK(,[wait3();], ,
-AC_CHECKING(wait2)
-AC_TRY_LINK(,[wait2();],
-dnl John Rouillard (rouilj@sni-usa.com):
-dnl need -I/usr/include/bsd in RISCOS otherwise sockets are broken, no
-dnl job control etc.
-dnl Detect RISCOS if wait2 is present, but not wait3.
-AC_DEFINE([USE_WAIT2],[1],[USE_WAIT2]) LIBS="$LIBS -lbsd" ; CC="$CC -I/usr/include/bsd"
-))
-fi
-fi
+AC_CANONICAL_HOST
+
+AS_CASE([$host_cpu],
+    [mips],      [AC_DEFINE([MIPS],[1],[MIPS])]
+    [pyramid],
+        [AC_CHECK_LIB([pyr], [main], [],
+	    [AC_TRY_LINK( [],[open_controlling_pty("")], AC_DEFINE([OSX],[1],[OSX]), LIBS="$oldlibs")]
+        )]
+)
+AS_CASE([$host_os],
+    [riscos],
+        [AC_DEFINE([USE_WAIT2],[1],[USE_WAIT2])]
+	[LIBS="$LIBS -lbsd"]
+	[CC="$CC -I/usr/include/bsd"],
+    [ultrix], ULTRIX=1
+)
 
 
-AC_CHECKING(for Ultrix)
-AC_EGREP_CPP(yes,
-[#if defined(ultrix) || defined(__ultrix)
-   yes;
-#endif
-], ULTRIX=1)
-
-if test -f /usr/lib/libpyr.a ; then
-oldlibs="$LIBS"
-LIBS="$LIBS -lpyr"
-AC_CHECKING(Pyramid OSX)
-AC_TRY_LINK(,[open_controlling_pty("")], AC_DEFINE([OSX],[1],[OSX]), LIBS="$oldlibs")
-fi
 
 dnl ghazi@caip.rutgers.edu (Kaveh R. Ghazi):
 dnl BBN butterfly is not POSIX, but a MACH BSD system.
