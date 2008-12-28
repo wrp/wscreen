@@ -19,3 +19,13 @@ term.h
 screen
 stamp-h.in
 tty.c
+/link-warning.h
+Makefile.in
+aclocal.m4
+config.guess
+config.sub
+depcomp
+install-sh
+lib/
+m4/
+missing
