@@ -3,7 +3,7 @@
 # Makefile template for screen 
 
 ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = lib
+SUBDIRS = lib doc
 
 SCREEN = screen-$(VERSION)
 
@@ -111,18 +111,4 @@ EXTRA_DIST = acls.h ansi.h display.h extern.h logfile.h mark.h os.h \
 	utf8encodings/cc \
 	utf8encodings/cd \
 	utf8encodings/d6
-
-#	cd doc; ln FAQ README.DOTSCREEN screen.1 screen.texinfo fdpat.ps make.help window_to_display.ps \
-#	  ../dist/$(SCREEN)/doc
-#	cd doc; if test -f screen.info; then ln screen.info* \
-#	   ../dist/$(SCREEN)/doc; fi
-#	cd dist/$(SCREEN)/doc; ln -s ../install.sh .
-#	cd dist/$(SCREEN); ln -s doc/FAQ .
-#	echo "install all Makefiles and config:" > dist/$(SCREEN)/Makefile
-#	echo "	rm -f config.cache" >> dist/$(SCREEN)/Makefile
-#	echo "	sh ./configure"     >> dist/$(SCREEN)/Makefile
-#	cd dist; tar cf ../$(SCREEN).tar $(SCREEN)
-#	rm -rf dist
-
-
 
