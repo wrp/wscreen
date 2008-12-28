@@ -187,7 +187,7 @@ dnl
 dnl   ****     Job control     ****
 dnl
 
-AC_CHECKING(BSD job jontrol)
+AC_CHECKING([BSD job control])
 AC_TRY_LINK(
 [#include <sys/types.h>
 #include <sys/ioctl.h>
