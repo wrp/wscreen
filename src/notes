@@ -17,3 +17,6 @@ CC Should not be touched by the build system, as it is a
 user defined variable.  Arguably, we could set -YBSD in
 AM_CFLAGS, but frankly it is better left to the user to
 define that value if needed.
+
+*) make dist in the master branch does not work
+in a VPATH build.
