@@ -39,8 +39,8 @@ AC_DEFINE_UNQUOTED([MAXWIN],[${MAXWIN-40}],[Maximum of simultaneously allowed wi
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWIN must be an int]))
 
 AC_MSG_CHECKING([for the socket dir])
-AC_ARG_WITH([socket-dir],
-    [AS_HELP_STRING([--with-socket-dir=path], [Where to put the per-user sockets.
+AC_ARG_VAR([SOCKDIR],
+    [Where to put the per-user sockets.
 
         Define SOCKDIR to be the directory to contain the named sockets
         screen creates. This should be in a common subdirectory, such as
@@ -53,30 +53,40 @@ AC_ARG_WITH([socket-dir],
         AFS is unlikely to support named sockets.
 
         Screen will name the subdirectories "S-$USER" (e.g /tmp/S-davison).
-    ])],
-    [AS_CASE([${withval}],
-        [*\"*], [SOCKDIR="${withval}"],
-        [SOCKDIR="\"${withval}\""]
-    )],
+    ]
+)
+AS_IF([test -z "${SOCKDIR}"],
     [SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"]
 )
 
-AC_ARG_WITH([socket-dir-remote],
-    [AS_HELP_STRING([--with-socket-dir-remote=path],
-        [This option is identical to --with-socket-dir, but indicates
-	that the specified path is a network mount.  If given, this
-        will override a value given by --with-socket-dir.]
-    )],
-    [AS_CASE([${withval}],
-        [*\"*], [SOCKDIR="${withval}"],
-        [SOCKDIR="\"${withval}\""]
-    )],
-    [AC_DEFINE([SOCKDIR_IS_LOCAL_TO_HOST],[1],
-        [Define this if the SOCKDIR is not shared between hosts.]
-    )]
+dnl Validate SOCKDIR.  If SOCKDIR is invalid, try putting "" around it.
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[char* s = ${SOCKDIR};])],[],
+    [SOCKDIR=\"$SOCKDIR\"]
+    [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[char* s = ${SOCKDIR};])],[],
+        AC_MSG_ERROR([SOCKDIR must evaluate to a valid char *])
+    ])
 )
 AC_MSG_RESULT(${SOCKDIR})
 AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
+
+AC_MSG_CHECKING([if the socket dir is remote])
+AC_ARG_WITH([remote-socket-dir],
+    [AS_HELP_STRING([--with-remote-socket-dir],
+        [This option indicates that the path specified in SOCKDIR
+        is on a network mount.]
+    )],
+    [AS_CASE([${withval}],
+        [yes], [REMOTE_SOCKDIR="${withval}"],
+        [REMOTE_SOCKDIR=no]
+    )],
+    [REMOTE_SOCKDIR=no] dnl
+)
+AS_IF([test "X$REMOTE_SOCKDIR" = Xno ],
+    [AC_DEFINE([SOCKDIR_IS_LOCAL_TO_HOST],[1],
+        [Define this if the SOCKDIR is not shared between hosts.]
+    )] dnl
+)
+AC_MSG_RESULT(${REMOTE_SOCKDIR})
 
 define([AC_NOTE],
 [AC_MSG_NOTICE([$1])
