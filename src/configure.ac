@@ -6,17 +6,17 @@ AC_INIT([screen], [4.1.0], [screen-devel@gnu.org])
 AC_CONFIG_SRCDIR([screen.c])
 AC_CONFIG_HEADERS([config.h])
 AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
-
-# After autoconf is cleaned up, we'll add automake support.
-# AM_INIT_AUTOMAKE([foreign])
+AM_INIT_AUTOMAKE([foreign])
 
 # Checks for programs.
 AC_PROG_INSTALL
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_AWK
+gl_EARLY
 
 # Checks for libraries.
+gl_INIT
 AC_SEARCH_LIBS([strerror], [cposix])
 AC_SEARCH_LIBS([sprintf], [util utils])
 
@@ -1210,7 +1210,7 @@ test -n "$seqptx" && LIBS="-ltermcap -lc -lsocket -linet -lnsl -lsec -lseq"
 
 AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal error. Sorry.))
 
-AC_OUTPUT(Makefile doc/Makefile, [[
+AC_OUTPUT([Makefile doc/Makefile lib/Makefile], [[
 # a hook for preserving undef directive in config.h
 mv config.h conftest
 sed -e 's@^\(.*\)defin.\( .*\) .*/\*\(.*KEEP_UNDEF_HERE\)@\1undef\2	/\*\3@' < conftest > config.h
