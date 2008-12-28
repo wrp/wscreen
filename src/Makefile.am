@@ -41,7 +41,6 @@ CPP_DEPEND=$(CC) -MM
 
 INSTALL = @INSTALL@
 INSTALL_PROGRAM = @INSTALL_PROGRAM@
-INSTALL_DATA = @INSTALL_DATA@
 
 AWK = @AWK@
 
@@ -204,7 +203,6 @@ $(SCREEN).tar: .version term.h comm.h tty.c kmapdef.c
 	cd etc; ln * ../dist/$(SCREEN)/etc
 	mkdir dist/$(SCREEN)/utf8encodings
 	cd utf8encodings; ln * ../dist/$(SCREEN)/utf8encodings
-	# sed -e 's/^startup/#startup/' -e 's/^autodetach/#autodetach/' < $(ETCSCREENRC) > dist/$(SCREEN)/etc/etcscreenrc 
 	cp $(HOME)/.screenrc dist/$(SCREEN)/etc/screenrc
 	mkdir dist/$(SCREEN)/doc
 	sed -e 's@/local/emacs@/usr/local@g' < doc/Makefile.in > dist/$(SCREEN)/doc/Makefile.in
@@ -230,7 +228,7 @@ lint:
 	lint -I. $(CFILES)
 
 saber:
-	#load $(CFLAGS) screen.c ansi.c $(LIBS)
+	echo load $(CFLAGS) screen.c ansi.c $(LIBS)
 
 config:
 	rm -f config.cache
