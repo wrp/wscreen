@@ -32,13 +32,6 @@
  */
 
 
-/*
- * Screen can look for the environment variable $SYSSCREENRC and -if it
- * exists- load the file specified in that variable as global screenrc.
- * If you want to enable this feature, define ALLOW_SYSSCREENRC to one (1).
- * Otherwise ETCSCREENRC is always loaded.
- */
-#define ALLOW_SYSSCREENRC 1
 
 /*
  * Define CHECKLOGIN to force Screen users to enter their Unix password

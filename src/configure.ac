@@ -75,6 +75,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int eff_uid; char* s = ${SOCKDIR};])],[],
 AC_MSG_RESULT(${SOCKDIR})
 AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
 
+
 AC_MSG_CHECKING([if the socket dir is remote])
 AC_ARG_WITH([remote-socket-dir],
     [AS_HELP_STRING([--with-remote-socket-dir],
@@ -93,6 +94,18 @@ AS_IF([test "X$REMOTE_SOCKDIR" = Xno ],
     )] dnl
 )
 AC_MSG_RESULT(${REMOTE_SOCKDIR})
+
+
+AC_ARG_VAR([ALLOW_SYSSCREENRC],[
+	Screen can look for the environment variable $SYSSCREENRC and -if it
+	exists- load the file specified in that variable as global screenrc.
+	If you want to disable this feature, define ALLOW_SYSSCREENRC to 'no'.]
+)
+AS_CASE([$ALLOW_SYSSCREENRC],
+	[no|n|N|NO],[],
+	[AC_DEFINE([ALLOW_SYSSCREENRC], [1],
+		[Define to 1 to allow $SYSSCREENRC to load a global screenrc])]
+)
 
 
 dnl --- cut ---  Below here is old.
