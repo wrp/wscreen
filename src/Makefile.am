@@ -54,7 +54,8 @@ shadow:
 term.h: term.c term.sh
 	AWK=$(AWK) srcdir=$(srcdir) sh $(srcdir)/term.sh
 
-kmapdef.c: term.h
+kmapdef.c: term.sh
+	AWK=$(AWK) srcdir=$(srcdir) sh $(srcdir)/term.sh
 
 tty.c:	tty.sh 
 	sh $(srcdir)/tty.sh tty.c
