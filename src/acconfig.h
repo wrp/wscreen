@@ -34,13 +34,9 @@
 
 
 /*
- * Define CHECKLOGIN to force Screen users to enter their Unix password
- * in addition to the screen password.
- *
  * Define NOSYSLOG if yo do not have logging facilities. Currently
  * syslog() will be used to trace ``su'' commands only.
  */
-#define CHECKLOGIN 1
 #undef NOSYSLOG
 
 

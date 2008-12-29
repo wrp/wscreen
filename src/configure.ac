@@ -108,6 +108,15 @@ AS_CASE(["x$enable_sysscreenrc"],
 )
 
 
+AC_ARG_ENABLE([checklogin],[AS_HELP_STRING([--disable-checklogin],
+	[force Screen users to enter their Unix password in addition
+	to the screen password.])]
+)
+AS_IF([test "x$enable_checklogin" != xno],
+	[AC_DEFINE([CHECKLOGIN], [1],
+		[Define to 1 to require Unix password in addition to screen password])]
+)
+
 dnl --- cut ---  Below here is old.
 
 define([AC_NOTE],
