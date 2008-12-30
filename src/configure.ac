@@ -42,7 +42,7 @@ AC_DEFINE([STATE], ["devel"], [state])
 # User configuration section.
 AC_ARG_VAR([MAXWIN],[Maximum of simultaneously allowed windows per screen session.])
 AC_DEFINE_UNQUOTED([MAXWIN],[${MAXWIN-40}],[Maximum of simultaneously allowed windows per screen session.])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWIN must be an int]))
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWIN=$MAXWIN must be an int]))
 
 AC_MSG_CHECKING([for the socket dir])
 AC_ARG_VAR([SOCKDIR],
