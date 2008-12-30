@@ -33,11 +33,6 @@
 
 
 
-/*
- * Define NOSYSLOG if yo do not have logging facilities. Currently
- * syslog() will be used to trace ``su'' commands only.
- */
-#undef NOSYSLOG
 
 
 /* 

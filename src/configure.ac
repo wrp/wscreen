@@ -22,8 +22,13 @@ AC_SEARCH_LIBS([strerror], [cposix])
 AC_SEARCH_LIBS([sprintf], [util utils])
 
 # Checks for header files.
+AC_CHECK_HEADERS([syslog.h])
 # Checks for typedefs, structures, and compiler characteristics.
 # Checks for library functions.
+AC_CHECK_FUNC([syslog],[],[AC_DEFINE([NOSYSLOG],[1],[[
+ Define NOSYSLOG if you do not have logging facilities. Currently
+ syslog() will be used to trace ``su'' commands only.]])])
+
 # AC_FUNC_GETLOADAVG
 
 # Parse revision number for backwards compatibility.
