@@ -55,7 +55,7 @@ AC_DEFUN([VARTYPE],
 ])
 
 VARTYPE([MAXWIN],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
-
+VARTYPE([PTYMODE],[0622],[int],[permissions for the PTY.  Defaults to 0622])
 
 AC_MSG_CHECKING([for the socket dir])
 AC_ARG_VAR([SOCKDIR],

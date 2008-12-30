@@ -36,8 +36,6 @@
 
 
 /* 
- * define PTYMODE if you do not like the default of 0622, which allows 
- * public write to your pty.
  * define PTYGROUP to some numerical group-id if you do not want the
  * tty to be in "your" group.
  * Note, screen is unable to change mode or group of the pty if it
@@ -46,7 +44,6 @@
  * filesystem so screen should not even attempt to set mode or group  
  * even if running as root (e.g. on TiVo).
  */
-#undef PTYMODE
 #undef PTYGROUP
 #undef PTYROFS
 
