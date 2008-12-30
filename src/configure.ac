@@ -45,9 +45,17 @@ AC_DEFINE([DATE], ["2-May-06"], [date])
 AC_DEFINE([STATE], ["devel"], [state])
 
 # User configuration section.
-AC_ARG_VAR([MAXWIN],[Maximum of simultaneously allowed windows per screen session.])
-AC_DEFINE_UNQUOTED([MAXWIN],[${MAXWIN-40}],[Maximum of simultaneously allowed windows per screen session.])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int x = MAXWIN;])],[],AC_MSG_ERROR([MAXWIN=$MAXWIN must be an int]))
+dnl VARTYPE( name, default, type, description )
+dnl Set an AC_ARG_VAR and validate it as a variable of the correct type.
+AC_DEFUN([VARTYPE],
+[
+	AC_ARG_VAR([$1],[$4])
+	AC_DEFINE_UNQUOTED([$1],[${$1-$2}],[$4])
+	AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[$3 x = $1;])],[],AC_MSG_ERROR([$1=@S|@$1 must be an $3]))
+])
+
+VARTYPE([MAXWIN],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
+
 
 AC_MSG_CHECKING([for the socket dir])
 AC_ARG_VAR([SOCKDIR],
