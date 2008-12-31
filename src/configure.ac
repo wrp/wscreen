@@ -51,9 +51,10 @@ AC_DEFUN([VARTYPE],
 [
 	AC_ARG_VAR([$1],[$4])
 	m4_if([$2],[],[],
-		AC_DEFINE_UNQUOTED([$1],[${$1-$2}],[$4])
-		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[$3 x = $1;])],[],
-			AC_MSG_ERROR([$1=@S|@$1 must be an $3]))
+		AC_DEFINE_UNQUOTED(m4_toupper([$1]),[${$1-$2}],[$4])
+		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],
+			[$3 x = m4_toupper($1);])],
+			[], AC_MSG_ERROR([$1=@S|@$1 must be an $3]))
 	)
 ])
 
