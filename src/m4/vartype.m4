@@ -1,8 +1,8 @@
 
 
-dnl VARTYPE( name, default, type, description, [headers], [body])
+dnl screen_VARTYPE( name, default, type, description, [headers], [body])
 dnl Set an AC_ARG_VAR and validate it as a variable of the correct type.
-AC_DEFUN([VARTYPE],
+AC_DEFUN([screen_VARTYPE],
 [
 	AC_ARG_VAR([$1],[$4])
 	m4_if([$2],[],[],

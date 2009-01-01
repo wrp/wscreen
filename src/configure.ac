@@ -37,7 +37,7 @@ screen_PARSE_REV
 
 # User configuration section.
 
-VARTYPE([MAXWIN],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
+screen_VARTYPE([MAXWIN],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
 
 AC_MSG_CHECKING([for the socket dir])
 AC_ARG_VAR([SOCKDIR],
@@ -767,11 +767,13 @@ main()
 )
 rm -f conftest_grp
 
-VARTYPE([ptymode],[0622],[int],[permissions for the PTY.  Defaults to 0622])
-VARTYPE([ptygroup],[${ptygrp-real_gid}],[gid_t],[A numerical group-id if you do not want the tty to be in
-	"your" group. Note, screen is unable to change mode or group of the pty if it
-	 is not installed with sufficient privilege. (e.g. set-uid-root)],
-	 [AC_INCLUDES_DEFAULT],[int real_gid;])
+screen_VARTYPE([ptymode],[0622],[int],[permissions for the PTY.
+	  Defaults to 0622])
+screen_VARTYPE([ptygroup],[${ptygrp-real_gid}],[gid_t],[A numerical group-id
+	if you do not want the tty to be in "your" group. Note, screen is
+	unable to change mode or group of the pty if it is not installed with
+	sufficient privilege. (e.g. set-uid-root)],
+	[AC_INCLUDES_DEFAULT],[int real_gid;])
 
 AC_MSG_NOTICE([- pty mode: ${ptymode}, group: $ptygroup])
 
