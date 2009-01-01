@@ -1,4 +1,9 @@
 
+dnl screen_PARSE_REV
+dnl This macro is used to parse the revision information
+dnl into a from usable by the current code base.  The code
+dnl should change to use PACKAGE_VERSION instead, and this
+dnl macro should be deleted when that happens.
 AC_DEFUN([screen_PARSE_REV],
 [
 	# Parse revision number for backwards compatibility.
