@@ -38,9 +38,7 @@ screen_PARSE_REV
 # User configuration section.
 
 screen_VARTYPE([MAXWIN],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
-
-AC_MSG_CHECKING([for the socket dir])
-AC_ARG_VAR([SOCKDIR],
+screen_VARTYPE([sockdir],["(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"],[char *],
     [Where to put the per-user sockets.
 
         Define SOCKDIR to be the directory to contain the named sockets
@@ -54,21 +52,8 @@ AC_ARG_VAR([SOCKDIR],
         AFS is unlikely to support named sockets.
 
         Screen will name the subdirectories "S-$USER" (e.g /tmp/S-davison).
-    ]
-)
-AS_IF([test -z "${SOCKDIR}"],
-    [SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"]
-)
+    ],[],[int eff_uid;])
 
-dnl Validate SOCKDIR.  If SOCKDIR is invalid, try putting "" around it.
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[int eff_uid; char* s = ${SOCKDIR};])],[],
-    [SOCKDIR=\"$SOCKDIR\"]
-    [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[char* s = ${SOCKDIR};])],[],
-        AC_MSG_ERROR([SOCKDIR:$SOCKDIR must evaluate to a valid char *])
-    ])
-)
-AC_MSG_RESULT(${SOCKDIR})
-AC_DEFINE_UNQUOTED([SOCKDIR], [$SOCKDIR], [The socket directory])
 
 
 AC_MSG_CHECKING([if the socket dir is remote])
