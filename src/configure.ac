@@ -1,6 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
+
 AC_PREREQ([2.61])
 AC_INIT([screen], [4.1.0], [screen-devel@gnu.org])
 AC_CONFIG_SRCDIR([screen.c])
@@ -34,6 +35,11 @@ AC_CHECK_FUNC([syslog],[],[AC_DEFINE([NOSYSLOG],[1],[[
 # AC_FUNC_GETLOADAVG
 
 screen_PARSE_REV
+AS_IF([test -d "$srcdir/../.git"],
+	[GIT_REV=`GIT_DIR="$srcdir/../.git" git describe --always 2>/dev/null`],
+	[GIT_REV="tgz"]
+)
+AC_SUBST([GIT_REV])
 
 # User configuration section.
 

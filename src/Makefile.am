@@ -5,8 +5,6 @@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = lib doc
 
-GIT_REV = "`git describe --always 2>/dev/null`"
-
 ETCSCREENRC = $(prefix)/etc/screenrc
 SCREENENCODINGS = $(datadir)/screen/utf8encodings
 
