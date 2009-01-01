@@ -61,7 +61,6 @@ AC_DEFUN([VARTYPE],
 ])
 
 VARTYPE([MAXWIN],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
-VARTYPE([PTYMODE],[0622],[int],[permissions for the PTY.  Defaults to 0622])
 
 AC_MSG_CHECKING([for the socket dir])
 AC_ARG_VAR([SOCKDIR],
@@ -720,14 +719,6 @@ fi
 dnl    ****  pty mode/group handling ****
 dnl
 dnl support provided by Luke Mewburn <lm@rmit.edu.au>, 931222
-AC_ARG_WITH(pty-mode, [  --with-pty-mode=mode    default mode for ptys], [ ptymode="${withval}" ])
-AC_ARG_WITH(pty-group, [  --with-pty-group=group  default group for ptys], [ ptygrp="${withval}" ])
-test -n "$ptymode" || ptymode=0620
-if test -n "$ptygrp" ; then
-AC_DEFINE_UNQUOTED(PTYMODE, $ptymode,[undocumented])
-AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp,[undocumented])
-else
-
 AC_CHECKING(default tty permissions/group)
 rm -f conftest_grp
 AC_TRY_RUN([
@@ -761,9 +752,6 @@ main()
 ],[
     if test -f conftest_grp; then
 	ptygrp=`cat conftest_grp`
-	AC_NOTE([- pty mode: $ptymode, group: $ptygrp])
-	AC_DEFINE_UNQUOTED(PTYMODE, $ptymode,[undocumented])
-	AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp,[undocumented])
     else
 	AC_NOTE(- ptys are world accessable)
     fi
@@ -792,9 +780,6 @@ main()
       found=`find $WRITEPATH $XTERMPATH $findfollow -perm -2000 -print` 
       if test -n "$found"; then
 	ptygrp=`ls -ln$lsfollow $found | sed -n -e 1p | $AWK '{print $4}'`
-	AC_NOTE([- pty mode: $ptymode, group: $ptygrp])
-	AC_DEFINE_UNQUOTED(PTYMODE, $ptymode,[undocumented])
-	AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp,[undocumented])
       else
 	AC_NOTE(- ptys are world accessable)
       fi
@@ -804,7 +789,14 @@ main()
   ]
 )
 rm -f conftest_grp
-fi
+
+VARTYPE([ptymode],[0622],[int],[permissions for the PTY.  Defaults to 0622])
+VARTYPE([ptygroup],[${ptygrp-real_gid}],[gid_t],[A numerical group-id if you do not want the tty to be in
+	"your" group. Note, screen is unable to change mode or group of the pty if it
+	 is not installed with sufficient privilege. (e.g. set-uid-root)],
+	 [AC_INCLUDES_DEFAULT],[int real_gid;])
+
+AC_MSG_NOTICE([- pty mode: ${ptymode}, group: $ptygroup])
 
 dnl
 dnl    ****  utmp handling  ****

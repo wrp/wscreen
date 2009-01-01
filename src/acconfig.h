@@ -36,15 +36,10 @@
 
 
 /* 
- * define PTYGROUP to some numerical group-id if you do not want the
- * tty to be in "your" group.
- * Note, screen is unable to change mode or group of the pty if it
- * is not installed with sufficient privilege. (e.g. set-uid-root)
  * define PTYROFS if the /dev/pty devices are mounted on a read-only 
  * filesystem so screen should not even attempt to set mode or group  
  * even if running as root (e.g. on TiVo).
  */
-#undef PTYGROUP
 #undef PTYROFS
 
 /*
