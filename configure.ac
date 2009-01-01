@@ -43,7 +43,7 @@ AC_SUBST([GIT_REV])
 
 # User configuration section.
 
-screen_VARTYPE([MAXWIN],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
+screen_VARTYPE([maxwin],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
 screen_VARTYPE([sockdir],["(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"],[char *],
     [Where to put the per-user sockets.
 
