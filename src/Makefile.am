@@ -5,8 +5,6 @@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = lib doc
 
-SCREEN = screen-$(VERSION)
-
 GIT_REV = "`git describe --always 2>/dev/null`"
 
 ETCSCREENRC = $(prefix)/etc/screenrc
