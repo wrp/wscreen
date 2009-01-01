@@ -61,8 +61,6 @@ screen_VARTYPE([sockdir],["(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"],[c
     ],[],[int eff_uid;])
 
 
-
-AC_MSG_CHECKING([if the socket dir is remote])
 AC_ARG_WITH([remote-socket-dir],
     [AS_HELP_STRING([--with-remote-socket-dir],
         [This option indicates that the path specified in SOCKDIR
@@ -79,7 +77,6 @@ AS_IF([test "X$REMOTE_SOCKDIR" = Xno ],
         [Define this if the SOCKDIR is not shared between hosts.]
     )] dnl
 )
-AC_MSG_RESULT(${REMOTE_SOCKDIR})
 
 
 AC_ARG_ENABLE([sysscreenrc],[AS_HELP_STRING([--disable-sysscreenrc],
