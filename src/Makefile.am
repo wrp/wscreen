@@ -2,8 +2,7 @@
 #
 # Makefile template for screen 
 
-ACLOCAL_AMFLAGS = -I m4
-SUBDIRS = lib doc
+SUBDIRS = doc
 
 ETCSCREENRC = $(prefix)/etc/screenrc
 SCREENENCODINGS = $(datadir)/screen/utf8encodings
@@ -56,11 +55,11 @@ kmapdef.c: term.sh
 tty.c:	tty.sh 
 	sh $(srcdir)/tty.sh tty.c
 
-comm.h: comm.c comm.sh config.h
-	AWK=$(AWK) CC="$(CC) $(CFLAGS)" srcdir=${srcdir} sh $(srcdir)/comm.sh
+comm.h: comm.c comm.sh ../config.h
+	AWK=$(AWK) CC="$(CC) $(CFLAGS) -I.." srcdir=${srcdir} sh $(srcdir)/comm.sh
 
-osdef.h: osdef.sh config.h osdef.h.in
-	CPP="$(CPP) $(CPPFLAGS)" srcdir=${srcdir} sh $(srcdir)/osdef.sh
+osdef.h: osdef.sh ../config.h osdef.h.in
+	CPP="$(CPP) $(CPPFLAGS) -I.." srcdir=${srcdir} sh $(srcdir)/osdef.sh
 
 docs:
 	cd doc; $(MAKE) dvi screen.info

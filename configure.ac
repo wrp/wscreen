@@ -4,7 +4,7 @@
 
 AC_PREREQ([2.61])
 AC_INIT([screen], [4.1.0], [screen-devel@gnu.org])
-AC_CONFIG_SRCDIR([screen.c])
+AC_CONFIG_SRCDIR([src/screen.c])
 AC_CONFIG_HEADERS([config.h])
 # AC_CONFIG_LIBOBJ_DIR([lib])
 AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
@@ -35,8 +35,8 @@ AC_CHECK_FUNC([syslog],[],[AC_DEFINE([NOSYSLOG],[1],[[
 # AC_FUNC_GETLOADAVG
 
 screen_PARSE_REV
-AS_IF([test -d "$srcdir/../.git"],
-	[GIT_REV=`GIT_DIR="$srcdir/../.git" git describe --always 2>/dev/null`],
+AS_IF([test -d "$srcdir/.git"],
+	[GIT_REV=`GIT_DIR="$srcdir/.git" git describe --always 2>/dev/null`],
 	[GIT_REV="tgz"]
 )
 AC_SUBST([GIT_REV])
@@ -1215,7 +1215,7 @@ test -n "$seqptx" && LIBS="-ltermcap -lc -lsocket -linet -lnsl -lsec -lseq"
 
 AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal error. Sorry.))
 
-AC_OUTPUT([Makefile doc/Makefile lib/Makefile], [[
+AC_OUTPUT([Makefile src/Makefile src/doc/Makefile lib/Makefile], [[
 # a hook for preserving undef directive in config.h
 mv config.h conftest
 sed -e 's@^\(.*\)defin.\( .*\) .*/\*\(.*KEEP_UNDEF_HERE\)@\1undef\2	/\*\3@' < conftest > config.h

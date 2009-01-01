@@ -1,0 +1,17 @@
+cscope.out
+TAGS
+tags
+Makefile.in
+/config.h.in
+/configure
+/autom4te.cache
+/aclocal.m4
+/config.guess
+/config.sub
+/missing
+/depcomp
+/install-sh
+/lib/
+/m4/
+
+/link-warning.h
