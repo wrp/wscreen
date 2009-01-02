@@ -64,8 +64,6 @@
 # define BLANKER_PRG
 #endif /* SIMPLESCREEN */
 
-#undef BUILTIN_TELNET
-#undef RXVT_OSC
 #undef COLORS256
 
 
