@@ -100,6 +100,38 @@ AS_IF([test "x$enable_checklogin" != xno],
 		[Define to 1 to require Unix password in addition to screen password])]
 )
 
+AC_DEFINE([DETACH], [1], [can detach a session. An absolute 'must'.])
+AC_ARG_ENABLE([erlangen],
+	[AS_HELP_STRING([--disable-erlangen],
+		[Do not activate the erlangen extensions]
+	)]
+)
+AS_IF([ test x"$enable_erlangen" != xno ],
+	AC_DEFINE([LOCK],[1],[ if you want to use a lock program for a screenlock.])
+	AC_DEFINE([PASSWORD],[1],[ for secure reattach of your screen.])
+	AC_DEFINE([COPY_PASTE],[1],[ to use the famous hacker's treasure zoo.])
+	AC_DEFINE([POW_DETACH],[1],[ to have a detach_and_logout key (requires DETACH).])
+	AC_DEFINE([REMOTE_DETACH],[1],[ (-d option) to move screen between terminals.])
+	AC_DEFINE([AUTO_NUKE],[1],[ to enable Tim MacKenzies clear screen nuking])
+	AC_DEFINE([PSEUDOS],[1],[ to allow window input/output filtering])
+	AC_DEFINE([MULTI],[1],[ to allow multiple attaches.])
+	AC_DEFINE([MULTIUSER],[1],[ to allow other users attach to your session
+			 (if they are in the acl, of course)])
+	AC_DEFINE([MAPKEYS],[1],[ to include input keyboard translation.])
+	AC_DEFINE([FONT],[1],[ to support ISO2022/alternet charset support])
+	AC_DEFINE([COLOR],[1],[ to include ansi color support. This may expose
+	       a bug in x11r6-color-xterm.])
+	AC_DEFINE([DW_CHARS],[1],[ to include support for double-width character
+	       sets.])
+	AC_DEFINE([ENCODINGS],[1],[ to include support for encodings like euc or big5.
+	       Needs FONT to work.])
+	AC_DEFINE([UTF8],[1],[ if you want support for UTF-8 encoding.
+	       Needs FONT and ENCODINGS to work.])
+	AC_DEFINE([COLORS16],[1],[ if you want 16 colors.
+	       Needs COLOR to work.])
+)
+
+
 dnl --- cut ---  Below here is old.
 
 define([AC_NOTE],
