@@ -1214,18 +1214,10 @@ if test "$enable_pam" = "yes"; then
        AC_MSG_RESULT(no);LIBS="$oldlibs")
 fi
 
-AC_ARG_ENABLE(use_locale, [  --enable-locale         use localized month/day names])
-if test "$enable_use_locale" = "yes"; then
-  AC_DEFINE([USE_LOCALE],[1],[USE_LOCALE])
-fi
-AC_ARG_ENABLE(colors256, [  --enable-colors256      enable support for 256 colors])
-if test "$enable_colors256" = "yes"; then
-  AC_DEFINE([COLORS256],[1],[COLORS256])
-fi
-
+screen_BOOLFEATURE([use_locale], [use localized month/day names])
+screen_BOOLFEATURE([colors256], [enable support for 256 colors])
 screen_BOOLFEATURE([rxvt_osc], [enable support for rxvt OSC codes
        (change fgcolor/bgcolor/bgpicture sequences)])
-
 screen_BOOLFEATURE([telnet],[enable builtin telnet
 	(Syntax: screen //telnet host @<:@port@:>@)],[builtin_])
 

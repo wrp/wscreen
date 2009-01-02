@@ -64,8 +64,6 @@
 # define BLANKER_PRG
 #endif /* SIMPLESCREEN */
 
-#undef COLORS256
-
 
 /*
  * If you have a braille display you should define HAVE_BRAILLE.
@@ -167,13 +165,6 @@
  * This is *not* recomended, do this only if you must.
  */
 #undef USE_SGR
-
-
-/*
- * Define USE_LOCALE if you want screen to use the locale names
- * for the name of the month and day of the week.
- */
-#define USE_LOCALE
 
 /*
  * Define USE_PAM if your system supports PAM (Pluggable Authentication
