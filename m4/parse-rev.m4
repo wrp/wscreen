@@ -18,7 +18,4 @@ AC_DEFUN([screen_PARSE_REV],
 	AC_DEFINE_UNQUOTED([PATCHLEVEL], [$PATCHLEVEL], [Patchlevel])
 	AC_DEFINE([DATE], ["2-May-06"], [date])
 	AC_DEFINE([STATE], ["devel"], [state])
-
-
-	echo "#include <config.h>" > $srcdir/src/patchlevel.h
 ])
