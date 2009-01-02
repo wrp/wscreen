@@ -78,17 +78,8 @@ AS_IF([test "X$REMOTE_SOCKDIR" = Xno ],
     )] dnl
 )
 
-
-AC_ARG_ENABLE([sysscreenrc],[AS_HELP_STRING([--disable-sysscreenrc],
-	[Screen can look for the environment variable SYSSCREENRC and, if it
-	exists, load the file specified in that variable as global screenrc.
-	This option will disable this feature.])]
-)
-AS_CASE(["x$enable_sysscreenrc"],
-	[xno],[],
-	[AC_DEFINE([ALLOW_SYSSCREENRC], [1],
-		[Define to 1 to allow $SYSSCREENRC to load a global screenrc])]
-)
+screen_BOOLFEATURE([sysscreenrc], [Do not allow the variable SYSSCREENRC
+	 to specify a global sreenrc],[yes],[allow_sysscreenrc])
 
 
 AC_ARG_ENABLE([checklogin],[AS_HELP_STRING([--disable-checklogin],
