@@ -1219,7 +1219,7 @@ screen_BOOLFEATURE([colors256], [enable support for 256 colors])
 screen_BOOLFEATURE([rxvt_osc], [enable support for rxvt OSC codes
        (change fgcolor/bgcolor/bgpicture sequences)])
 screen_BOOLFEATURE([telnet],[enable builtin telnet
-	(Syntax: screen //telnet host @<:@port@:>@)],[builtin_])
+	(Syntax: screen //telnet host @<:@port@:>@)],[no],[builtin_telnet])
 
 dnl
 dnl    ****  the end  ****
