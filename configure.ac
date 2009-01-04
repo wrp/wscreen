@@ -210,28 +210,7 @@ AC_TRY_LINK([#include <utmpx.h>
 ,LIBS="$oldlibs")
 AC_CHECK_HEADERS([stropts.h string.h strings.h])
 
-
-dnl
-dnl   ****     Job control     ****
-dnl
-
-AC_CHECKING([BSD job control])
-AC_TRY_LINK(
-[#include <sys/types.h>
-#include <sys/ioctl.h>
-], [
-#ifdef POSIX
-tcsetpgrp(0, 0);
-#else
-int x = TIOCSPGRP;
-#ifdef SYSV
-setpgrp();
-#else
-int y = TIOCNOTTY;
-#endif
-#endif
-], AC_NOTE(- you have jobcontrol) AC_DEFINE([BSDJOBS],[1],[BSDJOBS]), AC_NOTE(- you don't have jobcontrol))
-
+screen_JOBCONTROL
 dnl
 dnl    ****  setresuid(), setreuid(), seteuid()  ****
 dnl
