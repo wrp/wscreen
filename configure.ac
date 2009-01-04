@@ -92,15 +92,9 @@ screen_BOOLFEATURE([topstat],[ If you'd rather see the [status] line on the
 	first line of your terminal rather than the last[,] define TOPSTAT.])
 
 screen_BOOLFEATURE([nethack],[generate nethack friendly error messages],[yes])
+screen_BOOLFEATURE([checklogin], [force Screen users to enter their Unix
+	 password in addition to the screen password.], [yes])
 
-AC_ARG_ENABLE([checklogin],[AS_HELP_STRING([--disable-checklogin],
-	[force Screen users to enter their Unix password in addition
-	to the screen password.])]
-)
-AS_IF([test "x$enable_checklogin" != xno],
-	[AC_DEFINE([CHECKLOGIN], [1],
-		[Define to 1 to require Unix password in addition to screen password])]
-)
 
 AC_DEFINE([DETACH], [1], [can detach a session. An absolute 'must'.])
 AC_ARG_ENABLE([erlangen],
