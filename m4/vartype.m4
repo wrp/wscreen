@@ -11,12 +11,14 @@ AC_DEFUN([screen_VARTYPE],
 #define] m4_toupper([$1]) [$sc_tmp_val],
 			[$6 $3 x = m4_toupper($1);])],
 			[],
+			m4_if([$3],[char *],
 			dnl Try again after quoting the argument.
 			[$1=\"$sc_tmp_val\"]
 			AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$5
 #define] m4_toupper([$1]) [$sc_tmp_val],
 			[$6 $3 x = m4_toupper($1);])],
 			[], AC_MSG_ERROR([$1=@S|@$1 must be of type $3]))
+			,AC_MSG_ERROR([$1=@S|@$1 must be of type $3]))
 		)
 		AC_DEFINE_UNQUOTED(m4_toupper([$1]),[$sc_tmp_val],[$4])
 	)
