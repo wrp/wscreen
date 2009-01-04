@@ -90,15 +90,6 @@
 #undef CAREFULUTMP
 
 
-/*
- * If UTMPOK is defined and your system (incorrectly) counts logins by
- * counting non-null entries in /etc/utmp (instead of counting non-null
- * entries with no hostname that are not on a pseudo tty), define USRLIMIT
- * to have screen put an upper-limit on the number of entries to write
- * into /etc/utmp.  This helps to keep you from exceeding a limited-user
- * license.
- */
-#undef USRLIMIT
 
 /*
  * both must be defined if you want to favor tcsendbreak over

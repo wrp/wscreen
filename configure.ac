@@ -95,6 +95,12 @@ screen_BOOLFEATURE([nethack],[generate nethack friendly error messages],[yes])
 screen_BOOLFEATURE([checklogin], [force Screen users to enter their Unix
 	 password in addition to the screen password.], [yes])
 
+dnl If UTMPOK is defined and your system (incorrectly) counts logins by
+dnl counting non-null entries in /etc/utmp (instead of counting non-null
+dnl entries with no hostname that are not on a pseudo tty), define USRLIMIT
+dnl to have screen put an upper-limit on the number of entries to write into
+dnl /etc/utmp.  This helps to keep you from exceeding a limited-user license.
+screen_VARTYPE([usrlimit],[],[int],[Maximum number of entries to write in /etc/utmp])
 
 AC_DEFINE([DETACH], [1], [can detach a session. An absolute 'must'.])
 AC_ARG_ENABLE([erlangen],
