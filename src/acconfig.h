@@ -43,15 +43,6 @@
 #undef PTYROFS
 
 /*
- * If screen is NOT installed set-uid root, screen can provide tty
- * security by exclusively locking the ptys.  While this keeps other
- * users from opening your ptys, it also keeps your own subprocesses
- * from being able to open /dev/tty.  Define LOCKPTY to add this
- * exclusive locking.
- */
-#undef LOCKPTY
-
-/*
  * If you'd rather see the status line on the first line of your
  * terminal rather than the last, define TOPSTAT.
  */

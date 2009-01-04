@@ -81,6 +81,12 @@ AS_IF([test "X$REMOTE_SOCKDIR" = Xno ],
 screen_BOOLFEATURE([sysscreenrc], [Do not allow the variable SYSSCREENRC
 	 to specify a global sreenrc],[yes],[allow_sysscreenrc])
 
+screen_BOOLFEATURE([lockpty],[
+	If screen is NOT installed set-uid root[,] screen can provide tty
+	security by exclusively locking the ptys.  While this keeps other
+	users from opening your ptys[,] it also keeps your own subprocesses
+	from being able to open /dev/tty.  Define LOCKPTY to add this
+	exclusive locking.])
 
 AC_ARG_ENABLE([checklogin],[AS_HELP_STRING([--disable-checklogin],
 	[force Screen users to enter their Unix password in addition
