@@ -102,36 +102,23 @@ dnl to have screen put an upper-limit on the number of entries to write into
 dnl /etc/utmp.  This helps to keep you from exceeding a limited-user license.
 screen_VARTYPE([usrlimit],[],[int],[Maximum number of entries to write in /etc/utmp])
 
-AC_DEFINE([DETACH], [1], [can detach a session. An absolute 'must'.])
-AC_ARG_ENABLE([erlangen],
-	[AS_HELP_STRING([--disable-erlangen],
-		[Do not activate the erlangen extensions]
-	)]
-)
-AS_IF([ test x"$enable_erlangen" != xno ],
-	AC_DEFINE([LOCK],[1],[ if you want to use a lock program for a screenlock.])
-	AC_DEFINE([PASSWORD],[1],[ for secure reattach of your screen.])
-	AC_DEFINE([COPY_PASTE],[1],[ to use the famous hacker's treasure zoo.])
-	AC_DEFINE([POW_DETACH],[1],[ to have a detach_and_logout key (requires DETACH).])
-	AC_DEFINE([REMOTE_DETACH],[1],[ (-d option) to move screen between terminals.])
-	AC_DEFINE([AUTO_NUKE],[1],[ to enable Tim MacKenzies clear screen nuking])
-	AC_DEFINE([PSEUDOS],[1],[ to allow window input/output filtering])
-	AC_DEFINE([MULTI],[1],[ to allow multiple attaches.])
-	AC_DEFINE([MULTIUSER],[1],[ to allow other users attach to your session
-			 (if they are in the acl, of course)])
-	AC_DEFINE([MAPKEYS],[1],[ to include input keyboard translation.])
-	AC_DEFINE([FONT],[1],[ to support ISO2022/alternet charset support])
-	AC_DEFINE([COLOR],[1],[ to include ansi color support. This may expose
-	       a bug in x11r6-color-xterm.])
-	AC_DEFINE([DW_CHARS],[1],[ to include support for double-width character
-	       sets.])
-	AC_DEFINE([ENCODINGS],[1],[ to include support for encodings like euc or big5.
-	       Needs FONT to work.])
-	AC_DEFINE([UTF8],[1],[ if you want support for UTF-8 encoding.
-	       Needs FONT and ENCODINGS to work.])
-	AC_DEFINE([COLORS16],[1],[ if you want 16 colors.
-	       Needs COLOR to work.])
-)
+screen_BOOLFEATURE([DETACH], [disallow detaching], [yes])
+screen_BOOLFEATURE([LOCK], [disallow a lock program for a screenlock], [yes])
+screen_BOOLFEATURE([PASSWORD], [disallow secure reattach of your screen], [yes])
+screen_BOOLFEATURE([COPY_PASTE], [disallow use the famous hacker's treasure zoo], [yes])
+screen_BOOLFEATURE([POW_DETACH], [disallow detach_and_logout key], [yes])
+screen_BOOLFEATURE([REMOTE_DETACH], [disallow -d option to move screen between terminals], [yes])
+screen_BOOLFEATURE([AUTO_NUKE], [disable Tim MacKenzies clear screen nuking], [yes])
+screen_BOOLFEATURE([PSEUDOS], [disable window input/output filtering], [yes])
+screen_BOOLFEATURE([MULTI], [disable multiple attaches], [yes])
+screen_BOOLFEATURE([MULTIUSER], [do not allow other users in the acl to attach to your session], [yes])
+screen_BOOLFEATURE([MAPKEYS], [do not include input keyboard translation], [yes])
+screen_BOOLFEATURE([FONT], [disable support for ISO2022/alternet charset support], [yes])
+screen_BOOLFEATURE([COLOR], [disable ansi color support], [yes])
+screen_BOOLFEATURE([DW_CHARS], [do not include support for double-width character sets], [yes])
+screen_BOOLFEATURE([ENCODINGS], [do not include support for encodings like euc or big5], [yes])
+screen_BOOLFEATURE([UTF8], [disable support for UTF-8 encoding], [yes])
+screen_BOOLFEATURE([COLORS16], [do not use 16 colors], [yes])
 
 
 dnl --- cut ---  Below here is old.
