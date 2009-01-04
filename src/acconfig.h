@@ -42,13 +42,6 @@
  */
 #undef PTYROFS
 
-/*
- * If you'd rather see the status line on the first line of your
- * terminal rather than the last, define TOPSTAT.
- */
-#undef TOPSTAT
-
-
 #undef SIMPLESCREEN
 #ifndef SIMPLESCREEN
 # define ZMODEM

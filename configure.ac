@@ -88,6 +88,10 @@ screen_BOOLFEATURE([lockpty],[
 	from being able to open /dev/tty.  Define LOCKPTY to add this
 	exclusive locking.])
 
+screen_BOOLFEATURE([topstat],[ If you'd rather see the [status] line on the
+	first line of your terminal rather than the last[,] define TOPSTAT.])
+
+
 AC_ARG_ENABLE([checklogin],[AS_HELP_STRING([--disable-checklogin],
 	[force Screen users to enter their Unix password in addition
 	to the screen password.])]
