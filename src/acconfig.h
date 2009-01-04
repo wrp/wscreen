@@ -167,31 +167,6 @@
 /*
  * Some defines to identify special unix variants
  */
-#ifndef SVR4
-#undef SVR4
-#endif
-
-/* #ifndef __osf__ */
-#ifndef MIPS
-#undef MIPS
-#endif
-/* #endif */
-
-#ifndef OSX
-#undef OSX
-#endif
-
-#ifndef ISC
-#undef ISC
-#endif
-
-#ifndef sysV68
-#undef sysV68
-#endif
-
-#ifndef _POSIX_SOURCE
-#undef _POSIX_SOURCE
-#endif
 
 /*
  * Define BSDJOBS if you have BSD-style job control (both process
