@@ -1373,9 +1373,9 @@ char **av;
     }
   else
     MakeTermcap(1);
-#ifdef LOADAV
+#ifdef HAVE_GETLOADAVG
   InitLoadav();
-#endif /* LOADAV */
+#endif /* HAVE_GETLOADAVG */
   MakeNewEnv();
   signal(SIGHUP, SigHup);
   signal(SIGINT, FinitHandler);
@@ -2599,7 +2599,7 @@ int rec;
 	  p += strlen(p) - 1;
 	  break;
 	case 'l':
-#ifdef LOADAV
+#ifdef HAVE_GETLOADAVG
 	  *p = 0;
 	  if (l > 20)
 	    AddLoadav(p);

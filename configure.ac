@@ -6,7 +6,6 @@ AC_PREREQ([2.63.251])
 AC_INIT([screen], [4.1.0], [screen-devel@gnu.org])
 AC_CONFIG_SRCDIR([src/screen.c])
 AC_CONFIG_HEADERS([config.h])
-# AC_CONFIG_LIBOBJ_DIR([lib])
 AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
 AM_INIT_AUTOMAKE([foreign])
 
@@ -31,8 +30,6 @@ AC_TYPE_UID_T
 AC_CHECK_FUNC([syslog],[],[AC_DEFINE([NOSYSLOG],[1],[[
  Define NOSYSLOG if you do not have logging facilities. Currently
  syslog() will be used to trace ``su'' commands only.]])])
-
-# AC_FUNC_GETLOADAVG
 
 screen_PARSE_REV
 AS_IF([test -d "$srcdir/.git"],
@@ -819,112 +816,6 @@ if test "$have_utempter" = yes; then
 fi
 
 
-AC_CHECKING(getloadavg)
-AC_TRY_LINK(,[getloadavg((double *)0, 0);],
-AC_DEFINE([LOADAV_GETLOADAVG],[1],[LOADAV_GETLOADAVG]) load=1,
-if test -f /usr/lib/libkvm.a ; then
-olibs="$LIBS"
-LIBS="$LIBS -lkvm"
-AC_CHECKING(getloadavg with -lkvm)
-AC_TRY_LINK(,[getloadavg((double *)0, 0);],
-AC_DEFINE([LOADAV_GETLOADAVG],[1],[LOADAV_GETLOADAVG]) load=1, LIBS="$olibs")
-fi
-)
-
-if test -z "$load" ; then
-AC_EGREP_CPP(yes,
-[#if defined(NeXT) || defined(apollo) || defined(linux)
-  yes;
-#endif
-], load=1)
-fi
-if test -z "$load" ; then
-AC_CHECKING(for kernelfile)
-for core in /unix /vmunix /dynix /hp-ux /xelos /dev/ksyms /kernel/unix /kernel/genunix /unicos /mach /netbsd /386bsd /dgux /bsd /stand/vmunix; do
-  if test -f $core || test -c $core; then
-    break
-  fi
-done
-if test ! -f $core && test ! -c $core ; then
-  AC_NOTE(- no kernelfile found)
-else
-  AC_NOTE(- using kernelfile '$core')
-  if test -r $core ; then
-  AC_DEFINE_UNQUOTED(LOADAV_UNIX,"$core",[undocumented])
-  AC_CHECK_HEADER(nlist.h,
-    [AC_DEFINE([NLIST_STRUCT],[1],[NLIST_STRUCT])
-     AC_CHECKING(n_un in struct nlist)
-     AC_TRY_COMPILE([#include <nlist.h>],
-       [struct nlist n; n.n_un.n_name = 0;],
-        AC_DEFINE([NLIST_NAME_UNION],[1],[NLIST_NAME_UNION]))])
-
-  AC_CHECKING(for nlist declaration)
-  AC_EGREP_CPP([nlist(( |	)( |	)*.*\(|\()],[
-#ifdef NLIST_STRUCT
-# include <nlist.h>
-#else
-# include <a.out.h>
-#endif
-],AC_DEFINE([NLIST_DECLARED],[1],[NLIST_DECLARED]))
-
-  AC_CHECKING(for avenrun symbol)
-  nlist64=
-  for av in avenrun _avenrun _Loadavg avenrun _avenrun _Loadavg; do
-  AC_TRY_RUN([
-#include <sys/types.h>
-#ifdef NLIST_STRUCT
-#include <nlist.h>
-#else
-#include <a.out.h>
-#endif
-
-$nlist64
-
-struct nlist nl[2];
-
-main()
-{
-#if !defined(_AUX_SOURCE) && !defined(AUX)
-# ifdef NLIST_NAME_UNION
-  nl[0].n_un.n_name = "$av";
-# else
-  nl[0].n_name = "$av";
-# endif
-#else
-  strncpy(nl[0].n_name, "$av", sizeof(nl[0].n_name));
-#endif
-  nlist(LOADAV_UNIX, nl);
-  if (nl[0].n_value == 0)
-    exit(1);
-  exit(0);
-}
-  ],avensym=$av;break)
-  if test "$av" = _Loadavg; then
-    nlist64='#define nlist nlist64'
-  fi
-  done
-  if test -z "$avensym" ; then
-    AC_NOTE(- no avenrun symbol found)
-  else
-    AC_NOTE(- using avenrun symbol '$avensym')
-    AC_DEFINE_UNQUOTED(LOADAV_AVENRUN,"$avensym",[undocumented])
-    if test -n "$nlist64"; then
-      AC_NOTE(- used nlist64 to find it)
-      AC_DEFINE([LOADAV_USE_NLIST64],[1],[LOADAV_USE_NLIST64])
-    fi
-    load=1
-  fi
-  else
-    AC_NOTE(  Can't configure the load average display feature)
-    AC_NOTE(  because $core is not readable by you.)
-    AC_NOTE(  To configure the load average display feature,)
-    AC_NOTE(  re-run configure as root if possible.)
-    AC_NOTE(  If you are not the system administrator then disregard)
-    AC_NOTE(  this warning.  You can still use screen without)
-    AC_NOTE(  the load average display feature.)
-  fi
-fi
-fi
 
 
 
