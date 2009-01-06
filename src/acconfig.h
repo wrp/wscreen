@@ -82,17 +82,6 @@
 #define POSIX_HAS_A_GOOD_TCSENDBREAK
 #define SUNOS4_AND_WE_TRUST_TCSENDBREAK
 
-/*
- * to lower the interrupt load on the host machine, you may want to
- * adjust the VMIN and VTIME settings used for plain tty windows.
- * See the termio(4) manual page (Non-Canonical Mode Input Processing)
- * for details.
- * if undefined, VMIN=1, VTIME=0 is used as a default - this gives you
- * best user responsiveness, but highest interrupt frequency.
- * (Do not bother, if you are not using plain tty windows.)
- */
-#define TTYVMIN 100
-#define TTYVTIME 2
 
 /*
  * looks like the above values are ignored by setting FNDELAY.

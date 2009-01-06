@@ -75,6 +75,8 @@ AS_IF([test "X$REMOTE_SOCKDIR" = Xno ],
     )] dnl
 )
 
+screen_VARTYPE([ttyvmin],[100],[int],[VMIN setting for the tty])
+screen_VARTYPE([ttyvtime],[2],[int],[VTIME setting for the tty])
 screen_BOOLFEATURE([sysscreenrc], [Do not allow the variable SYSSCREENRC
 	 to specify a global sreenrc],[yes],[allow_sysscreenrc])
 
