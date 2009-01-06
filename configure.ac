@@ -97,6 +97,7 @@ dnl counting non-null entries in /etc/utmp (instead of counting non-null
 dnl entries with no hostname that are not on a pseudo tty), define USRLIMIT
 dnl to have screen put an upper-limit on the number of entries to write into
 dnl /etc/utmp.  This helps to keep you from exceeding a limited-user license.
+screen_BOOLFEATURE([utmpok], [define if screen has permission to update /etc/utmp], [yes])
 screen_VARTYPE([usrlimit],[],[int],[Maximum number of entries to write in /etc/utmp])
 
 screen_BOOLFEATURE([DETACH], [disallow detaching], [yes])
