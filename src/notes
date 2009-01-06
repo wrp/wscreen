@@ -1,16 +1,5 @@
 
-In updating the build, I anticipate some difficulties.  To
-make my life easier, some compromises will be made and some
-functionality will be sacrificed.  Hopefully not too much.
-I hope to use this file to maintain a list of all the
-changes I make that affect functionality.
-
-*) The configure test for determining the load average is
-very fragile.  It tests for systems rather than features,
-and that means I cannot tell what it is looking for.  Rather
-than sweating the details, I'm going to disable the loadavg
-feature.  I'll do this via the configure script, so that
-when I reasonable test is known it will be easy to replace.
+*) Use gnulib's getloadavg.
 
 *) -YBSD was automatically appended to CC for ULTRIX systems.
 CC Should not be touched by the build system, as it is a
@@ -18,5 +7,5 @@ user defined variable.  Arguably, we could set -YBSD in
 AM_CFLAGS, but frankly it is better left to the user to
 define that value if needed.
 
-*) make dist in the master branch does not work
-in a VPATH build.
+*) UTMPOK should NOT be defined at configure time but
+   should be determined at runtime
