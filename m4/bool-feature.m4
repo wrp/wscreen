@@ -1,4 +1,5 @@
-dnl screen_BOOLFEATURE( name, description, [status], [symbol])
+dnl screen_BOOLFEATURE( name, description, [status], [symbol],
+dnl   [action-if-yes], [action-if-no])
 dnl AC_ARG_ENABLE the name using the given description.
 dnl status should be 'yes' or 'no', defaulting to 'no'.  If 'yes',
 dnl then symbol will be AC_DEFINED to 1 unless the user specifies
@@ -19,9 +20,13 @@ AC_DEFUN([screen_BOOLFEATURE],
 		[AS_IF([test x"$enable_[]name" cmp],
 			[AC_DEFINE(cppname,[1],[$2])])],
 		m4_if(status,[yes],
-			[AC_DEFINE(cppname,[1],[$2])],
+			[AC_DEFINE(cppname,[1],[$2])]
+			$5,
+			$6
 			:)
 	)
+	m4_ifval([$5], [AS_IF([test x"$enable_[]name" = xyes],$5,:)])
+	m4_ifval([$6], [AS_IF([test x"$enable_[]name" = xno],$6,:)])
 	m4_popdef([name])
 	m4_popdef([status])
 	m4_popdef([cmp])
