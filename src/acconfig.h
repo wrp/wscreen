@@ -84,17 +84,6 @@
 
 
 /*
- * looks like the above values are ignored by setting FNDELAY.
- * This is default for all pty/ttys, you may disable it for
- * ttys here. After playing with it for a while, one may find out
- * that this feature may cause screen to lock up.
- */
-#ifdef bsdi
-# define TTY_DISABLE_FNBLOCK /* select barfs without it ... */
-#endif
-
-
-/*
  * Some terminals, e.g. Wyse 120, use a bitfield to select attributes.
  * This doesn't work with the standard so/ul/m? terminal entries,
  * because they will cancel each other out. 
