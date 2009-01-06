@@ -49,15 +49,6 @@
 #endif /* SIMPLESCREEN */
 
 
-/*
- * If you have a braille display you should define HAVE_BRAILLE.
- * The code inside #ifdef HAVE_BRAILLE was contributed by Hadi Bargi
- * Rangin (bargi@dots.physics.orst.edu).
- * WARNING: this is more or less unsupported code, it may be full of
- * bugs leading to security holes, enable at your own risk!
- */
-#undef HAVE_BRAILLE
-
 
 /*
  * If screen is installed with permissions to update /etc/utmp (such

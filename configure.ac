@@ -116,6 +116,7 @@ screen_BOOLFEATURE([DW_CHARS], [do not include support for double-width characte
 screen_BOOLFEATURE([ENCODINGS], [do not include support for encodings like euc or big5], [yes])
 screen_BOOLFEATURE([UTF8], [disable support for UTF-8 encoding], [yes])
 screen_BOOLFEATURE([COLORS16], [do not use 16 colors], [yes])
+screen_BOOLFEATURE([braille], [define if you have a braille display], [no], [have_braille])
 
 
 dnl --- cut ---  Below here is old.
