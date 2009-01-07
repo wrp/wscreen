@@ -43,13 +43,6 @@
 #undef PTYROFS
 
 
-/* Set LOGINDEFAULT to one (1)
- * if you want entries added to /etc/utmp by default, else set it to
- * zero (0).
- * LOGINDEFAULT will be one (1) whenever LOGOUTOK is undefined!
- */
-#define LOGINDEFAULT	1
-
 /* Set LOGOUTOK to one (1)
  * if you want the user to be able to log her/his windows out.
  * (Meaning: They are there, but not visible in /etc/utmp).

@@ -126,6 +126,7 @@ screen_BOOLFEATURE([pam], [enable Pluggable Authentication Modules], [no], [use_
 	AC_CHECK_HEADERS([security/pam_appl.h pam/pam_appl.h])
 	AC_CHECK_LIB([pam],[pam_start])
 )
+screen_BOOLFEATURE([logindefault], [do not add entries to /etc/utmp], [yes])
 
 
 dnl --- cut ---  Below here is old.
