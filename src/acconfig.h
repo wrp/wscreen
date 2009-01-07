@@ -42,11 +42,6 @@
  */
 #undef PTYROFS
 
-#undef SIMPLESCREEN
-#ifndef SIMPLESCREEN
-# define ZMODEM
-# define BLANKER_PRG
-#endif /* SIMPLESCREEN */
 
 /* Set LOGINDEFAULT to one (1)
  * if you want entries added to /etc/utmp by default, else set it to
