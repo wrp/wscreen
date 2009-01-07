@@ -782,7 +782,11 @@ LockTerminal()
  *  PAM support by Pablo Averbuj <pablo@averbuj.com>
  */
 
+#if HAVE_PAM_PAM_APPL_H
+#include <pam/pam_appl.h>
+#elif HAVE_SECURITY_PAM_APPL_H
 #include <security/pam_appl.h>
+#endif
 
 static int PAM_conv __P((int, const struct pam_message **, struct pam_response **, void *));
 

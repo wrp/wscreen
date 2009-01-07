@@ -9,3 +9,6 @@ define that value if needed.
 
 *) UTMPOK should NOT be defined at configure time but
    should be determined at runtime
+
+*) On OS X, the pam headers are in /usr/include/pam, not /usr/include/security.
+   This checks for the location.

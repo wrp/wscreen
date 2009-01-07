@@ -120,6 +120,10 @@ screen_BOOLFEATURE([ENCODINGS], [do not include support for encodings like euc o
 screen_BOOLFEATURE([UTF8], [disable support for UTF-8 encoding], [yes])
 screen_BOOLFEATURE([COLORS16], [do not use 16 colors], [yes])
 screen_BOOLFEATURE([braille], [define if you have a braille display], [no], [have_braille])
+screen_BOOLFEATURE([pam], [enable Pluggable Authentication Modules], [no], [use_pam],
+	AC_CHECK_HEADERS([security/pam_appl.h pam/pam_appl.h])
+	AC_CHECK_LIB([pam],[pam_start])
+)
 
 
 dnl --- cut ---  Below here is old.
