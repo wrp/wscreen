@@ -79,16 +79,6 @@
  */
 
 /*
- * Some defines to identify special unix variants
- */
-
-/*
- * Define BSDJOBS if you have BSD-style job control (both process
- * groups and a tty that deals correctly with them).
- */
-#undef BSDJOBS
-
-/*
  * Define CYTERMIO if you have cyrillic termio modes.
  */
 #undef CYTERMIO
