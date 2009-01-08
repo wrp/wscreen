@@ -43,25 +43,6 @@
 #undef PTYROFS
 
 
-/* Set LOGOUTOK to one (1)
- * if you want the user to be able to log her/his windows out.
- * (Meaning: They are there, but not visible in /etc/utmp).
- * Disabling this feature only makes sense if you have a secure /etc/utmp
- * database. 
- * Negative examples: suns usually have a world writable utmp file, 
- * xterm will run perfectly without s-bit.
- *
- * If LOGOUTOK is undefined and UTMPOK is defined, all windows are
- * initially and permanently logged in.
- *
- * Set CAREFULUTMP to one (1) if you want that users have at least one
- * window per screen session logged in.
- */
-#define LOGOUTOK 1
-#undef CAREFULUTMP
-
-
-
 /*
  * both must be defined if you want to favor tcsendbreak over
  * other calls to generate a break condition on serial lines.

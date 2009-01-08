@@ -127,6 +127,18 @@ screen_BOOLFEATURE([pam], [enable Pluggable Authentication Modules], [no], [use_
 	AC_CHECK_LIB([pam],[pam_start])
 )
 screen_BOOLFEATURE([logindefault], [do not add entries to /etc/utmp], [yes])
+screen_BOOLFEATURE([logoutok], [
+	logoutok should be enabled if you want the user to be able to log
+	her/his windows out.  (Meaning: They are there[,] but not visible in
+	/etc/utmp).  Disabling this feature only makes sense if you have a
+	secure /etc/utmp database.
+	Negative examples: suns usually have a world writable utmp file[,]
+	xterm will run perfectly without s-bit.
+	If LOGOUTOK is disabled and UTMPOK is enabled[,] all windows are
+	initially and permanently logged in.], [yes])
+screen_BOOLFEATURE([carefulutmp], [
+	Enable CAREFULUTMP if you want that users have at least one
+	window per screen session logged in.])
 
 
 dnl --- cut ---  Below here is old.
