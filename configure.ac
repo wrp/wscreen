@@ -139,7 +139,7 @@ screen_BOOLFEATURE([logoutok], [
 screen_BOOLFEATURE([carefulutmp], [
 	Enable CAREFULUTMP if you want that users have at least one
 	window per screen session logged in.])
-
+screen_BOOLFEATURE([cytermio], [if you have cyrillic termio modes])
 
 dnl --- cut ---  Below here is old.
 

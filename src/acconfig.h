@@ -79,11 +79,6 @@
  */
 
 /*
- * Define CYTERMIO if you have cyrillic termio modes.
- */
-#undef CYTERMIO
-
-/*
  * Define TERMINFO if your machine emulates the termcap routines
  * with the terminfo database.
  * Thus the .screenrc file is parsed for
