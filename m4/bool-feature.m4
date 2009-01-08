@@ -16,17 +16,17 @@ AC_DEFUN([screen_BOOLFEATURE],
 	m4_pushdef([msg],m4_case(status,[yes],[--disable],[no],[--enable]))
 
 	AC_ARG_ENABLE([name],
-		[AS_HELP_STRING([msg-name], $2)],
+		[AS_HELP_STRING([msg-name], [$2])],
 		[AS_IF([test x"$enable_[]name" cmp],
 			[AC_DEFINE(cppname,[1],[$2])])],
 		m4_if(status,[yes],
 			[AC_DEFINE(cppname,[1],[$2])]
-			$5,
-			$6
+			[$5],
+			[$6]
 			:)
 	)
-	m4_ifval([$5], [AS_IF([test x"$enable_[]name" = xyes],$5,:)])
-	m4_ifval([$6], [AS_IF([test x"$enable_[]name" = xno],$6,:)])
+	m4_ifval([$5], [AS_IF([test x"$enable_[]name" = xyes],[$5],[:])])
+	m4_ifval([$6], [AS_IF([test x"$enable_[]name" = xno],[$6],[:])])
 	m4_popdef([name])
 	m4_popdef([status])
 	m4_popdef([cmp])
