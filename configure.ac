@@ -214,11 +214,13 @@ AC_EGREP_CPP(yes,
 )
 
 AC_CHECKING(for System V)
-AC_TRY_COMPILE(
-[#include <sys/types.h>
+AC_TRY_COMPILE([
+#include <sys/types.h>
 #include <signal.h>
-#include <fcntl.h>], [int x = SIGCHLD | FNDELAY;], , AC_DEFINE([SYSV],[1],[SYSV]))
-
+#include <fcntl.h>],
+	[int x = SIGCHLD | FNDELAY;],[],
+	AC_DEFINE([SYSV],[1],[SYSV compliant (Sys V, HPUX, A/UX)])
+)
 
 oldlibs="$LIBS"
 LIBS="$LIBS -lelf"

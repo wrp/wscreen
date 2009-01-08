@@ -91,12 +91,6 @@
  */
 #undef NEED_OSPEED
 
-/*
- * Define SYSV if your machine is SYSV complient (Sys V, HPUX, A/UX)
- */
-#ifndef SYSV
-#undef SYSV
-#endif
 
 /*
  * Define SIGVOID if your signal handlers return void.  On older
