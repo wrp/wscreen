@@ -3,7 +3,9 @@
 
 
 AC_PREREQ([2.63.251])
-AC_INIT([screen], [4.1.0], [screen-devel@gnu.org])
+AC_INIT([screen],
+	m4_esyscmd([./git-version-gen .tarball-version]),
+	[screen-devel@gnu.org])
 AC_CONFIG_SRCDIR([src/screen.c])
 AC_CONFIG_HEADERS([config.h])
 AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
