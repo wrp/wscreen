@@ -140,6 +140,8 @@ screen_BOOLFEATURE([carefulutmp], [
 	Enable CAREFULUTMP if you want that users have at least one
 	window per screen session logged in.])
 screen_BOOLFEATURE([cytermio], [if you have cyrillic termio modes])
+screen_BOOLFEATURE([check_screen_w],[set TERM to 'screen-w' if the terminal width
+	is greater than 131.  (Obsolete)])
 
 dnl --- cut ---  Below here is old.
 
