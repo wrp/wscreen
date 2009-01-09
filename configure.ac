@@ -27,9 +27,9 @@ AC_CHECK_HEADERS([syslog.h sys/types.h])
 AC_TYPE_UID_T
 
 # Checks for library functions.
-AC_CHECK_FUNC([syslog],[],[AC_DEFINE([NOSYSLOG],[1],[[
+AC_SEARCH_LIBS([syslog],[bsd],[],[AC_DEFINE([NOSYSLOG],[1],[
  Define NOSYSLOG if you do not have logging facilities. Currently
- syslog() will be used to trace ``su'' commands only.]])])
+ syslog() will be used to trace ``su'' commands only.])])
 
 screen_PARSE_REV
 AS_IF([test -d "$srcdir/.git"],
@@ -931,12 +931,6 @@ LIBS="$LIBS -lsun"
 AC_CHECKING(IRIX sun library)
 AC_TRY_LINK(,,,LIBS="$oldlibs")
 
-AC_CHECKING(syslog)
-AC_TRY_LINK(,[closelog();], , [oldlibs="$LIBS"
-LIBS="$LIBS -lbsd"
-AC_CHECKING(syslog in libbsd.a)
-AC_TRY_LINK(, [closelog();], AC_NOTE(- found.), [LIBS="$oldlibs"
-AC_NOTE(- bad news: syslog missing.) AC_DEFINE([NOSYSLOG],[1],[NOSYSLOG])])])
 
 AC_EGREP_CPP(yes,
 [#ifdef M_UNIX
