@@ -142,6 +142,9 @@ screen_BOOLFEATURE([carefulutmp], [
 screen_BOOLFEATURE([cytermio], [if you have cyrillic termio modes])
 screen_BOOLFEATURE([check_screen_w],[set TERM to 'screen-w' if the terminal width
 	is greater than 131.  (Obsolete)])
+screen_BOOLFEATURE([ptyrofs], [enable if the /dev/pty devices are mounted on
+	a read-only filesystem so screen should not even attempt to set mode
+	or group even if running as root (e.g. on TiVo).])
 
 dnl --- cut ---  Below here is old.
 

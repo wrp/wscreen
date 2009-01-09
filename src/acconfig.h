@@ -35,14 +35,6 @@
 
 
 
-/* 
- * define PTYROFS if the /dev/pty devices are mounted on a read-only 
- * filesystem so screen should not even attempt to set mode or group  
- * even if running as root (e.g. on TiVo).
- */
-#undef PTYROFS
-
-
 /*
  * both must be defined if you want to favor tcsendbreak over
  * other calls to generate a break condition on serial lines.
