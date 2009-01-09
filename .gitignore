@@ -16,3 +16,7 @@ Makefile.in
 
 /link-warning.h
 /git-version-gen
+.version
+.tarball-version
+/GNUmakefile
+/maint.mk
