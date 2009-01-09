@@ -18,9 +18,9 @@ AC_DEFUN([screen_BOOLFEATURE],
 	AC_ARG_ENABLE([name],
 		[AS_HELP_STRING([msg-name], [$2])],
 		[AS_IF([test x"$enable_[]name" cmp],
-			[AC_DEFINE([cppname],[1],[$2])])],
+			[AC_DEFINE(cppname,[1],[$2])])],
 		m4_if(status,[yes],
-			[AC_DEFINE([cppname],[1],[$2])]
+			[AC_DEFINE(cppname,[1],[$2])]
 			[$5],
 			m4_ifval([$6],[$6],[:])
 		)
