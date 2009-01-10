@@ -47,15 +47,6 @@ install-exec-hook:
 		chmod 644 /usr/lib/terminfo/s/screen*; \
 	fi
 	@echo "termcap entry (${srcdir}/terminfo/screencap) should be installed manually."
-
-
-shadow:
-	mkdir shadow;
-	cd shadow; ln -s ../*.[ch] ../*.in ../*.sh ../configure ../doc ../terminfo ../etc .
-	rm -f shadow/term.h shadow/tty.c shadow/comm.h shadow/osdef.h
-	echo "install all Makefiles and config:" > shadow/Makefile
-	echo "	rm -f config.cache" >> shadow/Makefile
-	echo "	sh ./configure" >> shadow/Makefile
 	
 term.h: term.c term.sh
 	AWK=$(AWK) srcdir=$(srcdir) sh $(srcdir)/term.sh
