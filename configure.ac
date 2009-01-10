@@ -33,12 +33,6 @@ AC_SEARCH_LIBS([syslog],[bsd],[],[AC_DEFINE([NOSYSLOG],[1],[
  Define NOSYSLOG if you do not have logging facilities. Currently
  syslog() will be used to trace ``su'' commands only.])])
 
-AS_IF([test -d "$srcdir/.git"],
-	[GIT_REV=`GIT_DIR="$srcdir/.git" git describe --always 2>/dev/null`],
-	[GIT_REV="tgz"]
-)
-AC_SUBST([GIT_REV])
-
 # User configuration section.
 
 screen_VARTYPE([maxwin],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
