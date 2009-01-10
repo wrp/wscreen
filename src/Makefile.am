@@ -5,7 +5,7 @@
 SUBDIRS = doc
 
 ETCSCREENRC = $(prefix)/etc/screenrc
-SCREENENCODINGS = $(datadir)/screen/utf8encodings
+SCREENENCODINGS = $(pkgdatadir)/utf8encodings
 
 AM_CPPFLAGS = -DETCSCREENRC='"$(ETCSCREENRC)"' \
 	-DSCREENENCODINGS='"$(SCREENENCODINGS)"' \
@@ -23,10 +23,24 @@ screen_SOURCES = screen.c ansi.c fileio.c mark.c misc.c resize.c socket.c \
 	acls.c braille.c braille_tsi.c logfile.c layer.c \
 	sched.c teln.c nethack.c encoding.c
 
-
-install-data-hook:
-	$(MKDIR_P) $(DESTDIR)$(SCREENENCODINGS)
-	cp $(srcdir)/utf8encodings/?? $(DESTDIR)$(SCREENENCODINGS)
+encodingsdir = $(SCREENENCODINGS)
+dist_encodings_DATA = utf8encodings/01 \
+	utf8encodings/02 \
+	utf8encodings/03 \
+	utf8encodings/04 \
+	utf8encodings/18 \
+	utf8encodings/19 \
+	utf8encodings/a1 \
+	utf8encodings/bf \
+	utf8encodings/c2 \
+	utf8encodings/c3 \
+	utf8encodings/c4 \
+	utf8encodings/c6 \
+	utf8encodings/c7 \
+	utf8encodings/c8 \
+	utf8encodings/cc \
+	utf8encodings/cd \
+	utf8encodings/d6
 
 install-exec-hook:
 	-if [ -d /usr/lib/terminfo ]; then \
@@ -92,21 +106,5 @@ EXTRA_DIST = acls.h ansi.h display.h extern.h logfile.h mark.h os.h \
 	etc/screenrc \
 	etc/toolcheck \
 	etc/us-braille.tbl \
-	utf8encodings/01 \
-	utf8encodings/02 \
-	utf8encodings/03 \
-	utf8encodings/04 \
-	utf8encodings/18 \
-	utf8encodings/19 \
-	utf8encodings/a1 \
-	utf8encodings/bf \
-	utf8encodings/c2 \
-	utf8encodings/c3 \
-	utf8encodings/c4 \
-	utf8encodings/c6 \
-	utf8encodings/c7 \
-	utf8encodings/c8 \
-	utf8encodings/cc \
-	utf8encodings/cd \
-	utf8encodings/d6
+	$(dist_encodings_DATA)
 
