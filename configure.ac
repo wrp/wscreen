@@ -664,8 +664,12 @@ AC_TRY_RUN([
 		 instead of 'termcap'.])]
 )
 
-AC_CHECKING(ospeed)
-AC_TRY_LINK(extern short ospeed;,ospeed=5;,,AC_DEFINE([NEED_OSPEED],[1],[NEED_OSPEED]))
+AC_CHECKING([ospeed])
+AC_LINK_IFELSE(
+	[AC_LANG_PROGRAM([[ extern short ospeed;]], [[ospeed = 5;]])],
+	[],
+	[AC_DEFINE([NEED_OSPEED],[1],[define if ospeed not available])]
+)
 
 dnl
 dnl    ****  PTY specific things  ****

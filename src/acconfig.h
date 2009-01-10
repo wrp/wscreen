@@ -53,11 +53,6 @@
  *
  */
 
-/*
- * If your library does not define ospeed, define this.
- */
-#undef NEED_OSPEED
-
 
 /*
  * Define SIGVOID if your signal handlers return void.  On older
