@@ -44,17 +44,6 @@
 #define SUNOS4_AND_WE_TRUST_TCSENDBREAK
 
 
-/*
- * Some terminals, e.g. Wyse 120, use a bitfield to select attributes.
- * This doesn't work with the standard so/ul/m? terminal entries,
- * because they will cancel each other out. 
- * On TERMINFO machines, "sa" (sgr) may work. If you want screen
- * to switch attributes only with sgr, define USE_SGR.
- * This is *not* recomended, do this only if you must.
- */
-#undef USE_SGR
-
-
 /**********************************************************************
  *
  *	End of User Configuration Section

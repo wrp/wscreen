@@ -140,6 +140,13 @@ screen_BOOLFEATURE([check_screen_w],[set TERM to 'screen-w' if the terminal widt
 screen_BOOLFEATURE([ptyrofs], [enable if the /dev/pty devices are mounted on
 	a read-only filesystem so screen should not even attempt to set mode
 	or group even if running as root (e.g. on TiVo).])
+screen_BOOLFEATURE([use_sgr],[
+	Some terminals, e.g. Wyse 120, use a bitfield to select
+	attributes.  This doesn't work with the standard so/ul/m?
+	terminal entries, because they will cancel each other out.
+	On TERMINFO machines, "sa" (sgr) may work. If you want
+	screen to switch attributes only with sgr, enable USE_SGR.
+	This is *not* recomended, do this only if you must.])
 
 dnl --- cut ---  Below here is old.
 
