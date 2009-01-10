@@ -48,9 +48,6 @@ install-exec-hook:
 	fi
 	@echo "termcap entry (${srcdir}/terminfo/screencap) should be installed manually."
 
-installdirs:
-	$(MKDIR_P) $(DESTDIR)$(bindir) $(DESTDIR)$(SCREENENCODINGS)
-	cd doc ; $(MAKE) installdirs
 
 shadow:
 	mkdir shadow;
