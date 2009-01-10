@@ -1,6 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 SUBDIRS = lib src
+EXTRA_DIST = .version
 
 # .version - present in a checked-out repository and in a distribution
 #     tarball.  See git-version-gen.
