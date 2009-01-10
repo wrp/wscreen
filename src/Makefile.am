@@ -8,8 +8,7 @@ ETCSCREENRC = $(sysconfdir)/screenrc
 sysconf_DATA = etc/screenrc
 SCREENENCODINGS = $(pkgdatadir)/utf8encodings
 
-AM_CPPFLAGS = -DETCSCREENRC='"$(ETCSCREENRC)"' \
-	-DSCREENENCODINGS='"$(SCREENENCODINGS)"'
+AM_CPPFLAGS = -DETCSCREENRC='"$(ETCSCREENRC)"' -DSCREENENCODINGS='"$(SCREENENCODINGS)"'
 AM_CPPFLAGS += -I$(top_builddir)/lib -I$(top_srcdir)/lib
 LDADD = $(top_builddir)/lib/libgnu.a
 
