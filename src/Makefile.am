@@ -4,7 +4,8 @@
 
 SUBDIRS = doc
 
-ETCSCREENRC = $(prefix)/etc/screenrc
+ETCSCREENRC = $(sysconfdir)/screenrc
+sysconf_DATA = etc/screenrc
 SCREENENCODINGS = $(pkgdatadir)/utf8encodings
 
 AM_CPPFLAGS = -DETCSCREENRC='"$(ETCSCREENRC)"' \
@@ -47,7 +48,6 @@ install-exec-hook:
 		chmod 644 /usr/lib/terminfo/s/screen*; \
 	fi
 	@echo "termcap entry (${srcdir}/terminfo/screencap) should be installed manually."
-	@echo "You may also want to install $(srcdir)/etc/etcscreenrc in" $(ETCSCREENRC)
 
 installdirs:
 	$(MKDIR_P) $(DESTDIR)$(bindir) $(DESTDIR)$(SCREENENCODINGS)
