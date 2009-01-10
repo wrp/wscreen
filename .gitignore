@@ -14,9 +14,9 @@ Makefile.in
 /lib/
 /m4/
 
-/link-warning.h
-/git-version-gen
 .version
 .tarball-version
 /GNUmakefile
 /maint.mk
+/git-version-gen
+/link-warning.h
