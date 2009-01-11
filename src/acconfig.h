@@ -22,19 +22,6 @@
  * $Id$ FAU
  */
 
-
-
-
-
-/**********************************************************************
- *
- *	User Configuration Section
- */
-
-
-
-
-
 /*
  * both must be defined if you want to favor tcsendbreak over
  * other calls to generate a break condition on serial lines.
@@ -43,15 +30,6 @@
 #define POSIX_HAS_A_GOOD_TCSENDBREAK
 #define SUNOS4_AND_WE_TRUST_TCSENDBREAK
 
-
-/**********************************************************************
- *
- *	End of User Configuration Section
- *
- *      Rest of this file is modified by 'configure'
- *      Change at your own risk!
- *
- */
 
 
 /*
