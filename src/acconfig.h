@@ -206,12 +206,6 @@
 #undef HAVE_FDWALK
 
 /*
- * define HAVE_DEV_PTC if you have a /dev/ptc character special
- * device.
- */
-#undef HAVE_DEV_PTC
-
-/*
  * define HAVE_SVR4_PTYS if you have a /dev/ptmx character special
  * device and support the ptsname(), grantpt(), unlockpt() functions.
  */

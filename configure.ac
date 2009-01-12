@@ -675,10 +675,9 @@ AC_LINK_IFELSE(
 dnl
 dnl    ****  PTY specific things  ****
 dnl
-AC_CHECKING(for /dev/ptc)
-if test -r /dev/ptc; then
-AC_DEFINE([HAVE_DEV_PTC],[1],[HAVE_DEV_PTC])
-fi
+AC_CHECK_FILE([/dev/ptc],
+	AC_DEFINE([HAVE_DEV_PTC],[1],[/dev/ptc character special device exists.])
+)
 
 AC_CHECKING(for SVR4 ptys)
 sysvr4ptys=
