@@ -1,4 +1,4 @@
-ACLOCAL_AMFLAGS = -I m4
+ACLOCAL_AMFLAGS = -I m4 -I m4-screen
 
 SUBDIRS = lib src
 EXTRA_DIST = .version
