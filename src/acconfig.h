@@ -205,12 +205,6 @@
  */
 #undef HAVE_FDWALK
 
-/*
- * define HAVE_SVR4_PTYS if you have a /dev/ptmx character special
- * device and support the ptsname(), grantpt(), unlockpt() functions.
- */
-#undef HAVE_SVR4_PTYS
-
 /* 
  * define PTYRANGE0 and or PTYRANGE1 if you want to adapt screen
  * to unusual environments. E.g. For SunOs the defaults are "qpr" and 

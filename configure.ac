@@ -679,20 +679,21 @@ AC_CHECK_FILE([/dev/ptc],
 	AC_DEFINE([HAVE_DEV_PTC],[1],[/dev/ptc character special device exists.])
 )
 
-AC_CHECKING(for SVR4 ptys)
-sysvr4ptys=
-if test -c /dev/ptmx ; then
-AC_TRY_LINK([],[ptsname(0);grantpt(0);unlockpt(0);],[AC_DEFINE([HAVE_SVR4_PTYS],[1],[HAVE_SVR4_PTYS])
-sysvr4ptys=1])
-fi
-
 AC_CHECK_FUNCS(getpt)
 
-dnl check for openpty()
-if test -z "$sysvr4ptys"; then
-AC_CHECK_FUNCS(openpty,,
-[AC_CHECK_LIB(util,openpty, [AC_DEFINE([HAVE_OPENPTY],[1],[HAVE_OPENPTY])] [LIBS="$LIBS -lutil"])])
-fi
+AC_CHECK_FILE([/dev/ptmx],
+	AC_LINK_IFELSE(
+		[AC_LANG_PROGRAM([],[[ptsname(0);grantpt(0);unlockpt(0);]])],
+		[AC_DEFINE([HAVE_SVR4_PTYS],[1],[define if you have a
+		 /dev/ptmx character special device and support the ptsname(),
+		 grantpt(), unlockpt() functions.])],
+
+		dnl check for openpty() if /dev/ptmx not available
+		AC_SEARCH_LIBS([openpty],[util],
+			[AC_DEFINE([HAVE_OPENPTY],[1],[HAVE_OPENPTY])]
+		) dnl
+	) dnl
+) dnl
 
 AC_CHECKING(for ptyranges)
 if test -d /dev/ptym ; then
