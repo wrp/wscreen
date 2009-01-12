@@ -25,6 +25,8 @@ AC_SEARCH_LIBS([sprintf], [util utils])
 
 # Checks for header files.
 AC_CHECK_HEADERS([syslog.h sys/types.h])
+AC_CHECK_HEADERS([stropts.h string.h strings.h])
+
 # Checks for typedefs, structures, and compiler characteristics.
 AC_TYPE_UID_T
 
@@ -237,7 +239,6 @@ AC_TRY_LINK([#include <utmpx.h>
 [AC_CHECK_HEADER(dwarf.h, AC_DEFINE([SVR4],[1],[SVR4]) AC_DEFINE([BUGGYGETLOGIN],[1],[buggygetlogin]),
 [AC_CHECK_HEADER(elf.h, AC_DEFINE([SVR4],[1],[SVR4]) AC_DEFINE([BUGGYGETLOGIN],[1],[buggygetlogin]))])]
 ,LIBS="$oldlibs")
-AC_CHECK_HEADERS([stropts.h string.h strings.h])
 
 screen_JOBCONTROL
 dnl
