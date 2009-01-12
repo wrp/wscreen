@@ -30,25 +30,6 @@
 #define POSIX_HAS_A_GOOD_TCSENDBREAK
 #define SUNOS4_AND_WE_TRUST_TCSENDBREAK
 
-
-
-/*
- * Define SIGVOID if your signal handlers return void.  On older
- * systems, signal returns int, but on newer ones, it returns void.
- */
-#undef SIGVOID 
-
-/*
- * Define USESIGSET if you have sigset for BSD 4.1 reliable signals.
- */
-#undef USESIGSET
-
-/*
- * Define SYSVSIGS if signal handlers must be reinstalled after
- * they have been called.
- */
-#undef SYSVSIGS
-
 /*
  * Define BSDWAIT if your system defines a 'union wait' in <sys/wait.h>
  *
