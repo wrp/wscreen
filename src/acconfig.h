@@ -198,12 +198,6 @@
  */
 #undef HAVE_NL_LANGINFO
 
-/*
- * Newer versions of Solaris include fdwalk, which can greatly improve
- * the startup time of screen; otherwise screen spends a lot of time
- * closing file descriptors.
- */
-#undef HAVE_FDWALK
 
 /* 
  * define PTYRANGE0 and or PTYRANGE1 if you want to adapt screen

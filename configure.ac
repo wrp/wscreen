@@ -924,8 +924,7 @@ AC_TRY_LINK([#include <shadow.h>], [getspnam("x");],AC_DEFINE([SHADOWPW],[1],[SH
 AC_CHECKING(getttyent)
 AC_TRY_LINK(,[getttyent();], AC_DEFINE([GETTTYENT],[1],[GETTTYENT]))
 
-AC_CHECKING(fdwalk)
-AC_TRY_LINK([#include <stdlib.h>], [fdwalk(NULL, NULL);],AC_DEFINE([HAVE_FDWALK],[1],[HAVE_FDWALK]))
+AC_CHECK_FUNCS([fdwalk])
 
 AC_CHECKING(whether memcpy/memmove/bcopy handles overlapping arguments)
 AC_TRY_RUN([
