@@ -975,7 +975,7 @@ if test -f /tmp/conftest9012345 && test "$val" = 1; then
 AC_MSG_RESULT(yes)
 else
 AC_MSG_RESULT(no)
-AC_DEFINE([NAME_MAX], [14], [name max])
+AC_DEFINE([NAME_MAX], [14], [filesystem restriction on filename lengths])
 fi
 rm -f /tmp/conftest*
 
