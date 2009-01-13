@@ -199,13 +199,3 @@
 #undef HAVE_NL_LANGINFO
 
 
-/* 
- * define PTYRANGE0 and or PTYRANGE1 if you want to adapt screen
- * to unusual environments. E.g. For SunOs the defaults are "qpr" and 
- * "0123456789abcdef". For SunOs 4.1.2 
- * #define PTYRANGE0 "pqrstuvwxyzPQRST" 
- * is recommended by Dan Jacobson.
- */
-#undef PTYRANGE0
-#undef PTYRANGE1
-

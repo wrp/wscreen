@@ -1,197 +1,166 @@
-#                                               -*- Autoconf -*-
-# Process this file with autoconf to produce a configure script.
+dnl Process this file with autoconf to produce a configure script.
+dnl
+dnl $Id$ FAU
+dnl
+dnl Many thanks to David MacKenzie for writing autoconf and
+dnl providing a sample configure.in file for screen.
+dnl
+AC_REVISION($Revision$)dnl
+AC_INIT(screen.c)
+AC_CONFIG_HEADER(config.h)
 
+dnl
+dnl Define some useful macros
+dnl
+AC_DEFUN([AC_PROGRAM_SOURCE],
+[AC_REQUIRE([AC_PROG_CPP])AC_PROVIDE([$0])cat > conftest.c <<EOF
+#include "confdefs.h"
+[$1]
+_CUT_HERE_
+[$2]
+EOF
+eval "$ac_cpp conftest.c 2>&5 | sed -e '1,/_CUT_HERE_/d' -e 's/ //g' > conftest.out"
+. ./conftest.out
+rm -f conftest*
+])dnl
+dnl
+define(AC_NOTE,
+[echo "$1" 1>&AC_FD_MSG
+])dnl
 
-AC_PREREQ([2.63.251])
-AC_INIT([screen],
-	m4_esyscmd([./git-version-gen .tarball-version]),
-	[screen-devel@gnu.org])
-AC_CONFIG_SRCDIR([src/screen.c])
-AC_CONFIG_HEADERS([config.h])
-AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
-AM_INIT_AUTOMAKE([foreign])
+dnl
+dnl Extract version from patchlevel.h
+dnl
+rev=`sed < ${srcdir}/patchlevel.h -n -e '/#define REV/s/#define REV  *//p'`
+vers=`sed < ${srcdir}/patchlevel.h -n -e '/#define VERS/s/#define VERS  *//p'`
+pat=`sed < ${srcdir}/patchlevel.h -n -e '/#define PATCHLEVEL/s/#define PATCHLEVEL  *//p'`
+VERSION="$rev.$vers.$pat"
+AC_NOTE(this is screen version $VERSION)
+AC_SUBST(VERSION)
+AC_PREFIX_PROGRAM(screen)
+AC_PREFIX_PROGRAM(gzip)
 
-# Checks for programs.
-AC_PROG_INSTALL
+old_CFLAGS="$CFLAGS"
 AC_PROG_CC
 AC_PROG_CPP
-AC_PROG_AWK
-gl_EARLY
+AC_PROG_GCC_TRADITIONAL
+AC_ISC_POSIX
 
-# Checks for libraries.
-gl_INIT
-AC_SEARCH_LIBS([strerror], [cposix])
-AC_SEARCH_LIBS([sprintf], [util utils])
-
-# Checks for header files.
-AC_CHECK_HEADERS([syslog.h sys/types.h])
-AC_CHECK_HEADERS([stropts.h string.h strings.h])
-
-# Checks for typedefs, structures, and compiler characteristics.
-AC_TYPE_UID_T
-
-# Checks for library functions.
-AC_SEARCH_LIBS([syslog],[bsd],[],[AC_DEFINE([NOSYSLOG],[1],[
- Define NOSYSLOG if you do not have logging facilities. Currently
- syslog() will be used to trace ``su'' commands only.])])
-
-# User configuration section.
-
-screen_VARTYPE([maxwin],[40],[int],[Maximum of simultaneously allowed windows per screen session.])
-screen_VARTYPE([sockdir],["(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"],[char *],
-    [Where to put the per-user sockets.
-
-        Define SOCKDIR to be the directory to contain the named sockets
-        screen creates. This should be in a common subdirectory, such as
-        /usr/local or /tmp. It makes things a little more secure if you
-        choose a directory which is not writable by everyone or where the
-        "sticky" bit is on, but this isn't required.
-        If SOCKDIR is not defined screen will put the named sockets in
-        the user's home directory. Notice that this can cause you problems
-        if some user's HOME directories are AFS- or NFS-mounted. Especially
-        AFS is unlikely to support named sockets.
-
-        Screen will name the subdirectories "S-$USER" (e.g /tmp/S-davison).
-    ],[],[int eff_uid;])
-
-
-AC_ARG_WITH([remote-socket-dir],
-    [AS_HELP_STRING([--with-remote-socket-dir],
-        [This option indicates that the path specified in SOCKDIR
-        is on a network mount.]
-    )],
-    [AS_CASE([${withval}],
-        [yes], [REMOTE_SOCKDIR="${withval}"],
-        [REMOTE_SOCKDIR=no]
-    )],
-    [REMOTE_SOCKDIR=no] dnl
-)
-AS_IF([test "X$REMOTE_SOCKDIR" = Xno ],
-    [AC_DEFINE([SOCKDIR_IS_LOCAL_TO_HOST],[1],
-        [Define this if the SOCKDIR is not shared between hosts.]
-    )] dnl
-)
-
-screen_VARTYPE([ttyvmin],[100],[int],[VMIN setting for the tty])
-screen_VARTYPE([ttyvtime],[2],[int],[VTIME setting for the tty])
-screen_BOOLFEATURE([sysscreenrc], [Do not allow the variable SYSSCREENRC
-	 to specify a global sreenrc],[yes],[allow_sysscreenrc])
-
-screen_BOOLFEATURE([lockpty],[
-	If screen is NOT installed set-uid root, screen can provide tty
-	security by exclusively locking the ptys.  While this keeps other
-	users from opening your ptys, it also keeps your own subprocesses
-	from being able to open /dev/tty.  Define LOCKPTY to add this
-	exclusive locking.])
-
-screen_BOOLFEATURE([topstat],[ If you'd rather see the [status] line on the
-	first line of your terminal rather than the last, define TOPSTAT.])
-
-screen_BOOLFEATURE([nethack],[generate nethack friendly error messages],[yes])
-screen_BOOLFEATURE([checklogin], [force Screen users to enter their Unix
-	 password in addition to the screen password.], [yes])
-
-dnl If UTMPOK is defined and your system (incorrectly) counts logins by
-dnl counting non-null entries in /etc/utmp (instead of counting non-null
-dnl entries with no hostname that are not on a pseudo tty), define USRLIMIT
-dnl to have screen put an upper-limit on the number of entries to write into
-dnl /etc/utmp.  This helps to keep you from exceeding a limited-user license.
-screen_BOOLFEATURE([utmpok], [define if screen has permission to update /etc/utmp], [yes])
-screen_VARTYPE([usrlimit],[],[int],[Maximum number of entries to write in /etc/utmp])
-
-screen_BOOLFEATURE([DETACH], [disallow detaching], [yes])
-screen_BOOLFEATURE([LOCK], [disallow a lock program for a screenlock], [yes])
-screen_BOOLFEATURE([PASSWORD], [disallow secure reattach of your screen], [yes])
-screen_BOOLFEATURE([COPY_PASTE], [disallow use the famous hacker's treasure zoo], [yes])
-screen_BOOLFEATURE([POW_DETACH], [disallow detach_and_logout key], [yes])
-screen_BOOLFEATURE([REMOTE_DETACH], [disallow -d option to move screen between terminals], [yes])
-screen_BOOLFEATURE([AUTO_NUKE], [disable Tim MacKenzies clear screen nuking], [yes])
-screen_BOOLFEATURE([PSEUDOS], [disable window input/output filtering], [yes])
-screen_BOOLFEATURE([MULTI], [disable multiple attaches], [yes])
-screen_BOOLFEATURE([MULTIUSER], [do not allow other users in the acl to attach to your session], [yes])
-screen_BOOLFEATURE([MAPKEYS], [do not include input keyboard translation], [yes])
-screen_BOOLFEATURE([FONT], [disable support for ISO2022/alternet charset support], [yes])
-screen_BOOLFEATURE([COLOR], [disable ansi color support], [yes])
-screen_BOOLFEATURE([DW_CHARS], [do not include support for double-width character sets], [yes])
-screen_BOOLFEATURE([ENCODINGS], [do not include support for encodings like euc or big5], [yes])
-screen_BOOLFEATURE([UTF8], [disable support for UTF-8 encoding], [yes])
-screen_BOOLFEATURE([COLORS16], [do not use 16 colors], [yes])
-screen_BOOLFEATURE([zmodem], [zmodem], [yes])
-screen_BOOLFEATURE([blanker_prg], [blanker_prg], [yes])
-screen_BOOLFEATURE([braille], [define if you have a braille display], [no], [have_braille])
-screen_BOOLFEATURE([pam], [enable Pluggable Authentication Modules], [no], [use_pam],
-	AC_CHECK_HEADERS([security/pam_appl.h pam/pam_appl.h])
-	AC_CHECK_LIB([pam],[pam_start])
-)
-screen_BOOLFEATURE([logindefault], [do not add entries to /etc/utmp], [yes])
-screen_BOOLFEATURE([logoutok], [
-	logoutok should be enabled if you want the user to be able to log
-	her/his windows out.  (Meaning: They are there, but not visible in
-	/etc/utmp).  Disabling this feature only makes sense if you have a
-	secure /etc/utmp database.
-	Negative examples: suns usually have a world writable utmp file,
-	xterm will run perfectly without s-bit.
-	If LOGOUTOK is disabled and UTMPOK is enabled, all windows are
-	initially and permanently logged in.], [yes])
-screen_BOOLFEATURE([carefulutmp], [
-	Enable CAREFULUTMP if you want that users have at least one
-	window per screen session logged in.])
-screen_BOOLFEATURE([cytermio], [if you have cyrillic termio modes])
-screen_BOOLFEATURE([check_screen_w],[set TERM to 'screen-w' if the terminal width
-	is greater than 131.  (Obsolete)])
-screen_BOOLFEATURE([ptyrofs], [enable if the /dev/pty devices are mounted on
-	a read-only filesystem so screen should not even attempt to set mode
-	or group even if running as root (e.g. on TiVo).])
-screen_BOOLFEATURE([use_sgr],[
-	Some terminals, e.g. Wyse 120, use a bitfield to select
-	attributes.  This doesn't work with the standard so/ul/m?
-	terminal entries, because they will cancel each other out.
-	On TERMINFO machines, "sa" (sgr) may work. If you want
-	screen to switch attributes only with sgr, enable USE_SGR.
-	This is *not* recomended, do this only if you must.])
-
-dnl --- cut ---  Below here is old.
-
-define([AC_NOTE],
-[AC_MSG_NOTICE([$1])
+AC_TRY_RUN(main(){exit(0);},,[
+if test $CC != cc ; then
+AC_NOTE(Your $CC failed - restarting with CC=cc)
+AC_NOTE()
+CC=cc
+export CC
+exec $0 $configure_args
+fi
 ])
 
-AS_IF([test -n "$ISC"],
-  [AC_DEFINE([ISC],[1],[ISC])]
-  [AC_HAVE_LIBRARY([inet],,AC_MSG_ERROR([libinet is required on $ISC]))]
+AC_TRY_RUN(main(){exit(0);},,
+exec 5>&2
+eval $ac_link
+AC_NOTE(CC=$CC; CFLAGS=$CFLAGS; LIBS=$LIBS;)
+AC_NOTE($ac_compile)
+AC_MSG_ERROR(Can't run the compiler - sorry))
+
+AC_TRY_RUN([
+main()
+{
+  int __something_strange_();
+  __something_strange_(0);
+}
+],AC_MSG_ERROR(Your compiler does not set the exit status - sorry))
+
+AC_PROG_AWK
+
+AC_PROG_INSTALL
+
+if test -f etc/toolcheck; then
+AC_CHECKING(for buggy tools)
+sh etc/toolcheck 1>&AC_FD_MSG
+fi
+
+
+
+dnl SOCKDIR
+AC_MSG_CHECKING(if a system-wide socket dir should be used) 
+AC_ARG_ENABLE(socket-dir,
+    [  --disable-socket-dir    disable system wide socket-dir and use ~/.screen instead],
+    [
+	AC_MSG_RESULT(no.  ~/.screen will be used instead.)
+    ],
+    [
+	AC_MSG_RESULT(yes)
+	AC_MSG_CHECKING(for the socket dir)
+	SOCKDIR="(eff_uid ? \"/tmp/uscreens\" : \"/tmp/screens\")"
+	AC_ARG_WITH(socket-dir, [  --with-socket-dir=path  where to put the per-user sockets], [ 
+	  case "${withval}" in
+	    *\"*) SOCKDIR="${withval}" ;;
+	    *) SOCKDIR="\"${withval}\"" ;;
+	  esac
+        ])
+	AC_MSG_RESULT(${SOCKDIR})
+	AC_DEFINE_UNQUOTED(SOCKDIR, $SOCKDIR)
+    ]
 )
 
 
-AC_CANONICAL_HOST
+dnl
+dnl    ****  special unix variants  ****
+dnl
+if test -n "$ISC"; then
+  AC_DEFINE(ISC) LIBS="$LIBS -linet"
+fi
 
-AS_CASE([$host_cpu],
-    [mips],      [AC_DEFINE([MIPS],[1],[MIPS])],
-    [m68k],      [AC_DEFINE([sysV68],[1],[define if running on motorola 68000 family])],
-    [pyramid],
-        [AC_CHECK_LIB([pyr], [main], [],
-	    [AC_TRY_LINK( [],[open_controlling_pty("")], AC_DEFINE([OSX],[1],[OSX]), LIBS="$oldlibs")]
-        )]
-)
-AS_CASE([$host_os],
-    [riscos],
-        [AC_DEFINE([USE_WAIT2],[1],[USE_WAIT2])]
-        [LIBS="$LIBS -lbsd"]
-        [CC="$CC -I/usr/include/bsd"],
-    [ultrix], [ULTRIX=1],
-    [solaris*],
-        [AC_CHECK_LIB([socket], [main])]
-        [AC_CHECK_LIB([nsl], [main])]
-        [AC_CHECK_LIB([kstat], [main])],
-    []
-)
+dnl AC_CHECKING(for OSF1)
+dnl if test -f /bin/uname ; then
+dnl if test `/bin/uname` = OSF1 || test -f /osf_boot; then
+dnl AC_DEFINE(OSF1)	# this disables MIPS again....
+dnl fi
+dnl fi
 
-AS_CASE([$host_vendor],
-    [sequent],
-        [AC_CHECK_LIB([socket], [main])]
-        [AC_CHECK_LIB([inet], [main])]
-        [seqptx=1]
-)
+if test -f /sysV68 ; then
+AC_DEFINE(sysV68)
+fi
 
+AC_CHECKING(for MIPS)
+if test -f /lib/libmld.a || test -f /usr/lib/libmld.a || test -f /usr/lib/cmplrs/cc/libmld.a; then
+oldlibs="$LIBS"
+test -f /bin/mx || LIBS="$LIBS -lmld" # for nlist. But not on alpha.
+dnl djm@eng.umd.edu: "... for one thing, it doubles the size of the executable"
+AC_CHECKING(mld library)
+AC_TRY_LINK(,,,LIBS="$oldlibs")
+dnl
+dnl
+if test -r /dev/ptc; then
+AC_DEFINE(MIPS)
+AC_CHECKING(wait3)
+AC_TRY_LINK(,[wait3();], ,
+AC_CHECKING(wait2)
+AC_TRY_LINK(,[wait2();],
+dnl John Rouillard (rouilj@sni-usa.com):
+dnl need -I/usr/include/bsd in RISCOS otherwise sockets are broken, no
+dnl job control etc.
+dnl Detect RISCOS if wait2 is present, but not wait3.
+AC_DEFINE(USE_WAIT2) LIBS="$LIBS -lbsd" ; CC="$CC -I/usr/include/bsd"
+))
+fi
+fi
+
+
+AC_CHECKING(for Ultrix)
+AC_EGREP_CPP(yes,
+[#if defined(ultrix) || defined(__ultrix)
+   yes;
+#endif
+], ULTRIX=1)
+
+if test -f /usr/lib/libpyr.a ; then
+oldlibs="$LIBS"
+LIBS="$LIBS -lpyr"
+AC_CHECKING(Pyramid OSX)
+AC_TRY_LINK(,[open_controlling_pty("")], AC_DEFINE(OSX), LIBS="$oldlibs")
+fi
 
 dnl ghazi@caip.rutgers.edu (Kaveh R. Ghazi):
 dnl BBN butterfly is not POSIX, but a MACH BSD system.
@@ -201,57 +170,104 @@ AC_EGREP_CPP(yes,
 [#if defined(butterfly)
   yes;
 #endif
-],
-    [butterfly=1],
+], butterfly=1)
 
-    dnl This is not "butterfly".
-    [AC_CHECKING([for POSIX.1])]
-    [AC_EGREP_CPP([yes],[
-#include <sys/types.h>
+if test -z "$butterfly"; then
+if test -n "$ULTRIX"; then
+  test -z "$GCC" && CC="$CC -YBSD"
+fi
+AC_CHECKING(for POSIX.1)
+AC_EGREP_CPP(yes,
+[#include <sys/types.h>
 #include <unistd.h>
+main () {
 #ifdef _POSIX_VERSION
   yes;
 #endif
-],
-        [AC_MSG_NOTICE([- you have a POSIX system])]
-        [AC_DEFINE([POSIX],[1], dnl
-            [Define POSIX if your system supports IEEE Std 1003.1-1988 (POSIX).]
-        )]
-
-        [posix=1]
-    )]
-)
+], AC_NOTE(- you have a POSIX system) AC_DEFINE(POSIX) posix=1)
+fi
 
 AC_CHECKING(for System V)
-AC_TRY_COMPILE([
-#include <sys/types.h>
+AC_TRY_COMPILE(
+[#include <sys/types.h>
 #include <signal.h>
-#include <fcntl.h>],
-	[int x = SIGCHLD | FNDELAY;],[],
-	AC_DEFINE([SYSV],[1],[SYSV compliant (Sys V, HPUX, A/UX)])
-)
+#include <fcntl.h>], [int x = SIGCHLD | FNDELAY;], , AC_DEFINE(SYSV))
+
+AC_CHECKING(for sequent/ptx)
+AC_EGREP_CPP(yes,
+[#ifdef _SEQUENT_
+  yes;
+#endif
+], LIBS="$LIBS -lsocket -linet";seqptx=1)
 
 oldlibs="$LIBS"
 LIBS="$LIBS -lelf"
 AC_CHECKING(SVR4)
 AC_TRY_LINK([#include <utmpx.h>
 ],,
-[AC_CHECK_HEADER(dwarf.h, AC_DEFINE([SVR4],[1],[SVR4]) AC_DEFINE([BUGGYGETLOGIN],[1],[buggygetlogin]),
-[AC_CHECK_HEADER(elf.h, AC_DEFINE([SVR4],[1],[SVR4]) AC_DEFINE([BUGGYGETLOGIN],[1],[buggygetlogin]))])]
+[AC_CHECK_HEADER(dwarf.h, AC_DEFINE(SVR4) AC_DEFINE(BUGGYGETLOGIN),
+[AC_CHECK_HEADER(elf.h, AC_DEFINE(SVR4) AC_DEFINE(BUGGYGETLOGIN))])]
 ,LIBS="$oldlibs")
+AC_CHECK_HEADERS([stropts.h string.h strings.h])
 
-screen_JOBCONTROL
+AC_CHECKING(for Solaris 2.x)
+AC_EGREP_CPP(yes,
+[#if defined(SVR4) && defined(sun)
+  yes
+#endif
+], LIBS="$LIBS -lsocket -lnsl -lkstat")
+
+dnl
+dnl    ****  typedefs ****
+dnl
+dnl (currently not used)
+dnl
+dnl AC_CHECKING(for pid_t)
+dnl AC_EGREP_CPP(pid_t,[#include <sys/types.h>
+dnl ],AC_DEFINE(PID_T_DEFINED))
+dnl
+dnl AC_CHECKING(for sig_t)
+dnl AC_EGREP_CPP(sig_t,[#include <sys/types.h>
+dnl #include <signal.h>
+dnl ],AC_DEFINE(SIG_T_DEFINED))
+dnl
+dnl AC_CHECKING(for uid_t)
+dnl AC_EGREP_CPP(uid_t,[#include <sys/types.h>
+dnl ],AC_DEFINE(UID_T_DEFINED))
+dnl
+
+dnl
+dnl   ****     Job control     ****
+dnl
+
+AC_CHECKING(BSD job jontrol)
+AC_TRY_LINK(
+[#include <sys/types.h>
+#include <sys/ioctl.h>
+], [
+#ifdef POSIX
+tcsetpgrp(0, 0);
+#else
+int x = TIOCSPGRP;
+#ifdef SYSV
+setpgrp();
+#else
+int y = TIOCNOTTY;
+#endif
+#endif
+], AC_NOTE(- you have jobcontrol) AC_DEFINE(BSDJOBS), AC_NOTE(- you don't have jobcontrol))
+
 dnl
 dnl    ****  setresuid(), setreuid(), seteuid()  ****
 dnl
 AC_CHECKING(setresuid)
 AC_TRY_LINK(,[
 setresuid(0, 0, 0);
-], AC_DEFINE([HAVE_SETRESUID],[1],[HAVE_SETRESUID]))
+], AC_DEFINE(HAVE_SETRESUID))
 AC_CHECKING(setreuid)
 AC_TRY_LINK(,[
 setreuid(0, 0);
-], AC_DEFINE([HAVE_SETREUID],[1],[HAVE_SETREUID]))
+], AC_DEFINE(HAVE_SETREUID))
 dnl
 dnl seteuid() check:
 dnl   linux seteuid was broken before V1.1.11
@@ -265,7 +281,7 @@ seteuid_is_broken(0);
 #else
 seteuid(0);
 #endif
-], AC_DEFINE([HAVE_SETEUID],[1],[HAVE_SETEUID]))
+], AC_DEFINE(HAVE_SETEUID))
 
 dnl
 dnl    ****  select()  ****
@@ -396,7 +412,7 @@ main()
   exit(0);
 }
 ], AC_NOTE(- your implementation is ok), 
-AC_NOTE(- you have a broken implementation) AC_DEFINE([BROKEN_PIPE],[1],[BROKEN_PIPE]) fifobr=1)
+AC_NOTE(- you have a broken implementation) AC_DEFINE(BROKEN_PIPE) fifobr=1)
 rm -f /tmp/conftest*
 fi
 
@@ -497,7 +513,7 @@ main()
 }
 ],AC_NOTE(- you are normal),
 AC_NOTE(- unix domain sockets are not kept in the filesystem)
-AC_DEFINE([SOCK_NOT_IN_FS],[1],[SOCK_NOT_IN_FS]) socknofs=1)
+AC_DEFINE(SOCK_NOT_IN_FS) socknofs=1)
 rm -f /tmp/conftest*
 fi
 
@@ -509,7 +525,7 @@ if test -n "$fifo"; then
   if test -n "$sock"; then
     if test -n "$nore"; then
       AC_NOTE(- hmmm... better take the fifos)
-      AC_DEFINE([NAMEDPIPE],[1],[NAMEDPIPE])
+      AC_DEFINE(NAMEDPIPE)
     elif test -n "$fifobr"; then
       AC_NOTE(- as your fifos are broken lets use the sockets.)
     else
@@ -517,7 +533,7 @@ if test -n "$fifo"; then
     fi
   else
     AC_NOTE(- using named pipes, of course)
-    AC_DEFINE([NAMEDPIPE],[1],[NAMEDPIPE])
+    AC_DEFINE(NAMEDPIPE)
   fi
 elif test -n "$sock"; then
   AC_NOTE(- using unix-domain sockets, of course)
@@ -624,7 +640,7 @@ main()
   exit(0);
 }
 ],AC_NOTE(- select is ok),
-AC_NOTE(- select can't count) AC_DEFINE([SELECT_BROKEN],[1],[SELECT_BROKEN]))
+AC_NOTE(- select can't count) AC_DEFINE(SELECT_BROKEN))
 
 dnl
 dnl    ****  termcap or terminfo  ****
@@ -656,67 +672,72 @@ AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
 AC_MSG_ERROR(!!! no tgetent - no screen)))))))
 
 AC_TRY_RUN([
-	main() { exit( strcmp( tgoto( "%p1%d", 0, 1 ), "1" ) ? 0 : 1); }],
-	[AC_MSG_NOTICE([using the termcap database])],
-	[AC_MSG_NOTICE([using the terminfo database])]
-	[AC_DEFINE([TERMINFO],[1],[Define TERMINFO if the host machine
-		 emulates the termcap routines with the terminfo database.
-		 Thus the .screenrc file is parsed for the command 'terminfo'
-		 instead of 'termcap'.])]
-)
-
-AC_CHECKING([ospeed])
-AC_LINK_IFELSE(
-	[AC_LANG_PROGRAM([[ extern short ospeed;]], [[ospeed = 5;]])],
-	[],
-	[AC_DEFINE([NEED_OSPEED],[1],[define if ospeed not available])]
-)
+main()
+{
+ exit(strcmp(tgoto("%p1%d", 0, 1), "1") ? 0 : 1);
+}], AC_NOTE(- you use the termcap database),
+AC_NOTE(- you use the terminfo database) AC_DEFINE(TERMINFO))
+AC_CHECKING(ospeed)
+AC_TRY_LINK(extern short ospeed;,ospeed=5;,,AC_DEFINE(NEED_OSPEED))
 
 dnl
 dnl    ****  PTY specific things  ****
 dnl
-AC_CHECK_FILE([/dev/ptc],
-	AC_DEFINE([HAVE_DEV_PTC],[1],[/dev/ptc character special device exists.])
-)
+AC_CHECKING(for /dev/ptc)
+if test -r /dev/ptc; then
+AC_DEFINE(HAVE_DEV_PTC)
+fi
+
+AC_CHECKING(for SVR4 ptys)
+sysvr4ptys=
+if test -c /dev/ptmx ; then
+AC_TRY_LINK([],[ptsname(0);grantpt(0);unlockpt(0);],[AC_DEFINE(HAVE_SVR4_PTYS)
+sysvr4ptys=1])
+fi
 
 AC_CHECK_FUNCS(getpt)
 
-AC_CHECK_FILE([/dev/ptmx],
-	AC_LINK_IFELSE(
-		[AC_LANG_PROGRAM([],[[ptsname(0);grantpt(0);unlockpt(0);]])],
-		[AC_DEFINE([HAVE_SVR4_PTYS],[1],[define if you have a
-		 /dev/ptmx character special device and support the ptsname(),
-		 grantpt(), unlockpt() functions.])],
-
-		dnl check for openpty() if /dev/ptmx not available
-		AC_SEARCH_LIBS([openpty],[util],
-			[AC_DEFINE([HAVE_OPENPTY],[1],[HAVE_OPENPTY])]
-		) dnl
-	) dnl
-) dnl
+dnl check for openpty()
+if test -z "$sysvr4ptys"; then
+AC_CHECK_FUNCS(openpty,,
+[AC_CHECK_LIB(util,openpty, [AC_DEFINE(HAVE_OPENPTY)] [LIBS="$LIBS -lutil"])])
+fi
 
 AC_CHECKING(for ptyranges)
-AS_IF([test -d /dev/ptym],
-	[pdir='/dev/ptym'],
-	[pdir='/dev'])
+if test -d /dev/ptym ; then
+pdir='/dev/ptym'
+else
+pdir='/dev'
+fi
 dnl SCO uses ptyp%d
 AC_EGREP_CPP(yes,
 [#ifdef M_UNIX
    yes;
 #endif
 ], ptys=`echo /dev/ptyp??`, ptys=`echo $pdir/pty??`)
-AS_IF([test "$ptys" != "$pdir/pty??"],
+dnl if test -c /dev/ptyp19; then
+dnl ptys=`echo /dev/ptyp??`
+dnl else
+dnl ptys=`echo $pdir/pty??`
+dnl fi
+if test "$ptys" != "$pdir/pty??" ; then
 p0=`echo $ptys | tr ' ' '\012' | sed -e 's/^.*\(.\).$/\1/g' | sort -u | tr -d '\012'`
 p1=`echo $ptys | tr ' ' '\012' | sed -e 's/^.*\(.\)$/\1/g'  | sort -u | tr -d '\012'`
-AC_DEFINE_UNQUOTED(PTYRANGE0,"$p0",[define PTYRANGE0 and or PTYRANGE1 if you
-	want to adapt screen to unusual environments. E.g. For SunOs the
-	defaults are "qpr" and "0123456789abcdef".])
-AC_DEFINE_UNQUOTED(PTYRANGE1,"$p1",[see documentation for PTYRANGE0])
-)
+AC_DEFINE_UNQUOTED(PTYRANGE0,"$p0")
+AC_DEFINE_UNQUOTED(PTYRANGE1,"$p1")
+fi
 
 dnl    ****  pty mode/group handling ****
 dnl
 dnl support provided by Luke Mewburn <lm@rmit.edu.au>, 931222
+AC_ARG_WITH(pty-mode, [  --with-pty-mode=mode    default mode for ptys], [ ptymode="${withval}" ])
+AC_ARG_WITH(pty-group, [  --with-pty-group=group  default group for ptys], [ ptygrp="${withval}" ])
+test -n "$ptymode" || ptymode=0620
+if test -n "$ptygrp" ; then
+AC_DEFINE_UNQUOTED(PTYMODE, $ptymode)
+AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp)
+else
+
 AC_CHECKING(default tty permissions/group)
 rm -f conftest_grp
 AC_TRY_RUN([
@@ -750,6 +771,9 @@ main()
 ],[
     if test -f conftest_grp; then
 	ptygrp=`cat conftest_grp`
+	AC_NOTE([- pty mode: $ptymode, group: $ptygrp])
+	AC_DEFINE_UNQUOTED(PTYMODE, $ptymode)
+	AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp)
     else
 	AC_NOTE(- ptys are world accessable)
     fi
@@ -778,6 +802,9 @@ main()
       found=`find $WRITEPATH $XTERMPATH $findfollow -perm -2000 -print` 
       if test -n "$found"; then
 	ptygrp=`ls -ln$lsfollow $found | sed -n -e 1p | $AWK '{print $4}'`
+	AC_NOTE([- pty mode: $ptymode, group: $ptygrp])
+	AC_DEFINE_UNQUOTED(PTYMODE, $ptymode)
+	AC_DEFINE_UNQUOTED(PTYGROUP,$ptygrp)
       else
 	AC_NOTE(- ptys are world accessable)
       fi
@@ -787,16 +814,7 @@ main()
   ]
 )
 rm -f conftest_grp
-
-screen_VARTYPE([ptymode],[0622],[int],[permissions for the PTY.
-	  Defaults to 0622])
-screen_VARTYPE([ptygroup],[${ptygrp-real_gid}],[gid_t],[A numerical group-id
-	if you do not want the tty to be in "your" group. Note, screen is
-	unable to change mode or group of the pty if it is not installed with
-	sufficient privilege. (e.g. set-uid-root)],
-	[AC_INCLUDES_DEFAULT],[int real_gid;])
-
-AC_MSG_NOTICE([- pty mode: ${ptymode}, group: $ptygroup])
+fi
 
 dnl
 dnl    ****  utmp handling  ****
@@ -815,7 +833,7 @@ AC_TRY_LINK([
 #define pututline _pututline
 #endif
 ],
-[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE([GETUTENT],[1],[GETUTENT]),
+[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE(GETUTENT),
 olibs="$LIBS"
 LIBS="$LIBS -lgen"
 AC_CHECKING(getutent with -lgen)
@@ -832,7 +850,7 @@ AC_TRY_LINK([
 #define pututline _pututline
 #endif
 ],
-[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE([GETUTENT],[1],[GETUTENT]), LIBS="$olibs")
+[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE(GETUTENT), LIBS="$olibs")
 )
 AC_CHECKING(ut_host)
 AC_TRY_COMPILE([
@@ -844,15 +862,235 @@ AC_TRY_COMPILE([
 #else
 #include <utmp.h>
 #endif
-],[struct utmp u; u.ut_host[0] = 0;], AC_DEFINE([UTHOST],[1],[UTHOST]))
+],[struct utmp u; u.ut_host[0] = 0;], AC_DEFINE(UTHOST))
 AC_CHECK_HEADER(utempter.h, have_utempter=yes, have_utempter=no)
 if test "$have_utempter" = yes; then
-  AC_DEFINE([HAVE_UTEMPTER],[1],[HAVE_UTEMPTER])
+  AC_DEFINE(HAVE_UTEMPTER)
   LIBS="$LIBS -lutempter"
 fi
 
+dnl
+dnl    ****  loadav  ****
+dnl
+AC_CHECKING(for libutil(s))
+test -f /usr/lib/libutils.a && LIBS="$LIBS -lutils"
+test -f /usr/lib/libutil.a && LIBS="$LIBS -lutil"
 
-screen_TYPE_SIGNAL
+AC_CHECKING(getloadavg)
+AC_TRY_LINK(,[getloadavg((double *)0, 0);],
+AC_DEFINE(LOADAV_GETLOADAVG) load=1,
+if test -f /usr/lib/libkvm.a ; then
+olibs="$LIBS"
+LIBS="$LIBS -lkvm"
+AC_CHECKING(getloadavg with -lkvm)
+AC_TRY_LINK(,[getloadavg((double *)0, 0);],
+AC_DEFINE(LOADAV_GETLOADAVG) load=1, LIBS="$olibs")
+fi
+)
+
+if test -z "$load" ; then
+AC_EGREP_CPP(yes,
+[#if defined(NeXT) || defined(apollo) || defined(linux)
+  yes;
+#endif
+], load=1)
+fi
+if test -z "$load" ; then
+AC_CHECKING(for kernelfile)
+for core in /unix /vmunix /dynix /hp-ux /xelos /dev/ksyms /kernel/unix /kernel/genunix /unicos /mach /netbsd /386bsd /dgux /bsd /stand/vmunix; do
+  if test -f $core || test -c $core; then
+    break
+  fi
+done
+if test ! -f $core && test ! -c $core ; then
+  AC_NOTE(- no kernelfile found)
+else
+  AC_NOTE(- using kernelfile '$core')
+  if test -r $core ; then
+  AC_DEFINE_UNQUOTED(LOADAV_UNIX,"$core")
+  AC_CHECK_HEADER(nlist.h,
+    [AC_DEFINE(NLIST_STRUCT)
+     AC_CHECKING(n_un in struct nlist)
+     AC_TRY_COMPILE([#include <nlist.h>],
+       [struct nlist n; n.n_un.n_name = 0;],
+        AC_DEFINE(NLIST_NAME_UNION))])
+
+  AC_CHECKING(for nlist declaration)
+  AC_EGREP_CPP([nlist(( |	)( |	)*.*\(|\()],[
+#ifdef NLIST_STRUCT
+# include <nlist.h>
+#else
+# include <a.out.h>
+#endif
+],AC_DEFINE(NLIST_DECLARED))
+
+  AC_CHECKING(for avenrun symbol)
+  nlist64=
+  for av in avenrun _avenrun _Loadavg avenrun _avenrun _Loadavg; do
+  AC_TRY_RUN([
+#include <sys/types.h>
+#ifdef NLIST_STRUCT
+#include <nlist.h>
+#else
+#include <a.out.h>
+#endif
+
+$nlist64
+
+struct nlist nl[2];
+
+main()
+{
+#if !defined(_AUX_SOURCE) && !defined(AUX)
+# ifdef NLIST_NAME_UNION
+  nl[0].n_un.n_name = "$av";
+# else
+  nl[0].n_name = "$av";
+# endif
+#else
+  strncpy(nl[0].n_name, "$av", sizeof(nl[0].n_name));
+#endif
+  nlist(LOADAV_UNIX, nl);
+  if (nl[0].n_value == 0)
+    exit(1);
+  exit(0);
+}
+  ],avensym=$av;break)
+  if test "$av" = _Loadavg; then
+    nlist64='#define nlist nlist64'
+  fi
+  done
+  if test -z "$avensym" ; then
+    AC_NOTE(- no avenrun symbol found)
+  else
+    AC_NOTE(- using avenrun symbol '$avensym')
+    AC_DEFINE_UNQUOTED(LOADAV_AVENRUN,"$avensym")
+    if test -n "$nlist64"; then
+      AC_NOTE(- used nlist64 to find it)
+      AC_DEFINE(LOADAV_USE_NLIST64)
+    fi
+    load=1
+  fi
+  else
+    AC_NOTE(  Can't configure the load average display feature)
+    AC_NOTE(  because $core is not readable by you.)
+    AC_NOTE(  To configure the load average display feature,)
+    AC_NOTE(  re-run configure as root if possible.)
+    AC_NOTE(  If you are not the system administrator then disregard)
+    AC_NOTE(  this warning.  You can still use screen without)
+    AC_NOTE(  the load average display feature.)
+  fi
+fi
+fi
+
+AC_PROGRAM_SOURCE([
+#include <sys/types.h>
+#include <sys/param.h>
+],[
+#if !defined(LOADAV_GETLOADAVG) && ((defined(hp300) && !defined(__hpux)) || defined(sun) || (defined(ultrix) && defined(mips)) || defined(_SEQUENT_) || defined(sgi) || (defined(SVR4) && !defined(__hpux)) || defined(sony_news) || (!defined(__osf__) && defined(__alpha)) || defined(_IBMR2) || defined(_AUX_SOURCE) || defined(AUX) || defined(m88k))
+loadtype=long
+# if defined(apollo) || defined(_IBMR2) || defined(_AUX_SOURCE) || defined(AUX)
+loadscale=65536
+# else
+#  if defined(FSCALE) && !defined(__osf__)
+#   undef FSCALE
+loadscale=FSCALE
+#  else
+#   ifdef sgi
+loadtype=int
+loadscale=1024
+#   else
+#    if defined(MIPS) || defined(SVR4) || defined(m88k)
+loadscale=256
+#    else /* not MIPS */
+loadscale=1000 	/* our default value */
+#    endif /* MIPS */
+#   endif /* sgi */
+#  endif /* not FSCALE */
+# endif /* not apollo */
+#else
+loadtype=double
+loadscale=1
+#endif
+#ifdef alliant
+loadnum=4
+#else
+loadnum=3
+#endif
+])
+
+if test -n "$load" ; then AC_DEFINE(LOADAV) fi
+if test -n "$loadtype" ; then AC_DEFINE_UNQUOTED(LOADAV_TYPE,$loadtype) fi
+if test -n "$loadnum" ; then AC_DEFINE_UNQUOTED(LOADAV_NUM,$loadnum) fi
+if test -n "$loadscale" ; then AC_DEFINE_UNQUOTED(LOADAV_SCALE,$loadscale) fi
+
+dnl
+dnl    ****  signal handling  ****
+dnl
+if test -n "$posix" ; then
+
+dnl POSIX has reliable signals with void return type.
+AC_NOTE(assuming posix signal definition)
+AC_DEFINE(SIGVOID)
+
+else
+
+AC_CHECKING(return type of signal handlers)
+AC_TRY_COMPILE(
+[#include <sys/types.h>
+#include <signal.h>
+#ifdef signal
+#undef signal
+#endif
+extern void (*signal ()) ();], [int i;], AC_DEFINE(SIGVOID))
+AC_CHECKING(sigset)
+AC_TRY_LINK([
+#include <sys/types.h>
+#include <signal.h>
+],[
+#ifdef SIGVOID
+sigset(0, (void (*)())0);
+#else
+sigset(0, (int (*)())0);
+#endif
+], AC_DEFINE(USESIGSET))
+AC_CHECKING(signal implementation)
+AC_TRY_RUN([
+#include <sys/types.h>
+#include <signal.h>
+
+#ifndef SIGCLD
+#define SIGCLD SIGCHLD
+#endif
+#ifdef USESIGSET
+#define signal sigset
+#endif
+
+int got;
+
+#ifdef SIGVOID
+void
+#endif
+hand()
+{
+  got++;
+}
+
+main()
+{
+  /* on hpux we use sigvec to get bsd signals */
+#ifdef __hpux
+  (void)signal(SIGCLD, hand);
+  kill(getpid(), SIGCLD);
+  kill(getpid(), SIGCLD);
+  if (got < 2)
+    exit(1);
+#endif
+  exit(0);
+}
+],,AC_DEFINE(SYSVSIGS))
+
+fi
 
 dnl
 dnl    ****  libraries  ****
@@ -871,6 +1109,12 @@ LIBS="$LIBS -lsun"
 AC_CHECKING(IRIX sun library)
 AC_TRY_LINK(,,,LIBS="$oldlibs")
 
+AC_CHECKING(syslog)
+AC_TRY_LINK(,[closelog();], , [oldlibs="$LIBS"
+LIBS="$LIBS -lbsd"
+AC_CHECKING(syslog in libbsd.a)
+AC_TRY_LINK(, [closelog();], AC_NOTE(- found.), [LIBS="$oldlibs"
+AC_NOTE(- bad news: syslog missing.) AC_DEFINE(NOSYSLOG)])])
 
 AC_EGREP_CPP(yes,
 [#ifdef M_UNIX
@@ -890,36 +1134,26 @@ AC_TRY_COMPILE([#include <sys/types.h>
 #ifdef WEXITSTATUS
   y = WEXITSTATUS(x);
 #endif
-],AC_DEFINE([BSDWAIT],[1],[BSDWAIT]))
+],AC_DEFINE(BSDWAIT))
 
-m4_pushdef([TERMIO_DESCRIPTION],[[
-Define TERMIO if you have struct termio instead of struct sgttyb.
-This is usually the case for SVID systems, where BSD uses sgttyb.
-POSIX systems should define this anyway, even though they use
-struct termios.]])
-
-AS_IF([test -z "$butterfly"],
-    [AC_CHECKING([for termio or termios])]
-    [AC_PREPROC_IFELSE([#include <termio.h>],
-        [AC_DEFINE([TERMIO],[1],TERMIO_DESCRIPTION)]
-	,
-        [AS_IF([test -n "$posix"],
-	    [AC_TRY_CPP([#include <termios.h>],
-	        [AC_DEFINE([TERMIO],[1],TERMIO_DESCRIPTION)]
-            ])
-	])
-    )]
+if test -z "$butterfly"; then
+AC_CHECKING(for termio or termios)
+AC_TRY_CPP([#include <termio.h>], AC_DEFINE(TERMIO),
+if test -n "$posix"; then
+AC_TRY_CPP([#include <termios.h>], AC_DEFINE(TERMIO))
+fi
 )
-m4_popdef([TERMIO_DESCRIPTION])
+fi
 
-dnl AC_CHECK_HEADER(shadow.h, AC_DEFINE([SHADOWPW],[1],[SHADOWPW]))
+dnl AC_CHECK_HEADER(shadow.h, AC_DEFINE(SHADOWPW))
 AC_CHECKING(getspnam)
-AC_TRY_LINK([#include <shadow.h>], [getspnam("x");],AC_DEFINE([SHADOWPW],[1],[SHADOWPW]))
+AC_TRY_LINK([#include <shadow.h>], [getspnam("x");],AC_DEFINE(SHADOWPW))
 
 AC_CHECKING(getttyent)
-AC_TRY_LINK(,[getttyent();], AC_DEFINE([GETTTYENT],[1],[GETTTYENT]))
+AC_TRY_LINK(,[getttyent();], AC_DEFINE(GETTTYENT))
 
-AC_CHECK_FUNCS([fdwalk])
+AC_CHECKING(fdwalk)
+AC_TRY_LINK([#include <stdlib.h>], [fdwalk(NULL, NULL);],AC_DEFINE(HAVE_FDWALK))
 
 AC_CHECKING(whether memcpy/memmove/bcopy handles overlapping arguments)
 AC_TRY_RUN([
@@ -934,7 +1168,7 @@ main() {
   if (strncmp(buf, "cdedef", 6))
     exit(1);
   exit(0); /* libc version works properly.  */
-}], AC_DEFINE([USEBCOPY],[1],[USEBCOPY]))
+}], AC_DEFINE(USEBCOPY))
 
 AC_TRY_RUN([
 #define bcopy(s,d,l) memmove(d,s,l)
@@ -949,7 +1183,7 @@ main() {
   if (strncmp(buf, "cdedef", 6))
     exit(1);
   exit(0); /* libc version works properly.  */
-}], AC_DEFINE([USEMEMMOVE],[1],[USEMEMMOVE]))
+}], AC_DEFINE(USEMEMMOVE))
 
 
 AC_TRY_RUN([
@@ -965,7 +1199,7 @@ main() {
   if (strncmp(buf, "cdedef", 6))
     exit(1);
   exit(0); /* libc version works properly.  */
-}], AC_DEFINE([USEMEMCPY],[1],[USEMEMCPY]))
+}], AC_DEFINE(USEMEMCPY))
 
 AC_MSG_CHECKING(long file names)
 (echo 1 > /tmp/conftest9012345) 2>/dev/null
@@ -975,12 +1209,12 @@ if test -f /tmp/conftest9012345 && test "$val" = 1; then
 AC_MSG_RESULT(yes)
 else
 AC_MSG_RESULT(no)
-AC_DEFINE([NAME_MAX], [14], [name max])
+AC_DEFINE(NAME_MAX, 14)
 fi
 rm -f /tmp/conftest*
 
 AC_MSG_CHECKING(for vsprintf)
-AC_TRY_LINK(,[vsprintf(0,0,0);], AC_MSG_RESULT(yes);AC_DEFINE([USEVARARGS],[1],[USEVARARGS]), AC_MSG_RESULT(no))
+AC_TRY_LINK(,[vsprintf(0,0,0);], AC_MSG_RESULT(yes);AC_DEFINE(USEVARARGS), AC_MSG_RESULT(no))
 
 AC_HEADER_DIRENT
 
@@ -1000,21 +1234,21 @@ if test -z "$ac_setenv_args"; then
     ], ac_setenv_args=2)
 fi
 if test -n "$ac_setenv_args"; then
-    AC_DEFINE([USESETENV],[1],[USESETENV])
+    AC_DEFINE(USESETENV)
     if test "$ac_setenv_args" = 3; then
-        AC_DEFINE([HAVE_SETENV_3],[1],[HAVE_SETENV_3])
+        AC_DEFINE(HAVE_SETENV_3)
     elif test "$ac_setenv_args" = 2; then
-        AC_DEFINE([HAVE_SETENV_2],[1],[HAVE_SETENV_2])
+        AC_DEFINE(HAVE_SETENV_2)
     fi
 else
     AC_MSG_RESULT(no)
     AC_MSG_CHECKING(for putenv)
-    AC_TRY_LINK(,[putenv((char *)0);unsetenv((char *)0);], AC_MSG_RESULT(yes) ,  AC_MSG_RESULT(no);AC_DEFINE([NEEDPUTENV],[1],[NEEDPUTENV]))
+    AC_TRY_LINK(,[putenv((char *)0);unsetenv((char *)0);], AC_MSG_RESULT(yes) ,  AC_MSG_RESULT(no);AC_DEFINE(NEEDPUTENV))
 fi
 AC_MSG_CHECKING([for nl_langinfo(CODESET)])
 AC_TRY_LINK([
 #include <langinfo.h>
-],[nl_langinfo(CODESET);], AC_MSG_RESULT(yes);AC_DEFINE([HAVE_NL_LANGINFO],[1],[HAVE_NL_LANGINFO]), AC_MSG_RESULT(no))
+],[nl_langinfo(CODESET);], AC_MSG_RESULT(yes);AC_DEFINE(HAVE_NL_LANGINFO), AC_MSG_RESULT(no))
 
 AC_SEARCH_LIBS(gethostname, nsl)
 
@@ -1029,16 +1263,26 @@ if test "$enable_pam" = "yes"; then
 	pam_start(0, 0, 0, 0);
 	pam_authenticate(0, 0);
 	pam_end(0,0);
-    ], AC_MSG_RESULT(yes);AC_DEFINE([USE_PAM],[1],[USE_PAM]),
+    ], AC_MSG_RESULT(yes);AC_DEFINE(USE_PAM),
        AC_MSG_RESULT(no);LIBS="$oldlibs")
 fi
 
-screen_BOOLFEATURE([use_locale], [use localized month/day names])
-screen_BOOLFEATURE([colors256], [enable support for 256 colors])
-screen_BOOLFEATURE([rxvt_osc], [enable support for rxvt OSC codes
-       (change fgcolor/bgcolor/bgpicture sequences)])
-screen_BOOLFEATURE([telnet],[enable builtin telnet
-	(Syntax: screen //telnet host @<:@port@:>@)],[no],[builtin_telnet])
+AC_ARG_ENABLE(use_locale, [  --enable-locale         use localized month/day names])
+if test "$enable_use_locale" = "yes"; then
+  AC_DEFINE(USE_LOCALE)
+fi
+AC_ARG_ENABLE(telnet, [  --enable-telnet         enable builtin telnet])
+if test "$enable_telnet" = "yes"; then
+  AC_DEFINE(BUILTIN_TELNET)
+fi
+AC_ARG_ENABLE(colors256, [  --enable-colors256      enable support for 256 colors])
+if test "$enable_colors256" = "yes"; then
+  AC_DEFINE(COLORS256)
+fi
+AC_ARG_ENABLE(rxvt_osc, [  --enable-rxvt_osc       enable support for rxvt OSC codes])
+if test "$enable_rxvt_osc" = "yes"; then
+  AC_DEFINE(RXVT_OSC)
+fi
 
 dnl
 dnl    ****  the end  ****
@@ -1053,7 +1297,7 @@ test -n "$seqptx" && LIBS="-ltermcap -lc -lsocket -linet -lnsl -lsec -lseq"
 
 AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal error. Sorry.))
 
-AC_OUTPUT([Makefile src/Makefile src/doc/Makefile lib/Makefile], [[
+AC_OUTPUT(Makefile doc/Makefile, [[
 # a hook for preserving undef directive in config.h
 mv config.h conftest
 sed -e 's@^\(.*\)defin.\( .*\) .*/\*\(.*KEEP_UNDEF_HERE\)@\1undef\2	/\*\3@' < conftest > config.h
