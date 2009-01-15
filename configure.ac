@@ -912,9 +912,15 @@ AS_IF([test -z "$butterfly"],
 )
 m4_popdef([TERMIO_DESCRIPTION])
 
-dnl AC_CHECK_HEADER(shadow.h, AC_DEFINE([SHADOWPW],[1],[SHADOWPW]))
-AC_CHECKING(getspnam)
-AC_TRY_LINK([#include <shadow.h>], [getspnam("x");],AC_DEFINE([SHADOWPW],[1],[SHADOWPW]))
+AC_MSG_CHECKING([getspnam])
+AC_TRY_LINK([#include <shadow.h>],
+	[getspnam("x");],
+	AC_DEFINE([SHADOWPW],[1],[
+		If the passwords are stored in a shadow file and you want the
+		builtin lock to work properly, define SHADOWPW])
+	AC_MSG_RESULT([yes]),
+	AC_MSG_RESULT([no])
+)
 
 AC_CHECKING(getttyent)
 AC_TRY_LINK(,[getttyent();], AC_DEFINE([GETTTYENT],[1],[GETTTYENT]))

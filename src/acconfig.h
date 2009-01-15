@@ -177,10 +177,3 @@
  */
 #undef NEEDPUTENV
 
-/*
- * If the passwords are stored in a shadow file and you want the
- * builtin lock to work properly, define SHADOWPW.
- */
-#undef SHADOWPW
-
-
