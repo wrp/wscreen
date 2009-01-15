@@ -184,10 +184,3 @@
 #undef SHADOWPW
 
 
-/*
- * define HAVE_NL_LANGINFO if your system has the nl_langinfo() call
- * and <langinfo.h> defines CODESET.
- */
-#undef HAVE_NL_LANGINFO
-
-

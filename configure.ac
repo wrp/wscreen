@@ -1011,10 +1011,17 @@ else
     AC_MSG_CHECKING(for putenv)
     AC_TRY_LINK(,[putenv((char *)0);unsetenv((char *)0);], AC_MSG_RESULT(yes) ,  AC_MSG_RESULT(no);AC_DEFINE([NEEDPUTENV],[1],[NEEDPUTENV]))
 fi
+
 AC_MSG_CHECKING([for nl_langinfo(CODESET)])
 AC_TRY_LINK([
 #include <langinfo.h>
-],[nl_langinfo(CODESET);], AC_MSG_RESULT(yes);AC_DEFINE([HAVE_NL_LANGINFO],[1],[HAVE_NL_LANGINFO]), AC_MSG_RESULT(no))
+],[nl_langinfo(CODESET);],
+	AC_MSG_RESULT(yes)
+	AC_DEFINE([HAVE_NL_LANGINFO],[1],[
+	define HAVE_NL_LANGINFO if your system has the nl_langinfo() call
+	and <langinfo.h> defines CODESET.]),
+	AC_MSG_RESULT(no)
+)
 
 AC_SEARCH_LIBS(gethostname, nsl)
 
