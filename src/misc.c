@@ -580,50 +580,15 @@ int msec;
 
 
 /*
- * This uses either setenv() or putenv(). If it is putenv() we cannot dare
- * to free the buffer after putenv(), unless it it the one found in putenv.c
+ * Wrapper around setenv(). Once upon a time this function called
+ * putenv or setenv with only 2 arguments.
  */
 void
 xsetenv(var, value)
 char *var;
 char *value;
 {
-#ifndef USESETENV
-  char *buf;
-  int l;
-
-  if ((buf = (char *)malloc((l = strlen(var)) +
-			    strlen(value) + 2)) == NULL)
-    {
-      Msg(0, strnomem);
-      return;
-    }
-  strcpy(buf, var);
-  buf[l] = '=';
-  strcpy(buf + l + 1, value);
-  putenv(buf);
-# ifdef NEEDPUTENV
-  /*
-   * we use our own putenv(), knowing that it does a malloc()
-   * the string space, we can free our buf now.
-   */
-  free(buf);
-# else /* NEEDSETENV */
-  /*
-   * For all sysv-ish systems that link a standard putenv()
-   * the string-space buf is added to the environment and must not
-   * be freed, or modified.
-   * We are sorry to say that memory is lost here, when setting
-   * the same variable again and again.
-   */
-# endif /* NEEDSETENV */
-#else /* USESETENV */
-# if HAVE_SETENV_3
   setenv(var, value, 1);
-# else
-  setenv(var, value);
-# endif /* HAVE_SETENV_3 */
-#endif /* USESETENV */
 }
 
 #ifdef TERMINFO

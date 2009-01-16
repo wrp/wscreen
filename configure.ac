@@ -951,10 +951,6 @@ AC_TRY_LINK(,[vsprintf(0,0,0);], AC_MSG_RESULT(yes);AC_DEFINE([USEVARARGS],[1],[
 
 AC_HEADER_DIRENT
 
-# Use gnulib's setenv.
-AC_DEFINE([USESETENV],[1],[USESETENV])
-AC_DEFINE([HAVE_SETENV_3],[1],[HAVE_SETENV_3])
-
 AC_MSG_CHECKING([for nl_langinfo(CODESET)])
 AC_TRY_LINK([
 #include <langinfo.h>
