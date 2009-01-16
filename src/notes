@@ -1,5 +1,5 @@
 
-*) Use gnulib's getloadavg.
+*) Use gnulib's getloadavg, setenv, and select.
 
 *) -YBSD was automatically appended to CC for ULTRIX systems.
 CC Should not be touched by the build system, as it is a

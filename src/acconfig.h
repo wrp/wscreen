@@ -134,12 +134,6 @@
 #undef USEVARARGS
 
 /*
- * If the select return value doesn't treat a descriptor that is
- * usable for reading and writing as two hits, define SELECT_BROKEN.
- */
-#undef SELECT_BROKEN
-
-/*
  * Define this if your system supports named pipes.
  */
 #undef NAMEDPIPE
