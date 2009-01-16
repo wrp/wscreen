@@ -951,33 +951,9 @@ AC_TRY_LINK(,[vsprintf(0,0,0);], AC_MSG_RESULT(yes);AC_DEFINE([USEVARARGS],[1],[
 
 AC_HEADER_DIRENT
 
-AC_MSG_CHECKING(for setenv)
-if test -z "$ac_setenv_args"; then
-    AC_TRY_COMPILE(
-    [#include <stdlib.h>],
-    [
-        setenv((char *) 0, (char *) 0, 0);
-    ], ac_setenv_args=3)
-fi
-if test -z "$ac_setenv_args"; then
-    AC_TRY_COMPILE(
-    [#include <stdlib.h>],
-    [
-        setenv((char *) 0, (char *) 0);
-    ], ac_setenv_args=2)
-fi
-if test -n "$ac_setenv_args"; then
-    AC_DEFINE([USESETENV],[1],[USESETENV])
-    if test "$ac_setenv_args" = 3; then
-        AC_DEFINE([HAVE_SETENV_3],[1],[HAVE_SETENV_3])
-    elif test "$ac_setenv_args" = 2; then
-        AC_DEFINE([HAVE_SETENV_2],[1],[HAVE_SETENV_2])
-    fi
-else
-    AC_MSG_RESULT(no)
-    AC_MSG_CHECKING(for putenv)
-    AC_TRY_LINK(,[putenv((char *)0);unsetenv((char *)0);], AC_MSG_RESULT(yes) ,  AC_MSG_RESULT(no);AC_DEFINE([NEEDPUTENV],[1],[NEEDPUTENV]))
-fi
+# Use gnulib's setenv.
+AC_DEFINE([USESETENV],[1],[USESETENV])
+AC_DEFINE([HAVE_SETENV_3],[1],[HAVE_SETENV_3])
 
 AC_MSG_CHECKING([for nl_langinfo(CODESET)])
 AC_TRY_LINK([

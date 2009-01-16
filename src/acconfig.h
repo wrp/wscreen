@@ -149,25 +149,3 @@
  * opened read-only and no writer has opened it.
  */
 #undef BROKEN_PIPE
-
-/*
- * If your system has setenv() and unsetenv() define USESETENV
- */
-#undef USESETENV
-
-/*
- * If setenv() takes 3 arguments sefine HAVE_SETENV_3
- */
-#undef HAVE_SETENV_3
-
-/*
- * If setenv() takes 2 arguments sefine HAVE_SETENV_2
- */
-#undef HAVE_SETENV_2
-
-/*
- * If your system does not come with a setenv()/putenv()/getenv()
- * functions, you may bring in our own code by defining NEEDPUTENV.
- */
-#undef NEEDPUTENV
-
