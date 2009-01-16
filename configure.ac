@@ -497,9 +497,14 @@ main()
 }
 ],AC_NOTE(- you are normal),
 AC_NOTE(- unix domain sockets are not kept in the filesystem)
-AC_DEFINE([SOCK_NOT_IN_FS],[1],[SOCK_NOT_IN_FS]) socknofs=1)
+AC_DEFINE([SOCK_NOT_IN_FS],[1],[The unix-domain socket implementation doesn't
+	create a socket in the filesystem])
+	socknofs=1
+)
 rm -f /tmp/conftest*
 fi
+
+
 
 
 dnl

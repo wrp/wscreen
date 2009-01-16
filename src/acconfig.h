@@ -151,12 +151,6 @@
 #undef BROKEN_PIPE
 
 /*
- * Define this if the unix-domain socket implementation doesn't
- * create a socket in the filesystem.
- */
-#undef SOCK_NOT_IN_FS
-
-/*
  * If your system has setenv() and unsetenv() define USESETENV
  */
 #undef USESETENV
