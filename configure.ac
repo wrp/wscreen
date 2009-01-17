@@ -719,18 +719,11 @@ dnl
 dnl    ****  libraries  ****
 dnl
 
-AC_CHECKING(for crypt and sec libraries)
-test -f /lib/libcrypt_d.a || test -f /usr/lib/libcrypt_d.a && LIBS="$LIBS -lcrypt_d"
-oldlibs="$LIBS"
-LIBS="$LIBS -lcrypt"
-AC_CHECKING(crypt)
-AC_TRY_LINK(,,,LIBS="$oldlibs")
-test -f /lib/libsec.a || test -f /usr/lib/libsec.a && LIBS="$LIBS -lsec"
-test -f /lib/libshadow.a || test -f /usr/lib/libshadow.a && LIBS="$LIBS -lshadow"
-oldlibs="$LIBS"
-LIBS="$LIBS -lsun"
-AC_CHECKING(IRIX sun library)
-AC_TRY_LINK(,,,LIBS="$oldlibs")
+AC_CHECK_LIB([crypt_d],[main])
+AC_CHECK_LIB([crypt],[main])
+AC_CHECK_LIB([sec],[main])
+AC_CHECK_LIB([shadow],[main])
+AC_CHECK_LIB([sun],[main])
 
 
 AC_EGREP_CPP(yes,
