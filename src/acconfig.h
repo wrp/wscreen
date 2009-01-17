@@ -85,25 +85,6 @@
  */
 #undef HAVE_SETEUID
 
-/*
- * If you want the "time" command to display the current load average
- * define LOADAV. Maybe you must install screen with the needed
- * privileges to read /dev/kmem.
- * Note that NLIST_ stuff is only checked, when getloadavg() is not available.
- */
-#undef LOADAV
-
-#undef LOADAV_NUM
-#undef LOADAV_TYPE
-#undef LOADAV_SCALE
-#undef LOADAV_GETLOADAVG
-#undef LOADAV_UNIX
-#undef LOADAV_AVENRUN
-#undef LOADAV_USE_NLIST64
-
-#undef NLIST_DECLARED
-#undef NLIST_STRUCT
-#undef NLIST_NAME_UNION
 
 /*
  * If your system has the new format /etc/ttys (like 4.3 BSD) and the
