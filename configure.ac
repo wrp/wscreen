@@ -788,10 +788,10 @@ AC_TRY_LINK(,[getttyent();], AC_DEFINE([GETTTYENT],[1],[GETTTYENT]))
 
 AC_CHECK_FUNCS([fdwalk])
 
-AC_CHECKING(whether memcpy/memmove/bcopy handles overlapping arguments)
-AC_TRY_RUN([
+AC_MSG_CHECKING([for memcpy/memmove/bcopy that handles overlapping arguments])
+m4_pushdef([memory_test],[[
 main() {
-  char buf[10];
+  char buf[[10]];
   strcpy(buf, "abcdefghi");
   bcopy(buf, buf + 2, 3);
   if (strncmp(buf, "ababcf", 6))
@@ -801,38 +801,22 @@ main() {
   if (strncmp(buf, "cdedef", 6))
     exit(1);
   exit(0); /* libc version works properly.  */
-}], AC_DEFINE([USEBCOPY],[1],[USEBCOPY]))
+}]])
 
-AC_TRY_RUN([
-#define bcopy(s,d,l) memmove(d,s,l)
-main() {
-  char buf[10];
-  strcpy(buf, "abcdefghi");
-  bcopy(buf, buf + 2, 3);
-  if (strncmp(buf, "ababcf", 6))
-    exit(1);
-  strcpy(buf, "abcdefghi");
-  bcopy(buf + 2, buf, 3);
-  if (strncmp(buf, "cdedef", 6))
-    exit(1);
-  exit(0); /* libc version works properly.  */
-}], AC_DEFINE([USEMEMMOVE],[1],[USEMEMMOVE]))
-
-
-AC_TRY_RUN([
-#define bcopy(s,d,l) memcpy(d,s,l)
-main() {
-  char buf[10];
-  strcpy(buf, "abcdefghi");
-  bcopy(buf, buf + 2, 3);
-  if (strncmp(buf, "ababcf", 6))
-    exit(1);
-  strcpy(buf, "abcdefghi");
-  bcopy(buf + 2, buf, 3);
-  if (strncmp(buf, "cdedef", 6))
-    exit(1);
-  exit(0); /* libc version works properly.  */
-}], AC_DEFINE([USEMEMCPY],[1],[USEMEMCPY]))
+AC_RUN_IFELSE(memory_test,
+	AC_DEFINE([USEBCOPY],[1],[define if bcopy works])
+	AC_MSG_RESULT([bcopy]),
+	[AC_RUN_IFELSE([#define bcopy(s,d,l) memmove(d,s,l)] memory_test,
+		AC_DEFINE([USEMEMMOVE],[1],[define if memmove works])
+		AC_MSG_RESULT([memmove]),
+		[AC_RUN_IFELSE([#define bcopy(s,d,l) memcpy(d,s,l)] memory_test,
+			AC_DEFINE([USEMEMCPY],[1],[define if memcpy works])
+			AC_MSG_RESULT([memcpy]),
+			AC_MSG_RESULT([none]) dnl
+		)] dnl
+	)] dnl
+) dnl
+m4_popdef([memory_test])
 
 AC_MSG_CHECKING(long file names)
 (echo 1 > /tmp/conftest9012345) 2>/dev/null
