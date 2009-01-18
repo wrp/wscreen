@@ -695,15 +695,3 @@ AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal erro
 
 AC_OUTPUT([Makefile src/Makefile src/doc/Makefile lib/Makefile])
 
-echo ""
-if test -z "$AWK"; then
-echo "!!! Since you have no awk you must copy the files 'comm.h.dist'"
-echo "!!! and 'term.h.dist' to 'comm.h' and 'term.h'."
-echo "!!! Do _not_ change the user configuration section in config.h!"
-echo "Please check the pathnames in the Makefile."
-else
-echo "Now please check the pathnames in the Makefile and in the user"
-echo "configuration section in config.h."
-fi
-echo "Then type 'make' to make screen. Good luck."
-echo ""
