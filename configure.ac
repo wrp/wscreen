@@ -693,12 +693,7 @@ test -n "$seqptx" && LIBS="-ltermcap -lc -lsocket -linet -lnsl -lsec -lseq"
 
 AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal error. Sorry.))
 
-AC_OUTPUT([Makefile src/Makefile src/doc/Makefile lib/Makefile], [[
-# a hook for preserving undef directive in config.h
-mv config.h conftest
-sed -e 's@^\(.*\)defin.\( .*\) .*/\*\(.*KEEP_UNDEF_HERE\)@\1undef\2	/\*\3@' < conftest > config.h
-rm -f conftest
-]])
+AC_OUTPUT([Makefile src/Makefile src/doc/Makefile lib/Makefile])
 
 echo ""
 if test -z "$AWK"; then
