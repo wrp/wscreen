@@ -22,8 +22,8 @@ m4_pushdef([headers],
 #endif])
 
 AC_MSG_CHECKING(fifos)
-AC_TRY_RUN(headers
-[
+AC_RUN_IFELSE(headers
+[[
 char *fin = "/tmp/conftest$$";
 
 main()
@@ -69,7 +69,7 @@ main()
     exit(1);
   exit(0);
 }
-], AC_MSG_RESULT([usable])
+]], AC_MSG_RESULT([usable])
 AC_DEFINE([NAMEDPIPE],[1],[Define this if your system supports named pipes.]),
 rm -f /tmp/conftest*
 AC_MSG_ERROR(you have neither usable sockets nor usable pipes -> no screen))
@@ -78,7 +78,7 @@ rm -f /tmp/conftest*
 
 
 AC_MSG_CHECKING(if fifo implementation is ok)
-AC_TRY_RUN( headers
+AC_RUN_IFELSE( headers
 [
 char *fin = "/tmp/conftest$$";
 
