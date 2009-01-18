@@ -34,7 +34,7 @@
 #include "screen.h"
 #include "extern.h"
 
-#ifdef HAVE_UTEMPTER
+#ifdef HAVE_LIBUTEMPTER
 #include <utempter.h>
 #endif
 
@@ -74,7 +74,7 @@ extern int real_uid, eff_uid;
  *  we have a suid-root helper app that changes the utmp for us
  *  (won't work for login-slots)
  */
-#if (defined(sun) && defined(SVR4) && defined(GETUTENT)) || defined(HAVE_UTEMPTER)
+#if (defined(sun) && defined(SVR4) && defined(GETUTENT)) || defined(HAVE_LIBUTEMPTER)
 # define UTMP_HELPER
 #endif
 
@@ -574,7 +574,7 @@ struct win *wi;
   if (!SLOT_USED(u))
     return ut_delete_user(slot, u.ut_pid, 0, 0) != 0;
 #endif
-#ifdef HAVE_UTEMPTER
+#ifdef HAVE_LIBUTEMPTER
   if (eff_uid && wi->w_ptyfd != -1)
     {
       /* sigh, linux hackers made the helper functions void */

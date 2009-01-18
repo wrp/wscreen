@@ -706,11 +706,7 @@ AC_TRY_COMPILE([
 #include <utmp.h>
 #endif
 ],[struct utmp u; u.ut_host[0] = 0;], AC_DEFINE([UTHOST],[1],[UTHOST]))
-AC_CHECK_HEADER(utempter.h, have_utempter=yes, have_utempter=no)
-if test "$have_utempter" = yes; then
-  AC_DEFINE([HAVE_UTEMPTER],[1],[HAVE_UTEMPTER])
-  LIBS="$LIBS -lutempter"
-fi
+AC_CHECK_LIB([utempter],[addToUtmp])
 
 
 screen_TYPE_SIGNAL

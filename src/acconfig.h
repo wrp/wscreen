@@ -60,11 +60,6 @@
 #undef UTHOST
 
 /*
- * Define if you have the utempter utmp helper program
- */
-#undef HAVE_UTEMPTER
-
-/*
  * If ttyslot() breaks getlogin() by returning indexes to utmp entries
  * of type DEAD_PROCESS, then our getlogin() replacement should be
  * selected by defining BUGGYGETLOGIN.
