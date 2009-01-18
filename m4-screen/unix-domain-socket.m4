@@ -1,10 +1,12 @@
-
+dnl screen_UNIX_DOMAIN_SOCKET
+dnl Determine if sockets are kept in the file system.
+dnl define SOCK_NOT_IN_FS if appropriate.
 AC_DEFUN([screen_UNIX_DOMAIN_SOCKET],
 [
 
 if test -n "$sock"; then
-AC_CHECKING(socket implementation)
-AC_TRY_RUN([
+AC_MSG_CHECKING(if unix domain sockets are kept in the filesystem)
+AC_RUN_IFELSE([
 /* For select - According to POSIX 1003.1-2001 */
 #include <sys/select.h>
 
@@ -36,8 +38,8 @@ main()
   close(s);
   exit(0);
 }
-],AC_NOTE(- you are normal),
-AC_NOTE(- unix domain sockets are not kept in the filesystem)
+],AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no])
 AC_DEFINE([SOCK_NOT_IN_FS],[1],[The unix-domain socket implementation doesn't
 	create a socket in the filesystem])
 )
