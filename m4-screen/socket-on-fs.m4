@@ -4,7 +4,6 @@ dnl define SOCK_NOT_IN_FS if appropriate.
 AC_DEFUN([screen_SOCKET_ON_FS],
 [
 
-if test -n "$sock"; then
 AC_MSG_CHECKING(if unix domain sockets are kept in the filesystem)
 AC_RUN_IFELSE([
 /* For select - According to POSIX 1003.1-2001 */
@@ -44,6 +43,5 @@ AC_DEFINE([SOCK_NOT_IN_FS],[1],[The unix-domain socket implementation doesn't
 	create a socket in the filesystem])
 )
 rm -f /tmp/conftest*
-fi
 
 ])
