@@ -268,29 +268,11 @@ seteuid(0);
 ], AC_DEFINE([HAVE_SETEUID],[1],[HAVE_SETEUID]))
 
 AC_SEARCH_LIBS([select],[net nsl],[],[AC_MSG_ERROR(!!! no select - no screen)])
-screen_FIFO
 screen_SOCKET
-screen_UNIX_DOMAIN_SOCKET
-
-dnl
-dnl    ****  choose sockets or fifos  ****
-dnl
-if test -n "$fifo"; then
-  if test -n "$sock"; then
-    if test -n "$fifobr"; then
-      AC_NOTE(- as your fifos are broken lets use the sockets.)
-    else
-      AC_NOTE(- both sockets and fifos usable. let's take sockets.)
-    fi
-  else
-    AC_NOTE(- using named pipes, of course)
-    AC_DEFINE([NAMEDPIPE],[1],[NAMEDPIPE])
-  fi
-elif test -n "$sock"; then
-  AC_NOTE(- using unix-domain sockets, of course)
-else
-  AC_MSG_ERROR(you have neither usable sockets nor usable pipes -> no screen)
-fi
+AS_IF([test -n "$sock"],
+	screen_UNIX_DOMAIN_SOCKET,
+	screen_FIFO
+)
 
 
 dnl

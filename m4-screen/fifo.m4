@@ -1,4 +1,6 @@
-
+dnl Check the fifos.  Assign the configure
+dnl variables fifo and fifobr
+dnl define BROKEN_PIPE as appropriate
 AC_DEFUN([screen_FIFO],
 [
 dnl
@@ -72,11 +74,14 @@ main()
     exit(1);
   exit(0);
 }
-], AC_NOTE(- your fifos are usable) fifo=1,
-AC_NOTE(- your fifos are not usable))
+], AC_NOTE(- your fifos are usable)
+AC_DEFINE([NAMEDPIPE],[1],[Define this if your system supports named pipes.]),
+rm -f /tmp/conftest*
+AC_MSG_ERROR(you have neither usable sockets nor usable pipes -> no screen))
+
 rm -f /tmp/conftest*
 
-if test -n "$fifo"; then
+
 AC_CHECKING(for broken fifo implementation)
 AC_TRY_RUN( headers
 [
@@ -109,6 +114,5 @@ AC_DEFINE([BROKEN_PIPE],[1],[
 Define BROKEN_PIPE if your system exits select() immediatly if a pipe is
 opened read-only and no writer has opened it.]) fifobr=1)
 rm -f /tmp/conftest*
-fi dnl
 m4_popdef([headers])
 ])

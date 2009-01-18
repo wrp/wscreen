@@ -89,8 +89,3 @@
  * define USEVARARGS.
  */
 #undef USEVARARGS
-
-/*
- * Define this if your system supports named pipes.
- */
-#undef NAMEDPIPE
