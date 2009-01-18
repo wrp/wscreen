@@ -267,17 +267,8 @@ seteuid(0);
 #endif
 ], AC_DEFINE([HAVE_SETEUID],[1],[HAVE_SETEUID]))
 
-dnl
-dnl    ****  select()  ****
-dnl
+AC_SEARCH_LIBS([select],[net nsl],[],[AC_MSG_ERROR(!!! no select - no screen)])
 
-AC_CHECKING(select)
-AC_TRY_LINK(,[select(0, 0, 0, 0, 0);],, 
-LIBS="$LIBS -lnet -lnsl"
-AC_CHECKING(select with $LIBS)
-AC_TRY_LINK(,[select(0, 0, 0, 0, 0);],, 
-AC_MSG_ERROR(!!! no select - no screen))
-)
 dnl
 dnl    ****  FIFO tests  ****
 dnl
