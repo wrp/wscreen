@@ -21,7 +21,7 @@ m4_pushdef([headers],
 #define S_IFIFO 0010000
 #endif])
 
-AC_CHECKING(fifos)
+AC_MSG_CHECKING(fifos)
 AC_TRY_RUN(headers
 [
 char *fin = "/tmp/conftest$$";
@@ -69,7 +69,7 @@ main()
     exit(1);
   exit(0);
 }
-], AC_NOTE(- your fifos are usable)
+], AC_MSG_RESULT([usable])
 AC_DEFINE([NAMEDPIPE],[1],[Define this if your system supports named pipes.]),
 rm -f /tmp/conftest*
 AC_MSG_ERROR(you have neither usable sockets nor usable pipes -> no screen))
@@ -77,7 +77,7 @@ AC_MSG_ERROR(you have neither usable sockets nor usable pipes -> no screen))
 rm -f /tmp/conftest*
 
 
-AC_CHECKING(for broken fifo implementation)
+AC_MSG_CHECKING(if fifo implementation is ok)
 AC_TRY_RUN( headers
 [
 char *fin = "/tmp/conftest$$";
@@ -103,11 +103,13 @@ main()
     exit(1);
   exit(0);
 }
-], AC_NOTE(- your implementation is ok),
-AC_NOTE(- you have a broken implementation) dnl
+], AC_MSG_RESULT([yes]),
+AC_MSG_RESULT([no])
 AC_DEFINE([BROKEN_PIPE],[1],[
 Define BROKEN_PIPE if your system exits select() immediatly if a pipe is
-opened read-only and no writer has opened it.]) fifobr=1)
+opened read-only and no writer has opened it.])
+)
+
 rm -f /tmp/conftest*
 m4_popdef([headers])
 ])
