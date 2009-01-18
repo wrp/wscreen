@@ -104,7 +104,10 @@ main()
   exit(0);
 }
 ], AC_NOTE(- your implementation is ok),
-AC_NOTE(- you have a broken implementation) AC_DEFINE([BROKEN_PIPE],[1],[BROKEN_PIPE]) fifobr=1)
+AC_NOTE(- you have a broken implementation) dnl
+AC_DEFINE([BROKEN_PIPE],[1],[
+Define BROKEN_PIPE if your system exits select() immediatly if a pipe is
+opened read-only and no writer has opened it.]) fifobr=1)
 rm -f /tmp/conftest*
 fi dnl
 m4_popdef([headers])
