@@ -241,18 +241,8 @@ AC_TRY_LINK([#include <utmpx.h>
 ,LIBS="$oldlibs")
 
 screen_JOBCONTROL
-dnl
-dnl    ****  setresuid(), setreuid(), seteuid()  ****
-dnl
-AC_CHECKING(setresuid)
-AC_TRY_LINK(,[
-setresuid(0, 0, 0);
-], AC_DEFINE([HAVE_SETRESUID],[1],[HAVE_SETRESUID]))
-AC_CHECKING(setreuid)
-AC_TRY_LINK(,[
-setreuid(0, 0);
-], AC_DEFINE([HAVE_SETREUID],[1],[HAVE_SETREUID]))
-dnl
+AC_CHECK_FUNCS([setresuid setreuid])
+
 dnl seteuid() check:
 dnl   linux seteuid was broken before V1.1.11
 dnl   NeXT, AUX, ISC, and ultrix are still broken (no saved uid support)
