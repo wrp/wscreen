@@ -1,12 +1,7 @@
-dnl Check the fifos.  Assign the configure
-dnl variables fifo and fifobr
-dnl define BROKEN_PIPE as appropriate
+dnl Check the fifos.
+dnl define NAMED_PIPE and BROKEN_PIPE as appropriate
 AC_DEFUN([screen_FIFO],
 [
-dnl
-dnl    ****  FIFO tests  ****
-dnl
-
 m4_pushdef([headers],
 [/* For select - According to POSIX 1003.1-2001 */
 #include <sys/select.h>

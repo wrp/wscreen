@@ -270,7 +270,7 @@ seteuid(0);
 AC_SEARCH_LIBS([select],[net nsl],[],[AC_MSG_ERROR(!!! no select - no screen)])
 screen_SOCKET
 AS_IF([test -n "$sock"],
-	screen_UNIX_DOMAIN_SOCKET,
+	screen_SOCKET_ON_FS,
 	screen_FIFO
 )
 

@@ -1,7 +1,7 @@
-dnl screen_UNIX_DOMAIN_SOCKET
+dnl screen_SOCKET_ON_FS
 dnl Determine if sockets are kept in the file system.
 dnl define SOCK_NOT_IN_FS if appropriate.
-AC_DEFUN([screen_UNIX_DOMAIN_SOCKET],
+AC_DEFUN([screen_SOCKET_ON_FS],
 [
 
 if test -n "$sock"; then

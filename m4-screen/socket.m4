@@ -1,14 +1,9 @@
-
+dnl Check the unix domain sockets.  If they
+dnl work, set the shell variable sock=1.
 AC_DEFUN([screen_SOCKET],
 [
-dnl
-dnl    ****  SOCKET tests  ****
-dnl 
-dnl 	may need  	LIBS="$LIBS -lsocket" 	here
-dnl
-
-AC_CHECKING(sockets)
-AC_TRY_RUN([
+AC_MSG_CHECKING([sockets])
+AC_RUN_IFELSE([
 /* For select - According to POSIX 1003.1-2001 */
 #include <sys/select.h>
 
@@ -58,7 +53,8 @@ main()
     exit(1);
   exit(0);
 }
-], AC_NOTE(- your sockets are usable) sock=1,
-AC_NOTE(- your sockets are not usable))
+], AC_MSG_RESULT([usable])
+sock=1,
+AC_MSG_RESULT([not usable]))
 rm -f /tmp/conftest*
 ])
