@@ -277,10 +277,7 @@ dnl    ****  choose sockets or fifos  ****
 dnl
 if test -n "$fifo"; then
   if test -n "$sock"; then
-    if test -n "$nore"; then
-      AC_NOTE(- hmmm... better take the fifos)
-      AC_DEFINE([NAMEDPIPE],[1],[NAMEDPIPE])
-    elif test -n "$fifobr"; then
+    if test -n "$fifobr"; then
       AC_NOTE(- as your fifos are broken lets use the sockets.)
     else
       AC_NOTE(- both sockets and fifos usable. let's take sockets.)
