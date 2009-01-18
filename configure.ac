@@ -659,56 +659,7 @@ screen_VARTYPE([ptygroup],[${ptygrp-real_gid}],[gid_t],[A numerical group-id
 
 AC_MSG_NOTICE([- pty mode: ${ptymode}, group: $ptygroup])
 
-dnl
-dnl    ****  utmp handling  ****
-dnl
-AC_CHECKING(getutent)
-AC_TRY_LINK([
-#include <time.h> /* to get time_t on SCO */
-#include <sys/types.h>
-#if defined(SVR4) && !defined(DGUX)
-#include <utmpx.h>
-#define utmp utmpx
-#else
-#include <utmp.h>
-#endif
-#ifdef __hpux
-#define pututline _pututline
-#endif
-],
-[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE([GETUTENT],[1],[GETUTENT]),
-olibs="$LIBS"
-LIBS="$LIBS -lgen"
-AC_CHECKING(getutent with -lgen)
-AC_TRY_LINK([
-#include <time.h>
-#include <sys/types.h>
-#if defined(SVR4) && !defined(DGUX)
-#include <utmpx.h>
-#define utmp utmpx
-#else
-#include <utmp.h>
-#endif
-#ifdef __hpux
-#define pututline _pututline
-#endif
-],
-[int x = DEAD_PROCESS; pututline((struct utmp *)0); getutent();], AC_DEFINE([GETUTENT],[1],[GETUTENT]), LIBS="$olibs")
-)
-AC_CHECKING(ut_host)
-AC_TRY_COMPILE([
-#include <time.h>
-#include <sys/types.h>
-#if defined(SVR4) && !defined(DGUX)
-#include <utmpx.h>
-#define utmp utmpx
-#else
-#include <utmp.h>
-#endif
-],[struct utmp u; u.ut_host[0] = 0;], AC_DEFINE([UTHOST],[1],[UTHOST]))
-AC_CHECK_LIB([utempter],[addToUtmp])
-
-
+screen_UTMP
 screen_TYPE_SIGNAL
 
 dnl

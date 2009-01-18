@@ -48,11 +48,6 @@
 #undef USE_WAIT2
 #endif
 
-/*
- * If your system has getutent(), pututline(), etc. to write to the
- * utmp file, define GETUTENT.
- */
-#undef GETUTENT
 
 /*
  * Define UTHOST if the utmp file has a host field.
