@@ -187,9 +187,13 @@ AS_CASE([$host_os],
 
 AS_CASE([$host_vendor],
     [sequent],
-        [AC_CHECK_LIB([socket], [main])]
+        [AC_CHECK_LIB([seq], [main])]
+        [AC_CHECK_LIB([sec], [main])]
+        [AC_CHECK_LIB([nsl], [main])]
         [AC_CHECK_LIB([inet], [main])]
-        [seqptx=1]
+        [AC_CHECK_LIB([socket], [main])]
+        [AC_CHECK_LIB([c], [main])]
+        [AC_CHECK_LIB([termcap], [main])]
 )
 
 
@@ -556,12 +560,6 @@ screen_BOOLFEATURE([rxvt_osc], [enable support for rxvt OSC codes
        (change fgcolor/bgcolor/bgpicture sequences)])
 screen_BOOLFEATURE([telnet],[enable builtin telnet
 	(Syntax: screen //telnet host @<:@port@:>@)],[no],[builtin_telnet])
-
-dnl
-dnl    ****  the end  ****
-dnl
-dnl Ptx bug workaround -- insert -lc after -ltermcap
-test -n "$seqptx" && LIBS="-ltermcap -lc -lsocket -linet -lnsl -lsec -lseq"
 
 AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal error. Sorry.))
 
