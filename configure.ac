@@ -510,17 +510,12 @@ AC_RUN_IFELSE(memory_test,
 ) dnl
 m4_popdef([memory_test])
 
-AC_MSG_CHECKING(long file names)
-(echo 1 > /tmp/conftest9012345) 2>/dev/null
-(echo 2 > /tmp/conftest9012346) 2>/dev/null
-val=`cat /tmp/conftest9012345 2>/dev/null`
-if test -f /tmp/conftest9012345 && test "$val" = 1; then
-AC_MSG_RESULT(yes)
-else
-AC_MSG_RESULT(no)
-AC_DEFINE([NAME_MAX], [14], [filesystem restriction on filename lengths])
-fi
-rm -f /tmp/conftest*
+AC_SYS_LONG_FILE_NAMES
+AC_EGREP_CPP([yes],[
+#ifndef HAVE_LONG_FILE_NAMES
+   yes;
+#endif
+], AC_DEFINE([NAME_MAX], [14], [filesystem restriction on filename lengths]))
 
 AC_MSG_CHECKING(for vsprintf)
 AC_TRY_LINK(,[vsprintf(0,0,0);], AC_MSG_RESULT(yes);AC_DEFINE([USEVARARGS],[1],[USEVARARGS]), AC_MSG_RESULT(no))
