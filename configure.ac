@@ -175,8 +175,8 @@ AS_CASE([$host_cpu],
 AS_CASE([$host_os],
     [riscos],
         [AC_DEFINE([USE_WAIT2],[1],[USE_WAIT2])]
-        [LIBS="$LIBS -lbsd"]
-        [CC="$CC -I/usr/include/bsd"],
+        [AC_CHECK_LIB([bsd], [main])]
+        [CPPFLAGS="$CPPFLAGS -I/usr/include/bsd"],
     [ultrix], [ULTRIX=1],
     [solaris*],
         [AC_CHECK_LIB([socket], [main])]
