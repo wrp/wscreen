@@ -12,4 +12,4 @@ CLEANFILES = *.dvi
 
 DISTCLEANFILES = *.info*
 
-EXTRA_DIST = FAQ README.DOTSCREEN fdpat.ps make.help window_to_display.ps
+EXTRA_DIST = README.DOTSCREEN fdpat.ps make.help window_to_display.ps
