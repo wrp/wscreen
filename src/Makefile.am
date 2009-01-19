@@ -73,7 +73,7 @@ MOSTLYCLEANFILES = osdef0.c osdef1.sed osdef2.sed
 CLEANFILES = tty.c term.h comm.h osdef.h kmapdef.c
 DISTCLEAFILES = osdef.h
 EXTRA_DIST = acls.h ansi.h display.h extern.h logfile.h mark.h os.h \
-	layer.h patchlevel.h screen.h window.h image.h \
+	layer.h screen.h window.h image.h \
 	osdef.h.in term.sh tty.sh comm.sh osdef.sh braille.h \
 	sched.h \
 	term.h \
