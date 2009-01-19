@@ -560,11 +560,6 @@ screen_BOOLFEATURE([telnet],[enable builtin telnet
 dnl
 dnl    ****  the end  ****
 dnl
-if test -z "$old_CFLAGS"; then
-  if test "x$CFLAGS" = "x-g"; then
-    CFLAGS="-O"
-  fi
-fi
 dnl Ptx bug workaround -- insert -lc after -ltermcap
 test -n "$seqptx" && LIBS="-ltermcap -lc -lsocket -linet -lnsl -lsec -lseq"
 
