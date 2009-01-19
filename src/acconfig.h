@@ -55,13 +55,6 @@
 #undef UTHOST
 
 /*
- * If ttyslot() breaks getlogin() by returning indexes to utmp entries
- * of type DEAD_PROCESS, then our getlogin() replacement should be
- * selected by defining BUGGYGETLOGIN.
- */
-#undef BUGGYGETLOGIN
-
-/*
  * If your system has the calls setreuid() and setregid(),
  * define HAVE_SETREUID. Otherwise screen will use a forked process to
  * safely create output files without retaining any special privileges.
