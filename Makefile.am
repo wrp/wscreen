@@ -1,7 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4 -I m4-screen
 
 SUBDIRS = lib src
-EXTRA_DIST = .version m4/gnulib-cache.m4
+EXTRA_DIST = .version m4/gnulib-cache.m4 FAQ
 
 # .version - present in a checked-out repository and in a distribution
 #     tarball.  See git-version-gen.
