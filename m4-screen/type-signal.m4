@@ -10,7 +10,7 @@ AC_DEFUN([screen_TYPE_SIGNAL],
 if test -n "$posix" ; then
 
 dnl POSIX has reliable signals with void return type.
-AC_NOTE(assuming posix signal definition)
+AC_MSG_NOTICE([assuming posix signal definition])
 AC_DEFINE([SIGVOID],[1],[signal handlers return void])
 
 else

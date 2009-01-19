@@ -150,12 +150,6 @@ screen_BOOLFEATURE([use_sgr],[
 	screen to switch attributes only with sgr, enable USE_SGR.
 	This is *not* recomended, do this only if you must.])
 
-dnl --- cut ---  Below here is old.
-
-define([AC_NOTE],
-[AC_MSG_NOTICE([$1])
-])
-
 AS_IF([test -n "$ISC"],
   [AC_DEFINE([ISC],[1],[ISC])]
   [AC_HAVE_LIBRARY([inet],,AC_MSG_ERROR([libinet is required on $ISC]))]
@@ -372,7 +366,7 @@ main()
     if test -f conftest_grp; then
 	ptygrp=`cat conftest_grp`
     else
-	AC_NOTE(- ptys are world accessable)
+	AC_MSG_NOTICE([- ptys are world accessable])
     fi
 ],[
     WRITEPATH=''
@@ -400,10 +394,10 @@ main()
       if test -n "$found"; then
 	ptygrp=`ls -ln$lsfollow $found | sed -n -e 1p | $AWK '{print $4}'`
       else
-	AC_NOTE(- ptys are world accessable)
+	AC_MSG_NOTICE([- ptys are world accessable])
       fi
     else
-      AC_NOTE(- can't determine - assume ptys are world accessable)
+      AC_MSG_NOTICE([- can't determine - assume ptys are world accessable])
     fi
   ]
 )
