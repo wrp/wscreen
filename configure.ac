@@ -265,34 +265,8 @@ AS_IF([test -n "$sock"],
 )
 
 
-dnl
-dnl    ****  termcap or terminfo  ****
-dnl
-AC_CHECKING(for tgetent)
-AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
-olibs="$LIBS"
-LIBS="-lcurses $olibs"
-AC_CHECKING(libcurses)
-AC_TRY_LINK(,[
-#ifdef __hpux
-__sorry_hpux_libcurses_is_totally_broken_in_10_10();
-#else
-tgetent((char *)0, (char *)0);
-#endif
-],,
-LIBS="-ltermcap $olibs"
-AC_CHECKING(libtermcap)
-AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
-LIBS="-ltermlib $olibs"
-AC_CHECKING(libtermlib)
-AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
-LIBS="-lncursesw $olibs"
-AC_CHECKING(libncursesw)
-AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
-LIBS="-lncurses $olibs"
-AC_CHECKING(libncurses)
-AC_TRY_LINK(,tgetent((char *)0, (char *)0);,,
-AC_MSG_ERROR(!!! no tgetent - no screen)))))))
+AC_SEARCH_LIBS([tgetent],[curses termcap termlib ncursesw ncurses],
+	[], AC_MSG_ERROR([!!! no tgetent - no screen]))
 
 AC_TRY_RUN([
 	main() { exit( strcmp( tgoto( "%p1%d", 0, 1 ), "1" ) ? 0 : 1); }],
