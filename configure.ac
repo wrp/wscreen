@@ -454,19 +454,19 @@ AC_TRY_COMPILE([#include <sys/types.h>
 ],AC_DEFINE([BSDWAIT],[1],[BSDWAIT]))
 
 AS_IF([test -z "$butterfly"],
-    [AC_CHECKING([for termio or termios])]
-    [AC_PREPROC_IFELSE([#include <termio.h>],
-        [AC_DEFINE([TERMIO],[1],
-		[Define TERMIO if you have struct termio instead of struct sgttyb.
-		This is usually the case for SVID systems, where BSD uses sgttyb.
-		POSIX systems should define this anyway, even though they use
-		struct termios.])],
-        [AS_IF([test -n "$posix"],
-	    [AC_TRY_CPP([#include <termios.h>],
-	        [AC_DEFINE([TERMIO],[1])]
-            ])
-	])
-    )]
+	[AC_CHECKING([for termio or termios])]
+	[AC_PREPROC_IFELSE([#include <termio.h>],
+		[AC_DEFINE([TERMIO],[1],
+			[Define TERMIO if you have struct termio instead of struct sgttyb.
+			This is usually the case for SVID systems, where BSD uses sgttyb.
+			POSIX systems should define this anyway, even though they use
+			struct termios.])],
+		[AS_IF([test -n "$posix"],
+			[AC_TRY_CPP([#include <termios.h>],
+				[AC_DEFINE([TERMIO],[1])]
+			)]
+		)]
+	)]
 )
 
 AC_MSG_CHECKING([getspnam])
