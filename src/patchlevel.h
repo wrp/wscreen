@@ -529,12 +529,3 @@
  * 01.11.2004, 4.00.03jw2 zombie command has new option 'onerror'
  * 2005-12-19, 4.00.03jw3 syntax error.
  */
-
-#if 0
-#define ORIGIN "FAU"
-#define REV 4
-#define VERS 1
-#define PATCHLEVEL 0
-#define DATE "2-May-06"
-#define STATE "devel"
-#endif

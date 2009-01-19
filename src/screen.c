@@ -88,8 +88,6 @@
 # include "braille.h"
 #endif
 
-#include "patchlevel.h"
-
 /*
  *  At the moment we only need the real password if the
  *  builtin lock is used. Therefore disable SHADOWPW if
