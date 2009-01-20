@@ -162,9 +162,7 @@ AS_CASE([$host_cpu],
     [mips],      [AC_DEFINE([MIPS],[1],[MIPS])],
     [m68k],      [AC_DEFINE([sysV68],[1],[define if running on motorola 68000 family])],
     [pyramid],
-        [AC_CHECK_LIB([pyr], [main], [],
-	    [AC_TRY_LINK( [],[open_controlling_pty("")], AC_DEFINE([OSX],[1],[OSX]), LIBS="$oldlibs")]
-        )]
+        [AC_SEARCH_LIBS([open_controlling_pty],[pyr],[AC_DEFINE([OSX],[1],[OSX])])]
 )
 AS_CASE([$host_os],
     [riscos],
