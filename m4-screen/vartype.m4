@@ -2,6 +2,7 @@
 
 dnl screen_VARTYPE( name, default, type, description, [headers], [body])
 dnl Set an AC_ARG_VAR and validate it as a variable of the correct type.
+dnl Set the shell variable $1 to the result.
 AC_DEFUN([screen_VARTYPE],
 [
 	AC_ARG_VAR([$1],[$4])
@@ -21,5 +22,6 @@ AC_DEFUN([screen_VARTYPE],
 			,AC_MSG_ERROR([$1=@S|@$1 must be of type $3]))
 		)
 		AC_DEFINE_UNQUOTED(m4_toupper([$1]),[$sc_tmp_val],[$4])
+		$1="$sc_tmp_val"
 	)
 ])
