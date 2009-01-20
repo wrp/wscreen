@@ -33,7 +33,8 @@ m4_popdef([getutent_test_program])
 
 AC_CHECKING(ut_host)
 AC_TRY_COMPILE( ut_test_header,
-[struct utmp u; u.ut_host[0] = 0;], AC_DEFINE([UTHOST],[1],[UTHOST]))
+[struct utmp u; u.ut_host[0] = 0;], AC_DEFINE([UTHOST],[1],[
+	Define UTHOST if the utmp file has a host field.]))
 AC_CHECK_LIB([utempter],[addToUtmp])
 m4_popdef([ut_test_header])
 ])

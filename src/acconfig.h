@@ -50,11 +50,6 @@
 
 
 /*
- * Define UTHOST if the utmp file has a host field.
- */
-#undef UTHOST
-
-/*
  * If your system has the calls setreuid() and setregid(),
  * define HAVE_SETREUID. Otherwise screen will use a forked process to
  * safely create output files without retaining any special privileges.
