@@ -6,8 +6,8 @@ dnl Set the shell variable $1 to the result.
 AC_DEFUN([screen_VARTYPE],
 [
 	AC_ARG_VAR([$1],[$4])
-	m4_if([$2],[],[],
-		sc_tmp_val=${$1-$2}
+	sc_tmp_val=${$1-$2}
+	AS_IF([test -n "$sc_tmp_val"],
 		AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$5
 #define] m4_toupper([$1]) [$sc_tmp_val],
 			[$6 $3 x = m4_toupper($1);])],
