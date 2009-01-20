@@ -330,7 +330,9 @@ AC_DEFINE_UNQUOTED(PTYRANGE1,"$p1",[see documentation for PTYRANGE0])
 dnl    ****  pty mode/group handling ****
 dnl
 dnl support provided by Luke Mewburn <lm@rmit.edu.au>, 931222
-AC_CHECKING(default tty permissions/group)
+AC_PATH_PROG([WRITEPATH], [write])
+AC_PATH_PROG([XTERMPATH], [xterm])
+AC_MSG_CHECKING([default tty permissions/group])
 rm -f conftest_grp
 AC_TRY_RUN([
 #include <sys/types.h>
@@ -363,14 +365,8 @@ main()
 ],[
     if test -f conftest_grp; then
 	ptygrp=`cat conftest_grp`
-    else
-	AC_MSG_NOTICE([- ptys are world accessable])
     fi
 ],[
-    WRITEPATH=''
-    XTERMPATH=''
-    AC_PATH_PROG(WRITEPATH, write)
-    AC_PATH_PROG(XTERMPATH, xterm)
     found=
     if test -n "$WRITEPATH$XTERMPATH"; then
       findfollow=
@@ -391,11 +387,7 @@ main()
       found=`find $WRITEPATH $XTERMPATH $findfollow -perm -2000 -print` 
       if test -n "$found"; then
 	ptygrp=`ls -ln$lsfollow $found | sed -n -e 1p | $AWK '{print $4}'`
-      else
-	AC_MSG_NOTICE([- ptys are world accessable])
       fi
-    else
-      AC_MSG_NOTICE([- can't determine - assume ptys are world accessable])
     fi
   ]
 )
@@ -409,7 +401,7 @@ screen_VARTYPE([ptygroup],[${ptygrp-real_gid}],[gid_t],[A numerical group-id
 	sufficient privilege. (e.g. set-uid-root)],
 	[AC_INCLUDES_DEFAULT],[int real_gid;])
 
-AC_MSG_NOTICE([- pty mode: ${ptymode}, group: $ptygroup])
+AC_MSG_RESULT([pty mode: ${ptymode}, group: $ptygroup])
 
 screen_UTMP
 screen_TYPE_SIGNAL
