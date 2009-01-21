@@ -114,19 +114,7 @@ AC_TRY_COMPILE([
 	AC_DEFINE([SYSV],[1],[SYSV compliant (Sys V, HPUX, A/UX)])
 )
 
-oldlibs="$LIBS"
-LIBS="$LIBS -lelf"
-AC_CHECKING(SVR4)
-AC_TRY_LINK([#include <utmpx.h>
-],,
-[AC_CHECK_HEADER(dwarf.h, AC_DEFINE([SVR4],[1],[SVR4]) AC_DEFINE([BUGGYGETLOGIN],[1],
-[If ttyslot() breaks getlogin() by returning indexes to utmp entries
-of type DEAD_PROCESS, then our getlogin() replacement should be
-selected by defining BUGGYGETLOGIN.
-]),
-[AC_CHECK_HEADER(elf.h, AC_DEFINE([SVR4],[1],[SVR4]) AC_DEFINE([BUGGYGETLOGIN],[1]))])]
-,LIBS="$oldlibs")
-
+screen_BUGGYLOGIN
 screen_JOBCONTROL
 AC_CHECK_FUNCS([setresuid setreuid])
 
