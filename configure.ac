@@ -301,16 +301,30 @@ AC_EGREP_CPP(yes,
 dnl
 dnl    ****  misc things  ****
 dnl
-AC_CHECKING(wait union)
-AC_TRY_COMPILE([#include <sys/types.h>
+AH_TEMPLATE([BSDWAIT],[
+	Define BSDWAIT if your system defines a 'union wait' in <sys/wait.h>
+
+	Only allow BSDWAIT i.e. wait3 on nonposix systems, since
+	posix implies wait(3) and waitpid(3). vdlinden@fwi.uva.nl
+])
+AC_CHECKING([wait union])
+AC_COMPILE_IFELSE(
+	[AC_LANG_PROGRAM([[
+#include <sys/types.h>
 #include <sys/wait.h>
-],[
-  union wait x;
-  int y;
-#ifdef WEXITSTATUS
-  y = WEXITSTATUS(x);
+#ifdef POSIX
+#error
 #endif
-],AC_DEFINE([BSDWAIT],[1],[BSDWAIT]))
+		]],[[
+			union wait x;
+			int y;
+#ifdef WEXITSTATUS
+			y = WEXITSTATUS(x);
+#endif
+		]]
+	)],
+	[AC_DEFINE([BSDWAIT],[1])]
+)
 
 AS_IF([test -z "$butterfly"],
 	[AC_CHECKING([for termio or termios])]

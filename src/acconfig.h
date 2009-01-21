@@ -31,17 +31,6 @@
 #define SUNOS4_AND_WE_TRUST_TCSENDBREAK
 
 /*
- * Define BSDWAIT if your system defines a 'union wait' in <sys/wait.h>
- *
- * Only allow BSDWAIT i.e. wait3 on nonposix systems, since
- * posix implies wait(3) and waitpid(3). vdlinden@fwi.uva.nl
- * 
- */
-#ifndef POSIX
-#undef BSDWAIT
-#endif
-
-/*
  * On RISCOS we prefer wait2() over wait3(). rouilj@sni-usa.com 
  */
 #ifdef BSDWAIT
