@@ -22,9 +22,3 @@
  * $Id$ FAU
  */
 
-/*
- * If your system has vsprintf() and requires the use of the macros in
- * "varargs.h" to use functions with variable arguments,
- * define USEVARARGS.
- */
-#undef USEVARARGS

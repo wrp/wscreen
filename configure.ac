@@ -387,8 +387,16 @@ AC_EGREP_CPP([yes],[
 #endif
 ], AC_DEFINE([NAME_MAX], [14], [filesystem restriction on filename lengths]))
 
-AC_MSG_CHECKING(for vsprintf)
-AC_TRY_LINK(,[vsprintf(0,0,0);], AC_MSG_RESULT(yes);AC_DEFINE([USEVARARGS],[1],[USEVARARGS]), AC_MSG_RESULT(no))
+AC_MSG_CHECKING([for vsprintf])
+AH_TEMPLATE([USEVARARGS],[
+	If your system has vsprintf() and requires the use of the macros in
+	"varargs.h" to use functions with variable arguments,
+	define USEVARARGS.])
+AC_LINK_IFELSE([vsprintf(0,0,0);],
+	AC_MSG_RESULT([yes])
+	AC_DEFINE([USEVARARGS],[1]),
+	AC_MSG_RESULT([no])
+)
 
 AC_HEADER_DIRENT
 
