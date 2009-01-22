@@ -31,10 +31,7 @@ AC_CHECK_HEADERS([stropts.h string.h strings.h])
 AC_TYPE_UID_T
 
 # Checks for library functions.
-AC_SEARCH_LIBS([syslog],[bsd],[],[AC_DEFINE([NOSYSLOG],[1],[
- Define NOSYSLOG if you do not have logging facilities. Currently
- syslog() will be used to trace ``su'' commands only.])])
-
+AC_SEARCH_LIBS([syslog],[bsd],[],[AC_DEFINE([NOSYSLOG],[1])])
 screen_USER_CONFIG
 
 AS_IF([test -n "$ISC"],
@@ -440,5 +437,7 @@ AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal erro
 AC_OUTPUT([Makefile src/Makefile src/doc/Makefile lib/Makefile])
 
 AH_TEMPLATE([USE_WAIT2],[
-	On RISCOS we prefer wait2() over wait3(). rouilj@sni-usa.com
-])
+	On RISCOS we prefer wait2() over wait3(). rouilj@sni-usa.com])
+AH_TEMPLATE([NOSYSLOG],[
+	Define NOSYSLOG if you do not have logging facilities. Currently
+	syslog() will be used to trace ``su'' commands only.])
