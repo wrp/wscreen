@@ -23,13 +23,6 @@
  */
 
 /*
- * If your system has the new format /etc/ttys (like 4.3 BSD) and the
- * getttyent(3) library functions, define GETTTYENT.
- */
-#undef GETTTYENT
-
-
-/*
  * If your system has vsprintf() and requires the use of the macros in
  * "varargs.h" to use functions with variable arguments,
  * define USEVARARGS.

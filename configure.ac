@@ -341,10 +341,14 @@ AC_TRY_LINK([#include <shadow.h>],
 	AC_MSG_RESULT([no])
 )
 
-AC_CHECKING(getttyent)
-AC_TRY_LINK(,[getttyent();], AC_DEFINE([GETTTYENT],[1],[GETTTYENT]))
 
-AC_CHECK_FUNCS([fdwalk])
+AC_CHECK_FUNCS([fdwalk getttyent])
+AC_EGREP_CPP([yes],[
+#ifdef HAVE_GETTTYENT
+   yes;
+#endif ],
+	[AC_DEFINE([GETTTYENT],[1],[synonym for HAVE_GETTTYENT])] dnl
+)
 
 AC_MSG_CHECKING([for memcpy/memmove/bcopy that handles overlapping arguments])
 m4_pushdef([memory_test],[[
