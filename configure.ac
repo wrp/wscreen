@@ -53,7 +53,7 @@ AS_CASE([$host_cpu],
 )
 AS_CASE([$host_os],
     [riscos],
-        [AC_DEFINE([USE_WAIT2],[1],[USE_WAIT2])]
+        [AC_DEFINE([USE_WAIT2],[1])]
         [AC_CHECK_LIB([bsd], [main])]
         [CPPFLAGS="$CPPFLAGS -I/usr/include/bsd"],
     [ultrix], [ULTRIX=1],
@@ -315,6 +315,9 @@ AC_COMPILE_IFELSE(
 #ifdef POSIX
 #error
 #endif
+#ifdef USE_WAIT2
+#error
+#endif
 		]],[[
 			union wait x;
 			int y;
@@ -438,3 +441,6 @@ AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal erro
 
 AC_OUTPUT([Makefile src/Makefile src/doc/Makefile lib/Makefile])
 
+AH_TEMPLATE([USE_WAIT2],[
+	On RISCOS we prefer wait2() over wait3(). rouilj@sni-usa.com
+])

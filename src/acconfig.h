@@ -31,14 +31,6 @@
 #define SUNOS4_AND_WE_TRUST_TCSENDBREAK
 
 /*
- * On RISCOS we prefer wait2() over wait3(). rouilj@sni-usa.com 
- */
-#ifdef BSDWAIT
-#undef USE_WAIT2
-#endif
-
-
-/*
  * If your system has the calls setreuid() and setregid(),
  * define HAVE_SETREUID. Otherwise screen will use a forked process to
  * safely create output files without retaining any special privileges.
