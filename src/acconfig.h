@@ -23,21 +23,6 @@
  */
 
 /*
- * If your system has the calls setreuid() and setregid(),
- * define HAVE_SETREUID. Otherwise screen will use a forked process to
- * safely create output files without retaining any special privileges.
- */
-#undef HAVE_SETRESUID
-#undef HAVE_SETREUID
-
-/*
- * If your system supports BSD4.4's seteuid() and setegid(), define
- * HAVE_SETEUID.
- */
-#undef HAVE_SETEUID
-
-
-/*
  * If your system has the new format /etc/ttys (like 4.3 BSD) and the
  * getttyent(3) library functions, define GETTTYENT.
  */
