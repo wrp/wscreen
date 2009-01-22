@@ -23,14 +23,6 @@
  */
 
 /*
- * both must be defined if you want to favor tcsendbreak over
- * other calls to generate a break condition on serial lines.
- * (Do not bother, if you are not using plain tty windows.)
- */
-#define POSIX_HAS_A_GOOD_TCSENDBREAK
-#define SUNOS4_AND_WE_TRUST_TCSENDBREAK
-
-/*
  * If your system has the calls setreuid() and setregid(),
  * define HAVE_SETREUID. Otherwise screen will use a forked process to
  * safely create output files without retaining any special privileges.
