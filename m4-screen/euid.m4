@@ -2,7 +2,8 @@
 AC_DEFUN([screen_SETUID],[dnl
 dnl If the system does not have setre{s,}uid, screen will use a forked process to
 dnl safely create output files without retaining any special privileges.
-AC_CHECK_FUNCS([setresuid setreuid seteuid setegid])
+
+AC_CHECK_FUNCS([setresuid setreuid setegid])
 
 dnl seteuid() check:
 dnl   linux seteuid was broken before V1.1.11
@@ -23,8 +24,8 @@ AC_PREPROC_IFELSE( dnl
 	[AC_LANG_PROGRAM([[
 #if defined(linux) || defined(NeXT) || defined(_AUX_SOURCE) || defined(AUX) || defined(ultrix) || (defined(sun) && defined(SVR4)) || defined(ISC) || defined(sony_news)
 #error
-#endif]])], [],
-	[AC_DEFINE([HAVE_SETEUID],[0])] dnl
+#endif]])],
+	[AC_CHECK_FUNCS([seteuid])],
 	[AC_MSG_NOTICE([Assuming a broken seteuid based on system type])] dnl
 ) dnl
 ])
