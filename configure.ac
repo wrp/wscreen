@@ -146,9 +146,7 @@ AC_LINK_IFELSE(
 dnl
 dnl    ****  PTY specific things  ****
 dnl
-AC_CHECK_FILE([/dev/ptc],
-	AC_DEFINE([HAVE_DEV_PTC],[1],[/dev/ptc character special device exists.])
-)
+AC_CHECK_FILE([/dev/ptc], AC_DEFINE([HAVE_DEV_PTC],[1]))
 
 AC_CHECK_FUNCS(getpt)
 
@@ -441,3 +439,4 @@ AH_TEMPLATE([USE_WAIT2],[
 AH_TEMPLATE([NOSYSLOG],[
 	Define NOSYSLOG if you do not have logging facilities. Currently
 	syslog() will be used to trace ``su'' commands only.])
+AH_TEMPLATE([HAVE_DEV_PTC],[/dev/ptc character special device exists.])
