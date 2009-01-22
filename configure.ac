@@ -158,9 +158,7 @@ AC_CHECK_FILE([/dev/ptmx],
 		 grantpt(), unlockpt() functions.])],
 
 		dnl check for openpty() if /dev/ptmx not available
-		AC_SEARCH_LIBS([openpty],[util],
-			[AC_DEFINE([HAVE_OPENPTY],[1],[HAVE_OPENPTY])]
-		) dnl
+		AC_SEARCH_LIBS([openpty],[util],[AC_DEFINE([HAVE_OPENPTY],[1])])
 	) dnl
 ) dnl
 
@@ -440,3 +438,4 @@ AH_TEMPLATE([NOSYSLOG],[
 	Define NOSYSLOG if you do not have logging facilities. Currently
 	syslog() will be used to trace ``su'' commands only.])
 AH_TEMPLATE([HAVE_DEV_PTC],[/dev/ptc character special device exists.])
+AH_TEMPLATE([HAVE_OPENPTY],[define if openpty() is available])
