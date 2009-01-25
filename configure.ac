@@ -247,8 +247,8 @@ main()
 )
 rm -f conftest_grp
 
-screen_VARTYPE([ptymode],[0622],[int],[permissions for the PTY.
-	  Defaults to 0622])
+screen_VARTYPE([ptymode],[0620],[int],[permissions for the PTY.
+	  Defaults to 0620])
 screen_VARTYPE([ptygroup],[${ptygrp-real_gid}],[gid_t],[A numerical group-id
 	if you do not want the tty to be in "your" group. Note, screen is
 	unable to change mode or group of the pty if it is not installed with
