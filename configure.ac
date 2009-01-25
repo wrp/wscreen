@@ -429,6 +429,7 @@ screen_BOOLFEATURE([telnet],[enable builtin telnet
 	(Syntax: screen //telnet host @<:@port@:>@)],[no],[builtin_telnet])
 
 AC_TRY_RUN(main(){exit(0);},,AC_MSG_ERROR(Can't run the compiler - internal error. Sorry.))
+AC_DEFINE([USEVARARGS],[1],[Use modern varargs syntax])
 
 AC_OUTPUT([Makefile src/Makefile src/doc/Makefile lib/Makefile])
 
