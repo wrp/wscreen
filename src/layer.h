@@ -31,13 +31,13 @@ struct mchar;	/* forward declaration */
 
 struct LayFuncs
 {
-  void	(*lf_LayProcess) __P((char **, int *));
-  void	(*lf_LayAbort) __P((void));
-  void	(*lf_LayRedisplayLine) __P((int, int, int, int));
-  void	(*lf_LayClearLine) __P((int, int, int, int));
-  int	(*lf_LayRewrite) __P((int, int, int, struct mchar *, int));
-  int	(*lf_LayResize) __P((int, int));
-  void	(*lf_LayRestore) __P((void));
+  void	(*lf_LayProcess)( char **, int * );
+  void	(*lf_LayAbort)( void );
+  void	(*lf_LayRedisplayLine)( int, int, int, int );
+  void	(*lf_LayClearLine)( int, int, int, int );
+  int	(*lf_LayRewrite)( int, int, int, struct mchar *, int );
+  int	(*lf_LayResize)( int, int );
+  void	(*lf_LayRestore)( void );
 };
 
 struct layer

@@ -47,7 +47,7 @@ extern struct mchar mchar_blank;
 extern unsigned char *null, *blank;
 
 #ifdef HAVE_FDWALK
-static int close_func __P((void *, int));
+static int close_func( void *, int );
 #endif
 
 char *
@@ -195,12 +195,12 @@ char *nam;
 #ifdef POSIX
 sigret_t (*xsignal(sig, func))
 # ifndef __APPLE__
- __P(SIGPROTOARG)
+ SIGPROTOARG
 # else
 ()
 # endif
 int sig;
-sigret_t (*func) __P(SIGPROTOARG);
+sigret_t (*func) SIGPROTOARG;
 {
   struct sigaction osa, sa;
   sa.sa_handler = func;
@@ -211,7 +211,7 @@ sigret_t (*func) __P(SIGPROTOARG);
   sa.sa_flags = 0;
 #endif
   if (sigaction(sig, &sa, &osa))
-    return (sigret_t (*)__P(SIGPROTOARG))-1;
+    return (sigret_t (*)SIGPROTOARG)-1;
   return osa.sa_handler;
 }
 
@@ -221,9 +221,9 @@ sigret_t (*func) __P(SIGPROTOARG);
  * hpux has berkeley signal semantics if we use sigvector,
  * but not, if we use signal, so we define our own signal() routine.
  */
-void (*xsignal(sig, func)) __P(SIGPROTOARG)
+void (*xsignal(sig, func)) SIGPROTOARG
 int sig;
-void (*func) __P(SIGPROTOARG);
+void (*func) SIGPROTOARG;
 {
   struct sigvec osv, sv;
 
@@ -231,7 +231,7 @@ void (*func) __P(SIGPROTOARG);
   sv.sv_mask = sigmask(sig);
   sv.sv_flags = SV_BSDSIG;
   if (sigvector(sig, &sv, &osv) < 0)
-    return (void (*)__P(SIGPROTOARG))(BADSIG);
+    return (void (*)SIGPROTOARG)(BADSIG);
   return osv.sv_handler;
 }
 # endif	/* hpux */
@@ -395,7 +395,7 @@ int except;
 
 #ifndef USE_SETEUID
 static int UserPID;
-static sigret_t (*Usersigcld)__P(SIGPROTOARG);
+static sigret_t (*Usersigcld)SIGPROTOARG;
 #endif
 static int UserSTAT;
 
@@ -634,7 +634,7 @@ char *value;
 int
 _delay(delay, outc)
 register int delay;
-int (*outc) __P((int));
+int (*outc)( int );
 {
   int pad;
   extern short ospeed;
@@ -659,7 +659,7 @@ int (*outc) __P((int));
  * to store the current outc function. Oh well...
  */
 
-int (*save_outc) __P((int));
+int (*save_outc)( int );
 
 #  undef tputs
 
@@ -667,9 +667,9 @@ void
 xtputs(str, affcnt, outc)
 char *str;
 int affcnt;
-int (*outc) __P((int));
+int (*outc)( int );
 {
-  extern int tputs __P((const char *, int, int (*)(int)));
+  extern int tputs (const char *, int, int (*)(int));
   save_outc = outc;
   tputs(str, affcnt, outc);
 }
@@ -709,7 +709,7 @@ int n;
 char *fmt;
 unsigned long p1, p2, p3, p4, p5, p6;
 {
-  int xvsnprintf __P((char *, int, char *, xva_list));
+  int xvsnprintf( char *, int, char *, xva_list );
   return xvsnprintf(s, n, fmt, (char *)&fmt + xsnoff(1, 0, 0));
 }
 

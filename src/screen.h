@@ -28,18 +28,6 @@
  */
 
 #include "os.h"
-
-#if defined(__STDC__)
-# ifndef __P
-#  define __P(a) a
-# endif
-#else
-# ifndef __P
-#  define __P(a) ()
-# endif
-# define const
-#endif
-
 #include "osdef.h"
 
 #include "ansi.h"

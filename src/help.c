@@ -46,7 +46,7 @@ extern struct win *wtab[];
 extern struct term term[];
 #endif
 
-static void PadStr __P((char *, int, int, int));
+static void PadStr( char *, int, int, int );
 
 extern char *wliststr;
 extern char *wlisttit;
@@ -110,12 +110,12 @@ char *myname, *message, *arg;
 extern struct comm comms[];
 extern struct action ktab[];
 
-static void HelpProcess __P((char **, int *));
-static void HelpAbort __P((void));
-static void HelpRedisplayLine __P((int, int, int, int));
-static void add_key_to_buf __P((char *, int));
-static void AddAction __P((struct action *, int, int));
-static int  helppage __P((void));
+static void HelpProcess( char **, int * );
+static void HelpAbort( void );
+static void HelpRedisplayLine( int, int, int, int );
+static void add_key_to_buf( char *, int );
+static void AddAction( struct action *, int, int );
+static int  helppage( void );
 
 struct helpdata
 {
@@ -476,10 +476,10 @@ int y, xs, xe, isblank;
 **
 */
 
-static void CopyrightProcess __P((char **, int *));
-static void CopyrightRedisplayLine __P((int, int, int, int));
-static void CopyrightAbort __P((void));
-static void copypage __P((void));
+static void CopyrightProcess( char **, int * );
+static void CopyrightRedisplayLine( int, int, int, int );
+static void CopyrightAbort( void );
+static void copypage( void );
 
 struct copydata
 {
@@ -688,9 +688,9 @@ int y, xs, xe, isblank;
 
 #ifdef MULTI
 
-static void DisplaysProcess __P((char **, int *));
-static void DisplaysRedisplayLine __P((int, int, int, int));
-static void displayspage __P((void));
+static void DisplaysProcess( char **, int * );
+static void DisplaysRedisplayLine( int, int, int, int );
+static void displayspage( void );
 
 struct displaysdata
 {
@@ -865,16 +865,16 @@ int y, xs, xe, isblank;
 
 struct wlistdata;
 
-static void WListProcess __P((char **, int *));
-static void WListRedisplayLine __P((int, int, int, int));
-static void wlistpage __P((void));
-static void WListLine __P((int, int, int, int));
-static void WListLines __P((int, int));
-static void WListMove __P((int, int));
-static void WListUpdate __P((struct win *));
-static int  WListNormalize __P((void));
-static int  WListResize __P((int, int));
-static int  WListNext __P((struct wlistdata *, int, int));
+static void WListProcess( char **, int * );
+static void WListRedisplayLine( int, int, int, int );
+static void wlistpage( void );
+static void WListLine( int, int, int, int );
+static void WListLines( int, int );
+static void WListMove( int, int );
+static void WListUpdate( struct win * );
+static int  WListNormalize( void );
+static int  WListResize( int, int );
+static int  WListNext( struct wlistdata *, int, int );
 
 struct wlistdata {
   int pos;
@@ -1490,10 +1490,10 @@ extern struct action dmtab[];
 extern struct action mmtab[];
 
 
-static void BindkeyProcess __P((char **, int *));
-static void BindkeyAbort __P((void));
-static void BindkeyRedisplayLine __P((int, int, int, int));
-static void bindkeypage __P((void));
+static void BindkeyProcess( char **, int * );
+static void BindkeyAbort( void );
+static void BindkeyRedisplayLine( int, int, int, int );
+static void bindkeypage( void );
 
 struct bindkeydata
 {
@@ -1699,8 +1699,8 @@ int y, xs, xe, isblank;
 
 #ifdef ZMODEM
 
-static void ZmodemRedisplayLine __P((int, int, int, int));
-static int  ZmodemResize __P((int, int));
+static void ZmodemRedisplayLine( int, int, int, int );
+static int  ZmodemResize( int, int );
 
 static struct LayFuncs ZmodemLf =
 {
