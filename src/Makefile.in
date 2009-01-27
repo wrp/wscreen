@@ -131,8 +131,8 @@ tty.c:	tty.sh
 comm.h: comm.c comm.sh config.h
 	AWK=$(AWK) CC="$(CC) $(CFLAGS)" srcdir=${srcdir} sh $(srcdir)/comm.sh
 
-osdef.h: osdef.sh config.h osdef.h.in
-	CPP="$(CPP) $(CPPFLAGS)" srcdir=${srcdir} sh $(srcdir)/osdef.sh
+osdef.h:
+	echo '/* obsolete built header */' > osdef.h
 
 docs:
 	cd doc; $(MAKE) dvi screen.info
