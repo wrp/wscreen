@@ -325,6 +325,7 @@ int how;
 	m.type = MSG_DETACH;
       /* If there is no password for the session, or the user enters the correct
        * password, then we get a SIGCONT. Otherwise we get a SIG_BYE */
+#ifdef MULTIUSER
       signal(SIGCONT, AttachSigCont);
       if (WriteMessage(lasts, &m))
 	Panic(errno, "WriteMessage");
@@ -333,6 +334,7 @@ int how;
         pause();	/* wait for SIGCONT */
       signal(SIGCONT, SIG_DFL);
       ContinuePlease = 0;
+#endif
       if (how != MSG_ATTACH)
 	return 0;	/* we detached it. jw. */
       sleep(1);	/* we dont want to overrun our poor backend. jw. */
