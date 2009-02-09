@@ -1,4 +1,4 @@
-/* Copyright (c) 2008
+/* Copyright (c) 2008, 2009
  *      Juergen Weigert (jnweiger@immd4.informatik.uni-erlangen.de)
  *      Michael Schroeder (mlschroe@immd4.informatik.uni-erlangen.de)
  *      Micah Cowan (micah@cowan.name)
@@ -277,6 +277,7 @@ struct comm comms[RC_LAST + 1] =
 #ifdef COPY_PASTE
   { "removebuf",	ARGS_0 },
 #endif
+  { "rendition",	ARGS_23 },
   { "reset",		NEED_FORE|ARGS_0 },
   { "resize",		NEED_DISPLAY|ARGS_0|ARGS_ORMORE },
   { "screen",		ARGS_0|ARGS_ORMORE },

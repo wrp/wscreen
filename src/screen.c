@@ -1,4 +1,4 @@
-/* Copyright (c) 2008
+/* Copyright (c) 2008, 2009
  *      Juergen Weigert (jnweiger@immd4.informatik.uni-erlangen.de)
  *      Michael Schroeder (mlschroe@immd4.informatik.uni-erlangen.de)
  *      Micah Cowan (micah@cowan.name)
@@ -2411,6 +2411,22 @@ time_t now;
   (void)time(&now2);
   bt->bestbefore = now2 + bt->lifespan;
   return bt->result;
+}
+
+int
+AddWinMsgRend(str, r)
+const char *str;
+int r;
+{
+  if (winmsg_numrend >= MAX_WINMSG_REND || str < winmsg_buf ||
+      str >= winmsg_buf + MAXSTR)
+    return -1;
+
+  winmsg_rend[winmsg_numrend] = r;
+  winmsg_rendpos[winmsg_numrend] = str - winmsg_buf;
+  winmsg_numrend++;
+
+  return 0;
 }
 
 char *
