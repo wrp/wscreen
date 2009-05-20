@@ -3694,7 +3694,32 @@ int key;
 	  digraphs[i].d[0] = args[0][0];
 	  digraphs[i].d[1] = args[0][1];
 	  if (!parse_input_int(args[1], argl[1], &digraphs[i].value))
-	    digraphs[i].value = atoi(args[1]);
+	    {
+	      if (!(digraphs[i].value = atoi(args[1])))
+		{
+		  if (!args[1][1])
+		    digraphs[i].value = (int)args[1][0];
+#ifdef UTF8
+		  else
+		    {
+		      int t;
+		      unsigned char *s = args[1];
+		      digraphs[i].value = 0;
+		      while (*s)
+			{
+			  t = FromUtf8(*s++, &digraphs[i].value);
+			  if (t == -1)
+			    continue;
+			  if (t == -2)
+			    digraphs[i].value = 0;
+			  else
+			    digraphs[i].value = t;
+			  break;
+			}
+		    }
+#endif
+		}
+	    }
 	  break;
 	}
       Input("Enter digraph: ", 10, INP_EVERY, digraph_fn, NULL, 0);
@@ -4162,6 +4187,11 @@ int key;
 	{
 	  int old;
 	  struct layout *lay;
+	  if (!D_layout)
+	    {
+	      Msg(0, "not on a layout");
+	      break;
+	    }
 	  if (!args[1])
 	    {
 	      Msg(0, "This is layout %d (%s).\n", D_layout->lay_number, D_layout->lay_title);
@@ -4479,7 +4509,7 @@ int bufl, *argl;
 	{
 	  if (*p == delim)
 	    delim = 0;
-	  else if (delim != '\'' && *p == '\\' && (p[1] == '\'' || p[1] == '"' || p[1] == '\\' || p[1] == '$' || p[1] == '#' || p[1] == '^' || (p[1] >= '0' && p[1] <= '7')))
+	  else if (delim != '\'' && *p == '\\' && (p[1] == 'n' || p[1] == 'r' || p[1] == 't' || p[1] == '\'' || p[1] == '"' || p[1] == '\\' || p[1] == '$' || p[1] == '#' || p[1] == '^' || (p[1] >= '0' && p[1] <= '7')))
 	    {
 	      p++;
 	      if (*p >= '0' && *p <= '7')
@@ -4498,7 +4528,16 @@ int bufl, *argl;
 		  pp++;
 		}
 	      else
-		*pp++ = *p;
+		{
+		  switch (*p)
+		    {
+		      case 'n': *pp = '\n'; break;
+		      case 'r': *pp = '\r'; break;
+		      case 't': *pp = '\t'; break;
+		      default: *pp = *p; break;
+		    }
+		  pp++;
+		}
 	    }
 	  else if (delim != '\'' && *p == '$' && (p[1] == '{' || p[1] == ':' || (p[1] >= 'a' && p[1] <= 'z') || (p[1] >= 'A' && p[1] <= 'Z') || (p[1] >= '0' && p[1] <= '9') || p[1] == '_'))
 
@@ -5330,15 +5369,16 @@ int where;
   int l;
 
   s = ss = buf;
+  if ((flags & 8) && where < 0)
+    {
+      *s = 0;
+      return ss;
+    }
   for (pp = ((flags & 4) && where >= 0) ? wtab + where + 1: wtab; pp < wtab + MAXWIN; pp++)
     {
       int rend = -1;
       if (pp - wtab == where && ss == buf)
-	{
-	  ss = s;
-	  if (flags & 8)
-	    break;
-	}
+        ss = s;
       if ((p = *pp) == 0)
 	continue;
       if ((flags & 1) && display && p == D_fore)
@@ -5357,6 +5397,12 @@ int where;
 	  *s++ = ' ';
 	  *s++ = ' ';
 	}
+      if (p->w_number == where)
+        {
+          ss = s;
+          if (flags & 8)
+            break;
+        }
       if (!(flags & 4) || where < 0 || ((flags & 4) && where < p->w_number))
 	{
 	  if (p->w_monitor == MON_DONE && renditions[REND_MONITOR] != -1)
@@ -5367,8 +5413,6 @@ int where;
       if (rend != -1)
 	AddWinMsgRend(s, rend);
       sprintf(s, "%d", p->w_number);
-      if (p->w_number == where)
-        ss = s;
       s += strlen(s);
       if (display && p == D_fore)
 	*s++ = '*';
