@@ -9,7 +9,7 @@ AC_INIT([screen],
 AC_CONFIG_SRCDIR([src/screen.c])
 AC_CONFIG_HEADERS([config.h])
 AC_MSG_NOTICE([this is screen version $PACKAGE_VERSION])
-AM_INIT_AUTOMAKE([gnu])
+AM_INIT_AUTOMAKE([gnu silent-rules])
 
 # Checks for programs.
 AC_PROG_INSTALL

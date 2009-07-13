@@ -1,3 +1,6 @@
+## Process this file with automake to create Makefile.in
+
+AUTOMAKE_OPTIONS = 1.11
 ACLOCAL_AMFLAGS = -I m4 -I m4-screen
 
 SUBDIRS = lib src
