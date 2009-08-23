@@ -18,5 +18,4 @@ Makefile.in
 .tarball-version
 /GNUmakefile
 /maint.mk
-/git-version-gen
-/link-warning.h
+/build-aux
