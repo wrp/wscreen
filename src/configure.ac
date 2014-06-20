@@ -74,10 +74,15 @@ AC_SEARCH_LIBS([crypt], [crypt], [], [
 
 dnl
 AC_CHECK_HEADERS(pty.h util.h libutil.h)
-AC_SEARCH_LIBS([openpty], [util openpty], [
+AC_SEARCH_LIBS([openpty], [util openpty bsd], [
 	AC_DEFINE(HAVE_OPENPTY)
 ], [
 	AC_MSG_ERROR([unable to find openpty() function])
+])
+
+dnl
+AC_SEARCH_LIBS([socket], [network], [], [
+	AC_MSG_ERROR([unable to find socket() function])
 ])
 
 dnl
