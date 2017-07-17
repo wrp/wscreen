@@ -85,6 +85,9 @@ dnl
 AC_CHECK_HEADERS(langinfo.h)
 
 dnl
+AC_CHECK_HEADERS(dirent.h)
+
+dnl
 dnl Check user changeable stuff
 dnl
 
