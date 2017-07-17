@@ -76,7 +76,6 @@ dnl
 AC_CHECK_HEADERS(pty.h util.h libutil.h)
 AC_SEARCH_LIBS([openpty], [util openpty], [
 	AC_DEFINE(HAVE_OPENPTY)
-	LIBS="$LIBS -lutil"
 ], [
 	AC_MSG_ERROR([unable to find openpty() function])
 ])
