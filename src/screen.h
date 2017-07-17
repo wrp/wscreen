@@ -221,7 +221,7 @@ void  SigHup (int);
 void  eexit (int) __attribute__((__noreturn__));
 void  Detach (int);
 void  Hangup (void);
-void  Kill (int, int);
+void  Kill (pid_t, int);
 void  Msg (int, const char *, ...) __attribute__((format(printf, 2, 3)));
 void  Panic (int, const char *, ...) __attribute__((format(printf, 2, 3))) __attribute__((__noreturn__));
 void  QueryMsg (int, const char *, ...) __attribute__((format(printf, 2, 3)));
