@@ -51,6 +51,7 @@ typedef enum {
 	WINESC_FOCUS           = 'F',
 	WINESC_HSTATUS         = 'h',
 	WINESC_HOST            = 'H',
+	WINESC_WIN_COUNT       = 'C',
 	WINESC_WIN_NUM         = 'n',
 	WINESC_WIN_LOGNAME     = 'N',
 	WINESC_PID             = 'p',

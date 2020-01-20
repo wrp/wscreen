@@ -420,6 +420,32 @@ winmsg_esc_ex(WinNum, Window *win)
 	wmc_set(cond);
 }
 
+winmsg_esc_ex(WinCount, Window *win)
+{
+	if (esc->num == 0)
+		esc->num = 1;
+
+	if (!win) {
+		wmbc_printf(wmbc, "%*s", esc->num, esc->num > 1 ? "--" : "-");
+	} else {
+		int count = 0;
+
+		for (Window *w = win; w; w = w->w_prev_mru) {
+			if (esc->flags.minus) {
+				if (w->w_group == win->w_group && w->w_type != W_TYPE_GROUP) {
+					count++;
+				}
+			} else {
+				count++;
+			}
+		}
+
+		wmbc_printf(wmbc, "%*d", esc->num, count);
+	}
+
+	wmc_set(cond);
+}
+
 winmsg_esc_ex(WinLogName, Window *win)
 {
 	if (win && win->w_log && win->w_log->fp)
@@ -654,6 +680,9 @@ char *MakeWinMsgEv(WinMsgBuf *winmsg, char *str, Window *win,
 			break;
 		case WINESC_WIN_NUM:
 			WinMsgDoEscEx(WinNum, win);
+			break;
+		case WINESC_WIN_COUNT:
+			WinMsgDoEscEx(WinCount, win);
 			break;
 		case WINESC_WIN_LOGNAME:
 			WinMsgDoEscEx(WinLogName, win);
