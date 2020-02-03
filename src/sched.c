@@ -156,7 +156,7 @@ skip:
 				i++;
 		}
 
-		n = poll(pfd, i, timeoutev ? timeout : 0);
+		n = poll(pfd, i, timeoutev ? timeout : 1000);
 		if (n < 0) {
 			if (errno != EINTR) {
 				Panic(errno, "poll");
