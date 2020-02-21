@@ -124,7 +124,7 @@ struct Display {
 					   does not */
 	int   d_bracketed;		/* bracketed paste mode */
 	int   d_cursorstyle;		/* cursor style */
-	int   d_xtermosc[4];		/* osc used */
+	int   d_xtermosc[5];		/* osc used */
 	struct mchar d_lpchar;		/* missing char */
 	struct timeval d_status_time;	/* time of status display */
 	DisplayStatus   d_status;			/* is status displayed? */
