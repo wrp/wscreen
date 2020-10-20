@@ -869,6 +869,10 @@ int main(int argc, char **argv)
 	xsignal(SIG_BYE, AttacherFinit);	/* prevent races */
 	if (cmdflag) {
 		/* attach_tty is not mandatory */
+
+		if (multi)
+			real_uid = multi_uid;
+
 		SetTtyname(false, &st);
 		if (!*argv)
 			Panic(0, "Please specify a command.");
